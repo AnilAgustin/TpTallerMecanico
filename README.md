@@ -1,4 +1,4 @@
 # TpTallerMecanico
-Repositoria de PPAI Programacion Avanzada 2023
+Repositorio de PPAI Programacion Avanzada 2023
 
 
