@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaft.org">
+    <head>
+        <title>Marca</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>AGREGAR MARCA</h1>
+        <a th:href="@{/}">Regresar</a>
+        <br/>
+        <form th:action="@{/guardarMarca}" method="post" th:object="${marca}">
+            <label for="nombre">Nombre:<label/>
+                <input type="hidden" name="idMarca" th:field="*{idMarca}"/>
+                <input type="text" name="nombreMarca" th:field="*{nombre}"/>
+                <input type="hidden" name="estadoMarca" th:field="*{estado}"/>
+                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                <br/>
+                <input type="submit" name="guardar" value="Guardar"/>
+        </form>
+    </body>
+</html>

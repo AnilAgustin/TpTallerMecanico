@@ -1,0 +1,29 @@
+<html>
+    <head xmlns:th="http://www.thymeleaft.org">
+        <title>Inicio</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Inicio</h1>
+        <a th:href="@{/agregarMarca}">Agregar Marca</a>
+        <div th:if="${marca != null and !marca.empty}">
+            <table border="1">
+                <tr>
+                    <th>Marca</th>
+                    <th>Editar</th>
+                    <th>Eliminar</th>
+                </tr>
+                <tr th:each="marca :${marca}">
+                    <td th:text="${marca.nombre}">Mostrar Nombre</td>
+                    <td> <a th:href="@{/modificarMarca/} + ${marca.idMarca}" th:text="Editar"/></td>
+                    <td> <a th:href="@{/eliminarMarca/} + ${marca.idMarca}" th:text="Eliminar"/></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div th:if="${marca == null or marca.empty}">
+        La lista de marcas esta vacia
+    </div>
+</body>
+</html>
