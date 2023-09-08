@@ -3,19 +3,33 @@
     <head>
         <title>Marca</title>
         <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     </head>
     <body>
-        <h1>AGREGAR MARCA</h1>
-        <a th:href="@{/}">Regresar</a>
-        <br/>
-        <form th:action="@{/guardarMarca}" method="post" th:object="${marca}">
-            <label for="nombre">Nombre:<label/>
-                <input type="hidden" name="idMarca" th:field="*{idMarca}"/>
-                <input type="text" name="nombreMarca" th:field="*{nombre}"/>
-                <input type="hidden" name="estadoMarca" th:field="*{estado}"/>
-                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
-                <br/>
-                <input type="submit" name="guardar" value="Guardar"/>
-        </form>
+        <div class="container mt-4">
+            <div class="col-sm-6">
+                <form th:action="@{/guardarMarca}" th:object=${marca} method="POST">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Marca</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label>Nombre</label>
+                                <input type="hidden" name="idMarca" th:field="*{idMarca}"/>
+                                <input class="form-control" type="text" name="nombreMarca" th:field="*{nombre}" />
+                                <input type="hidden" name="estadoMarca" th:field="*{estado}"/>
+                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input type="submit" class="btn btn-success" value="Guardar"/>
+                            <a  class="btn btn-danger" th:href="@{/}">Regresar</a>
+                        </div>
+                   </div>
+                </form>
+            </div>
+        </div>
     </body>
-</html>
+</html> 
+

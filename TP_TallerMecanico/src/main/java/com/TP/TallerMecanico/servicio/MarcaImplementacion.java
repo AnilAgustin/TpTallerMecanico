@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class MarcaImplementacion implements MarcaService{
+public class MarcaImplementacion implements MarcaService {
 
     @Autowired
     private IMarcaDao marcaDao;
@@ -16,18 +16,25 @@ public class MarcaImplementacion implements MarcaService{
     @Override
     @Transactional(readOnly = true)
     public List<Marca> listarMarcas() {
-        return marcaDao.findByEstadoTrue();  
+        return marcaDao.findByEstadoTrue();
     }
 
     @Override
     @Transactional
     public void guardar(Marca marca) {
+        marca.setNombre(marca.getNombre().toUpperCase());
         String nombreMarca = marca.getNombre();
-        Marca marcaExistente = marcaDao.findByNombreAndEstadoFalse(nombreMarca);
-        if(marcaExistente != null){
-            marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
-        }else{
-            marcaDao.save(marca);
+        Marca marcaExistente = marcaDao.findByNombre(nombreMarca);
+        Marca marcaRegistrada = marcaDao.findByNombreAndEstadoTrue(nombreMarca);
+
+        if (!nombreMarca.trim().isEmpty()) {
+            if (marcaExistente == null) {
+                marcaDao.save(marca);
+            } else {
+                if (marcaRegistrada == null) {
+                    marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
+                }
+            }
         }
     }
 
@@ -42,5 +49,5 @@ public class MarcaImplementacion implements MarcaService{
     public Marca buscarMarca(Marca marca) {
         return marcaDao.findById(marca.getIdMarca()).orElse(null);
     }
-    
+
 }

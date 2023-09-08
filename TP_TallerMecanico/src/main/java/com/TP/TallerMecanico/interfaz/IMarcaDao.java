@@ -18,5 +18,7 @@ public interface IMarcaDao extends CrudRepository<Marca, Long>{
     @Query("UPDATE Marca m SET m.estado = true WHERE m.idMarca = :idMarca")  //Update a estado true
     void marcarComoActivo(@Param("idMarca") Long idMarca);
     
-    Marca findByNombreAndEstadoFalse(String nombreMarca);
+    Marca findByNombre(String nombreMarca);
+    
+    Marca findByNombreAndEstadoTrue(String nombreMarca);
 }
