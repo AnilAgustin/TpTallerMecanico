@@ -27,6 +27,7 @@ public class GestorCliente {
     public String agregarCliente(Cliente cliente){
         return "agregarModificarCliente";
     }
+
     @PostMapping("/guardarCliente")
     public String guardarCliente(@Valid Cliente cliente, BindingResult error){
         if(error.hasErrors()){

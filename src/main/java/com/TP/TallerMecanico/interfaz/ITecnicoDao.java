@@ -1,24 +1,24 @@
 package com.TP.TallerMecanico.interfaz;
 
-import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-public interface ITecnicoDao extends CrudRepository<Cliente, Long> {
+public interface ITecnicoDao extends CrudRepository<Tecnico, Long> {
 
     @Modifying
     @Query("UPDATE Tecnico t SET t.estado = false WHERE t.idTecnico = :idTecnico")
     void marcarComoEliminado(@Param("idTecnico") Long idTecnico);
 
-    List<Cliente> findByEstadoTrue();
+    List<Tecnico> findByEstadoTrue();
 
     @Modifying
-    @Query("UPDATE Tecnico t SET t.estado = true WHERE m.idTecnico = :idTecnico")
+    @Query("UPDATE Tecnico t SET t.estado = true WHERE t.idTecnico = :idTecnico")
     void marcarComoActivo(@Param("idTecnico") Long idTecnico);
 
-    Cliente findByDni(String dni);
+    Tecnico findByLegajo(String legajo);
 
-    Cliente findByDniAndEstadoTrue(String dni);
+    Tecnico findByLegajoAndEstadoTrue(String legajo);
 }
