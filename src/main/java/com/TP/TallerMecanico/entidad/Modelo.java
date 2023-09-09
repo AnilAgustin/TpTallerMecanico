@@ -1,17 +1,13 @@
 package com.TP.TallerMecanico.entidad;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -33,6 +29,9 @@ public class Modelo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "marca_id")
     private Marca marca;
+
+    @OneToMany(mappedBy = "modelo")
+    private List<Vehiculo> vehiculos;
 
     private Boolean estado = true;
 }

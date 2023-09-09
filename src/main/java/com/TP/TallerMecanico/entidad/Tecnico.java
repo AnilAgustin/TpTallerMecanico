@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Size;
 
 // import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
+
 import lombok.Data;
 
 
@@ -35,6 +37,9 @@ public class Tecnico implements Serializable {
     @Size(max=50, message = "El apellido del tecnico no debe superar los 50 caracteres")
     @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El apellido debe contener solo caracteres alfabeticos")
     private String apellido;
+
+    @OneToMany(mappedBy = "tecnico")
+    private List<Vehiculo> vehiculo;
 
     private Boolean estado = true;
 
