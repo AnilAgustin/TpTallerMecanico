@@ -9,4 +9,5 @@ public interface IModeloService {
     public void guardar(Modelo modelo);
     public void eliminar(Modelo modelo);
     public Modelo buscarModelo(Modelo modelo);
+    public void activarModelo(Modelo modelo);
 }

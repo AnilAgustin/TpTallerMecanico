@@ -20,5 +20,9 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
     Cliente findByDni(String dni);
 
+    Cliente findByIdCliente(Long idCliente);
+
     Cliente findByDniAndEstadoTrue(String dni);
+
+
 }

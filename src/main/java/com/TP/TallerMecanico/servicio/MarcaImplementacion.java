@@ -19,6 +19,9 @@ public class MarcaImplementacion implements IMarcaService {
     @Autowired
     private IModeloDao modeloDao;
 
+    @Autowired 
+    private IModeloService modeloService;
+
     private List<Modelo> modelosAntesDeEliminar; 
 
     @Override
@@ -47,7 +50,7 @@ public class MarcaImplementacion implements IMarcaService {
 
                     if (modelosAntesDeEliminar != null) {
                         for (Modelo modelo : modelosAntesDeEliminar) {
-                            modeloDao.marcarComoActivo(modelo.getIdModelo());
+                            modeloService.activarModelo(modelo);
                         }
                     }
                 }
@@ -64,7 +67,7 @@ public class MarcaImplementacion implements IMarcaService {
         modelosAntesDeEliminar =  modeloDao.findByMarcaAndEstadoTrue(marca);
 
         for (Modelo modelo : modelosAntesDeEliminar) {
-            modeloDao.marcarComoEliminado(modelo.getIdModelo());
+            modeloService.eliminar(modelo);
         }
     }
 

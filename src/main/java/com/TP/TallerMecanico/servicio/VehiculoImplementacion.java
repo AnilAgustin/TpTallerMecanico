@@ -1,8 +1,6 @@
 package com.TP.TallerMecanico.servicio;
 
-import com.TP.TallerMecanico.entidad.Cliente;
-import com.TP.TallerMecanico.entidad.Modelo;
-import com.TP.TallerMecanico.entidad.Tecnico;
+
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import java.util.List;
@@ -15,6 +13,7 @@ public class VehiculoImplementacion implements IVehiculoService {
 
     @Autowired
     private IVehiculoDao vehiculoDao;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -35,11 +34,22 @@ public class VehiculoImplementacion implements IVehiculoService {
             if (vehiculoExistente != null){ //Chequeamos si estamos agregando o editando un vehiculo (comparando por id)
                 vehiculoDao.save(vehiculo); //Guardamos el vehiculo (editado)
             }
-            if (vehiculoRegistrado != null){
+            if (vehiculoRegistrado == null){
                 vehiculoDao.marcarComoActivo(patenteExistente.getIdVehiculo());
             }
         }
     }
+
+    @Override
+    @Transactional
+    public void activarVehiculo(List<Vehiculo> vehiculos){
+
+        for (Vehiculo vehiculo : vehiculos){
+            vehiculoDao.marcarComoActivo(vehiculo.getIdVehiculo());
+        }
+        
+    }
+
 
     @Override
     @Transactional

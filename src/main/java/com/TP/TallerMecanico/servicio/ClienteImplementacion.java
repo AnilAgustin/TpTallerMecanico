@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,20 +18,27 @@ public class ClienteImplementacion implements IClienteService {
     @Transactional(readOnly = true)
     public List<Cliente> listarClientes() { return clienteDao.findByEstadoTrue(); }
 
+    //private List<Vehiculo> vehiculosAntesDeEliminar;
+
     @Override
     @Transactional
     public void guardar(Cliente cliente) {
         String dni = cliente.getDni();
-        Cliente clienteExistente = clienteDao.findByDni(dni);
+        Long id = cliente.getIdCliente();
+        Cliente clienteExistente = clienteDao.findByIdCliente(id);
+        Cliente dniExistente = clienteDao.findByDni(dni);
         Cliente clienteRegistrado = clienteDao.findByDniAndEstadoTrue(dni);
 
-        if (clienteExistente == null) {
+        if (dniExistente == null){ 
             clienteDao.save(cliente);
-        } else {
-            if (clienteRegistrado == null) {
-                clienteDao.marcarComoActivo(clienteExistente.getIdCliente());
-                }
+        } else { 
+            if (clienteExistente != null){ 
+                clienteDao.save(cliente); 
             }
+            if (clienteRegistrado == null){
+                clienteDao.marcarComoActivo(dniExistente.getIdCliente());
+            }
+        }
     }
 
     @Override

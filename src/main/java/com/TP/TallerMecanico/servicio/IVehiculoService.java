@@ -9,4 +9,5 @@ public interface IVehiculoService {
     public void guardar(Vehiculo vehiculo);
     public void eliminar(Vehiculo vehiculo);
     public Vehiculo buscarVehiculo(Vehiculo vehiculo);
+    public void activarVehiculo(List<Vehiculo> vehiculos) ;
 }

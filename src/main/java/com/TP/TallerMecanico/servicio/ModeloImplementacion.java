@@ -2,7 +2,10 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
+import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IModeloDao;
+import com.TP.TallerMecanico.interfaz.IVehiculoDao;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +16,14 @@ public class ModeloImplementacion implements IModeloService {
 
     @Autowired
     private IModeloDao modeloDao;
+
+    @Autowired
+    private IVehiculoDao vehiculoDao;
+
+    @Autowired
+    private IVehiculoService vehiculoService;
+
+    private List<Vehiculo> vehiculosAntesDeEliminar;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,6 +47,9 @@ public class ModeloImplementacion implements IModeloService {
             } else {
                 if (modeloRegistrada == null) {
                     modeloDao.marcarComoActivo(modeloExistente.getIdModelo());
+                    if (vehiculosAntesDeEliminar != null) {
+                        vehiculoService.activarVehiculo(vehiculosAntesDeEliminar);
+                    }
                 }
             }
         }
@@ -43,8 +57,22 @@ public class ModeloImplementacion implements IModeloService {
 
     @Override
     @Transactional
+    public void activarModelo(Modelo modelo){
+        modeloDao.marcarComoActivo(modelo.getIdModelo());
+
+        vehiculoService.activarVehiculo(vehiculosAntesDeEliminar);
+    }
+
+    @Override
+    @Transactional
     public void eliminar(Modelo modelo) {
         modeloDao.marcarComoEliminado(modelo.getIdModelo());
+        
+        vehiculosAntesDeEliminar = vehiculoDao.findByModeloAndEstadoTrue(modelo);
+
+        for (Vehiculo vehiculo: vehiculosAntesDeEliminar){
+            vehiculoService.eliminar(vehiculo);
+        }
     }
 
     @Override
