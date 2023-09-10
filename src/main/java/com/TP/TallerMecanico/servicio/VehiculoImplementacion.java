@@ -1,10 +1,11 @@
 package com.TP.TallerMecanico.servicio;
 
-
+import org.apache.commons.beanutils.BeanUtils;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,10 @@ public class VehiculoImplementacion implements IVehiculoService {
         } else {
             if (vehiculoActivado == null) {
                 vehiculoDao.marcarComoActivo(patenteExistente.getIdVehiculo());
+                if (!patenteExistente.equals(vehiculo)){
+                    vehiculo.setIdVehiculo(patenteExistente.getIdVehiculo());
+                    vehiculoDao.save(vehiculo);
+                }
             }
         }
     }
