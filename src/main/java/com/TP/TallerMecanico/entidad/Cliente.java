@@ -41,6 +41,8 @@ public class Cliente implements Serializable {
     @OneToMany(mappedBy = "cliente")
     private List<Vehiculo> vehiculo;
 
+    @Transient
+    private String modo;
     private Boolean estado = true;
 
 }

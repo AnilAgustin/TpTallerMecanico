@@ -2,6 +2,7 @@ package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -21,11 +23,6 @@ public class GestorModelo {
 
     @Autowired
     private IModeloService modeloService; // Inyeccion de la clase (modeloImplementacion) a la interfaz modeloService
-
-    // @GetMapping("/")
-    // public String inicio() {
-    // return "index";
-    // }
 
     @Autowired
     private IMarcaService marcaService;
@@ -43,6 +40,7 @@ public class GestorModelo {
         List<Marca> marcas = marcaService.listarMarcas(); // Obtener marcas activas
         model.addAttribute("modelo", modelo);
         model.addAttribute("marcas", marcas); // Agregar la lista de marcas al modelo
+        model.addAttribute("modo", "nuevo");
         return "agregarModificarModelo";
     }
 
@@ -59,14 +57,19 @@ public class GestorModelo {
         return "redirect:/modelos";
     }
 
+    @PostMapping("/actualizarModelo")
+    public String actualizarModelo(@ModelAttribute Modelo modelo) {
+        modeloService.actualizar(modelo);
+        return "redirect:/modelos";
+    }
+
     @GetMapping("/modificarModelo/{idModelo}")
     public String modificarModelo(Modelo modelo, Model model) {
         modelo = modeloService.buscarModelo(modelo);
         model.addAttribute("modelo", modelo);
-
         List<Marca> marcas = marcaService.listarMarcas(); // Obtener marcas activas
         model.addAttribute("marcas", marcas);
-
+        model.addAttribute("modo", "editar");
         return "agregarModificarModelo";
     }
 

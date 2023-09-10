@@ -23,6 +23,8 @@ public class Marca implements Serializable{
     @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El nombre de la marca debe contener solo caracteres alfabeticos")    
     private String nombre;
     
+    @Transient
+    private String modo;
     private Boolean estado = true;
 
     @OneToMany(mappedBy = "marca")

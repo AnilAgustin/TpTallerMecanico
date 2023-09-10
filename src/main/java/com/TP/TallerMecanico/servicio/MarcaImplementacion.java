@@ -36,28 +36,45 @@ public class MarcaImplementacion implements IMarcaService {
         marca.setNombre(marca.getNombre().toUpperCase());
         String nombreMarca = marca.getNombre();
         Marca marcaExistente = marcaDao.findByNombre(nombreMarca);
-        Marca marcaRegistrada = marcaDao.findByNombreAndEstadoTrue(nombreMarca);
+        Marca marcaActivada = marcaDao.findByNombreAndEstadoTrue(nombreMarca);
 
         if (!nombreMarca.trim().isEmpty()) {
             if (marcaExistente == null) {
                 marcaDao.save(marca);
-                
             } else {
 
-                if (marcaRegistrada == null) {
+                if (marcaActivada == null) {
 
                     marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
 
-                    if (modelosAntesDeEliminar != null) {
-                        for (Modelo modelo : modelosAntesDeEliminar) {
-                            modeloService.activarModelo(modelo);                           
-                        }
+                    if (!marcaExistente.equals(marca)) {
+                        marca.setIdMarca(marcaExistente.getIdMarca());
+                        marcaDao.save(marca);
                     }
                 }
             }
         }
     }
 
+    @Override
+    @Transactional
+    public void actualizar(Marca marca){
+        marca.setNombre(marca.getNombre().toUpperCase());
+        Long marcaId = marca.getIdMarca();
+        Marca marcaExistente = marcaDao.findById(marcaId).orElse(null);
+        if(marcaExistente != null){
+            String nuevoNombre = marca.getNombre();
+            String nombreExistente = marcaExistente.getNombre();
+
+            if(nuevoNombre.equals(nombreExistente) || !nombreExisteEnBaseDeDatos(nuevoNombre)){
+                marcaDao.save(marca);
+            }
+        }
+    }
+
+    private boolean nombreExisteEnBaseDeDatos(String nombreMarca) {
+        return marcaDao.findByNombre(nombreMarca) != null;
+    }
 
     @Override
     @Transactional

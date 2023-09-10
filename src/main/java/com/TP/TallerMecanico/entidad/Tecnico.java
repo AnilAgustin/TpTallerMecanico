@@ -41,6 +41,8 @@ public class Tecnico implements Serializable {
     @OneToMany(mappedBy = "tecnico")
     private List<Vehiculo> vehiculo;
 
+    @Transient
+    private String modo;
     private Boolean estado = true;
 
 }

@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -24,7 +26,10 @@ public class GestorCliente {
     }
 
     @GetMapping("/agregarCliente")
-    public String agregarCliente(Cliente cliente){
+    public String agregarCliente(Model model){
+        var cliente = new Cliente();
+        model.addAttribute("cliente", cliente);
+        model.addAttribute("modo", "nuevo");
         return "agregarModificarCliente";
     }
 
@@ -38,10 +43,17 @@ public class GestorCliente {
         return "redirect:/clientes";
     }
 
+    @PostMapping("/actualizarCliente")
+    public String actualizarVehiculo(@ModelAttribute Cliente cliente) {
+        clienteService.actualizar(cliente);
+        return "redirect:/clientes";
+    }
+
     @GetMapping("/modificarCliente/{idCliente}")
     public String modificarCliente(Cliente cliente, Model model){
         cliente = clienteService.buscarCliente(cliente);
         model.addAttribute("cliente", cliente);
+        model.addAttribute("modo", "editar");
         return "agregarModificarCliente";
     }
     @GetMapping("/eliminarCliente/{idCliente}")

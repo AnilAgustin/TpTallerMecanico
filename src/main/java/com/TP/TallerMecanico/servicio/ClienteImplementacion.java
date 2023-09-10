@@ -24,20 +24,44 @@ public class ClienteImplementacion implements IClienteService {
     public void guardar(Cliente cliente) {
         String dni = cliente.getDni();
         Long id = cliente.getIdCliente();
-        Cliente clienteExistente = clienteDao.findByIdCliente(id);
+        //Cliente clienteExistente = clienteDao.findByIdCliente(id);
         Cliente dniExistente = clienteDao.findByDni(dni);
-        Cliente clienteRegistrado = clienteDao.findByDniAndEstadoTrue(dni);
+        Cliente clienteActivado = clienteDao.findByDniAndEstadoTrue(dni);
 
         if (dniExistente == null){ 
             clienteDao.save(cliente);
         } else { 
-            if (clienteExistente != null){ 
-                clienteDao.save(cliente); 
-            }
-            if (clienteRegistrado == null){
+            // if (clienteExistente != null){ 
+            //     clienteDao.save(cliente); 
+            // }
+            if (clienteActivado == null){
                 clienteDao.marcarComoActivo(dniExistente.getIdCliente());
+                if(!dniExistente.equals(cliente)){
+                    cliente.setIdCliente(dniExistente.getIdCliente());
+                    clienteDao.save(cliente);
+                }
+            }
+
+        }
+    }
+
+    @Override
+    @Transactional
+    public void actualizar(Cliente cliente){
+        Long clienteId = cliente.getIdCliente();
+        Cliente clienteExistente = clienteDao.findById(clienteId).orElse(null);
+        if (clienteExistente != null) {
+            String nuevoDni = cliente.getDni();
+            String dniExistente = clienteExistente.getDni();
+
+            if (nuevoDni.equals(dniExistente) || !dniExisteEnBaseDeDatos(nuevoDni)) {
+                clienteDao.save(cliente);
             }
         }
+    }
+
+    private boolean dniExisteEnBaseDeDatos(String dniCliente) {
+        return clienteDao.findByDni(dniCliente) != null;
     }
 
     @Override

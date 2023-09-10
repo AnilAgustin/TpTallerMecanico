@@ -30,9 +30,13 @@ public class VehiculoImplementacion implements IVehiculoService {
         } else {
             if (vehiculoActivado == null) {
                 vehiculoDao.marcarComoActivo(patenteExistente.getIdVehiculo());
+                if (!patenteExistente.equals(vehiculo)){
+                    vehiculo.setIdVehiculo(patenteExistente.getIdVehiculo());
+                    vehiculoDao.save(vehiculo);
+                }
             }
         }
-    }
+    } 
 
     @Override
     @Transactional

@@ -1,12 +1,15 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Marca;
+import com.TP.TallerMecanico.entidad.Modelo;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import com.TP.TallerMecanico.servicio.IMarcaService;
 
@@ -29,7 +32,10 @@ public class GestorMarca {
     }
 
     @GetMapping("/agregarMarca")
-    public String agregarMarca(Marca marca) {
+    public String agregarMarca(Model model) {
+        var marca = new Marca();
+        model.addAttribute("marca", marca);
+        model.addAttribute("modo", "nuevo");
         return "agregarModificarMarca";
     }
 
@@ -42,10 +48,17 @@ public class GestorMarca {
         return "redirect:/marcas";
     }
 
+    @PostMapping("/actualizarMarca")
+    public String actualizarModelo(@ModelAttribute Marca marca) {
+        marcaService.actualizar(marca);
+        return "redirect:/marcas";
+    }
+
     @GetMapping("/modificarMarca/{idMarca}")
     public String modificarMarca(Marca marca, Model model) {
         marca = marcaService.buscarMarca(marca);
         model.addAttribute("marca", marca);
+        model.addAttribute("modo", "editar");
         return "agregarModificarMarca";
     }
 

@@ -25,5 +25,7 @@ public interface IModeloDao extends CrudRepository<Modelo, Long>{
     
     Modelo findByNombreAndEstadoTrue(String nombreModelo);
 
+    Modelo findByMarca(Marca marca);
+
     List<Modelo> findByMarcaAndEstadoTrue(Marca marca);
 }

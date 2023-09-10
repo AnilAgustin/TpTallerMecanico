@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -24,7 +26,10 @@ public class GestorTecnico {
     }
 
     @GetMapping("/agregarTecnico")
-    public String agregarTecnico(Tecnico tecnico){
+    public String agregarTecnico(Model model){
+        var tecnico = new Tecnico();
+        model.addAttribute("tecnico", tecnico);
+        model.addAttribute("modo", "nuevo");
         return "agregarModificarTecnico";
     }
 
@@ -38,12 +43,20 @@ public class GestorTecnico {
         return "redirect:/tecnicos";
     }
 
+    @PostMapping("/actualizarTecnico")
+    public String actualizarVehiculo(@ModelAttribute Tecnico tecnico) {
+        tecnicoService.actualizar(tecnico);
+        return "redirect:/tecnicos";
+    }
+
     @GetMapping("/modificarTecnico/{idTecnico}")
-    public String modificarTecnico(Tecnico tecnico, Model model){
-        tecnico = tecnicoService.buscarTecnico(tecnico);
+    public String modificarTecnico(@PathVariable Long idTecnico, Model model){
+        var tecnico = tecnicoService.buscarTecnico(idTecnico);
         model.addAttribute("tecnico", tecnico);
+        model.addAttribute("modo", "editar");
         return "agregarModificarTecnico";
     }
+
     @GetMapping("/eliminarTecnico/{idTecnico}")
     public String eliminarTecnico(Tecnico tecnico){
         tecnicoService.eliminar(tecnico);

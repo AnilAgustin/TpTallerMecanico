@@ -33,5 +33,7 @@ public class Modelo implements Serializable {
     @OneToMany(mappedBy = "modelo")
     private List<Vehiculo> vehiculos;
 
+    @Transient
+    private String modo;
     private Boolean estado = true;
 }

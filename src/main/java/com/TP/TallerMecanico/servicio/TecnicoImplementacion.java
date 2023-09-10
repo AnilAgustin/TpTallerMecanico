@@ -21,16 +21,40 @@ public class TecnicoImplementacion implements ITecnicoService {
     @Transactional
     public void guardar(Tecnico tecnico) {
         String legajo = tecnico.getLegajo();
-        Tecnico tecnicoExistente = tecnicoDao.findByLegajo(legajo);
-        Tecnico tecnicoRegistrado = tecnicoDao.findByLegajoAndEstadoTrue(legajo);
+        Tecnico legajoExistente = tecnicoDao.findByLegajo(legajo);
+        Tecnico tecnicoActivado = tecnicoDao.findByLegajoAndEstadoTrue(legajo);
 
-        if (tecnicoExistente == null) {
+        if (legajoExistente == null) {
             tecnicoDao.save(tecnico);
         } else {
-            if (tecnicoRegistrado == null) {
-                tecnicoDao.marcarComoActivo(tecnicoExistente.getIdTecnico());
+            if (tecnicoActivado == null) {
+                tecnicoDao.marcarComoActivo(legajoExistente.getIdTecnico());
+                if(!legajoExistente.equals(tecnico)){
+                    tecnico.setIdTecnico(legajoExistente.getIdTecnico());
+                    tecnicoDao.save(tecnico);
                 }
             }
+        }
+    }
+
+    @Override
+    @Transactional
+    public void actualizar(Tecnico tecnico){
+        Long tecnicoId = tecnico.getIdTecnico();
+        Tecnico tecnicoExistente = tecnicoDao.findById(tecnicoId).orElse(null);
+        if (tecnicoExistente != null) {
+            // Verificar si el tecnico ha cambiado
+            String nuevoLegajo = tecnico.getLegajo();
+            String legajoExistente = tecnicoExistente.getLegajo();
+
+            if (nuevoLegajo.equals(legajoExistente) || !legajoExisteEnBaseDeDatos(nuevoLegajo)) {
+                tecnicoDao.save(tecnico);
+            }
+        }
+    }   
+
+    private boolean legajoExisteEnBaseDeDatos(String legajo) {
+        return tecnicoDao.findByLegajo(legajo) != null;
     }
 
     @Override
@@ -41,7 +65,7 @@ public class TecnicoImplementacion implements ITecnicoService {
 
     @Override
     @Transactional(readOnly = true)
-    public Tecnico buscarTecnico(Tecnico tecnico) {
-        return tecnicoDao.findById(tecnico.getIdTecnico()).orElse(null);
+    public Tecnico buscarTecnico(Long idTecnico) {
+        return tecnicoDao.findById(idTecnico).orElse(null);
     }
 }

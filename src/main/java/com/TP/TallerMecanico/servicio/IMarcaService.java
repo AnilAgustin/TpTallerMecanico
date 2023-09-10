@@ -7,6 +7,7 @@ public interface IMarcaService {
     
     public List<Marca> listarMarcas();
     public void guardar(Marca marca);
+    public void actualizar(Marca marca);
     public void eliminar(Marca marca);
     public Marca buscarMarca(Marca marca);
 }
