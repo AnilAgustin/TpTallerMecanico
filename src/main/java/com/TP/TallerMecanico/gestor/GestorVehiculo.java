@@ -1,16 +1,13 @@
 package com.TP.TallerMecanico.gestor;
 
-import jakarta.servlet.http.HttpServletRequest;
 import com.TP.TallerMecanico.entidad.*;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,14 +44,13 @@ public class GestorVehiculo {
         return "agregarModificarVehiculo";
     }
 
-
-
     @GetMapping("/vehiculos")
     public String listarVehiculos(Model model) {
         var vehiculo = vehiculoService.listarVehiculos();
         model.addAttribute("vehiculo", vehiculo);
         return "vehiculos";
     }
+
     @PostMapping("/guardarVehiculo")
     public String guardarVehiculo(@ModelAttribute Vehiculo vehiculo, Model model) {
         vehiculoService.guardar(vehiculo);
@@ -82,8 +78,11 @@ public class GestorVehiculo {
     }
 
     @GetMapping("/eliminarVehiculo/{idVehiculo}")
-    public String eliminarVehiculo(Vehiculo vehiculo){
+    public String eliminarVehiculo(Vehiculo vehiculo) {
+
         vehiculoService.eliminar(vehiculo);
         return "redirect:/vehiculos";
     }
+
+    
 }

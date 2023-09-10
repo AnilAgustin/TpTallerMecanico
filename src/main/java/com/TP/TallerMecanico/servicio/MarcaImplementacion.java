@@ -50,7 +50,7 @@ public class MarcaImplementacion implements IMarcaService {
 
                     if (modelosAntesDeEliminar != null) {
                         for (Modelo modelo : modelosAntesDeEliminar) {
-                            modeloService.activarModelo(modelo);
+                            modeloService.activarModelo(modelo);                           
                         }
                     }
                 }
@@ -65,9 +65,10 @@ public class MarcaImplementacion implements IMarcaService {
         marcaDao.marcarComoEliminado(marca.getIdMarca());
 
         modelosAntesDeEliminar =  modeloDao.findByMarcaAndEstadoTrue(marca);
-
+        
         for (Modelo modelo : modelosAntesDeEliminar) {
             modeloService.eliminar(modelo);
+            System.out.println(modelo.getNombre());
         }
     }
 

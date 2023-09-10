@@ -10,5 +10,5 @@ public interface IVehiculoService {
     public void actualizar(Vehiculo vehiculo);
     public void eliminar(Vehiculo vehiculo);
     public Vehiculo buscarVehiculo(Long idVehiculo);
-    public void activarVehiculo(List<Vehiculo> vehiculos) ;
+    public void activarVehiculo(Vehiculo vehiculo) ;
 }

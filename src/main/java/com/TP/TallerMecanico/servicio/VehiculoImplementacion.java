@@ -1,8 +1,6 @@
 package com.TP.TallerMecanico.servicio;
 
-import com.TP.TallerMecanico.entidad.Cliente;
-import com.TP.TallerMecanico.entidad.Modelo;
-import com.TP.TallerMecanico.entidad.Tecnico;
+
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import java.util.List;
@@ -73,7 +71,7 @@ public class VehiculoImplementacion implements IVehiculoService {
     }
 
     @Override
-    public void activarVehiculo(List<Vehiculo> vehiculos) {
-
+    public void activarVehiculo(Vehiculo vehiculo) {
+        vehiculoDao.marcarComoActivo(vehiculo.getIdVehiculo());
     }
 }

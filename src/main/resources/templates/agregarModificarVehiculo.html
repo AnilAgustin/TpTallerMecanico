@@ -60,25 +60,16 @@
                     <div class="card-footer">
                         <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
                                             <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
-                        <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
+                    <button type="submit" class="btn btn-success ">Guardar</button>
+                    <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
+                        
                     </div>
                 </div>
-                <button type="submit">Guardar</button>
+                
             </form>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
+        <!--Actualizar-->
         <div th:if="${modo eq 'editar'}">
             <form th:action="@{/actualizarVehiculo}" th:object="${vehiculo}" method="POST">
                 <div class="card">
@@ -131,10 +122,12 @@
                     <div class="card-footer">
                         <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
                                             <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
+                        <button type="submit" class="btn btn-success">Actualizar</button>
                         <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
+                        
                     </div>
                 </div>
-                <button type="submit">Actualizar</button>
+                
             </form>
 
 

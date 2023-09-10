@@ -18,17 +18,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class GestorModelo {
-    
+
     @Autowired
-    private IModeloService modeloService; //Inyeccion de la clase (modeloImplementacion) a la interfaz modeloService
-    
+    private IModeloService modeloService; // Inyeccion de la clase (modeloImplementacion) a la interfaz modeloService
+
     // @GetMapping("/")
     // public String inicio() {
-    //     return "index";
+    // return "index";
     // }
 
     @Autowired
     private IMarcaService marcaService;
+
+    @GetMapping("/modelos")
+    public String listarModelos(Model model) {
+        var modelo = modeloService.listarModelos();
+        model.addAttribute("modelo", modelo);
+        return "modelos";
+    }
 
     @GetMapping("/agregarModelo")
     public String agregarModelo(Model model) {
@@ -37,13 +44,6 @@ public class GestorModelo {
         model.addAttribute("modelo", modelo);
         model.addAttribute("marcas", marcas); // Agregar la lista de marcas al modelo
         return "agregarModificarModelo";
-    }
-
-    @GetMapping("/modelos")
-    public String listarModelos(Model model) {
-        var modelo = modeloService.listarModelos();
-        model.addAttribute("modelo", modelo);
-        return "modelos";
     }
 
     @PostMapping("/guardarModelo")

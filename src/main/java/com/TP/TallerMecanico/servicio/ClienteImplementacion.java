@@ -1,7 +1,6 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Cliente;
-import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

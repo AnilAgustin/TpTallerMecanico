@@ -48,7 +48,12 @@ public class ModeloImplementacion implements IModeloService {
                 if (modeloRegistrada == null) {
                     modeloDao.marcarComoActivo(modeloExistente.getIdModelo());
                     if (vehiculosAntesDeEliminar != null) {
-                        vehiculoService.activarVehiculo(vehiculosAntesDeEliminar);
+
+                        for (Vehiculo vehiculo : vehiculosAntesDeEliminar) {
+                            vehiculoService.activarVehiculo(vehiculo);
+                            System.out.println("ACTIVADO"+vehiculo.getPatente());
+                        }
+                        
                     }
                 }
             }
@@ -60,7 +65,11 @@ public class ModeloImplementacion implements IModeloService {
     public void activarModelo(Modelo modelo){
         modeloDao.marcarComoActivo(modelo.getIdModelo());
 
-        vehiculoService.activarVehiculo(vehiculosAntesDeEliminar);
+        for (Vehiculo vehiculo : vehiculosAntesDeEliminar) {
+            vehiculoService.activarVehiculo(vehiculo);
+            System.out.println("ACTIVADO"+vehiculo.getPatente());
+        }
+        
     }
 
     @Override
@@ -72,6 +81,7 @@ public class ModeloImplementacion implements IModeloService {
 
         for (Vehiculo vehiculo: vehiculosAntesDeEliminar){
             vehiculoService.eliminar(vehiculo);
+            System.out.println("ELIMINADO"+vehiculo.getPatente());
         }
     }
 
