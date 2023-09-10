@@ -1,6 +1,5 @@
 package com.TP.TallerMecanico.servicio;
 
-import org.apache.commons.beanutils.BeanUtils;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import java.util.List;

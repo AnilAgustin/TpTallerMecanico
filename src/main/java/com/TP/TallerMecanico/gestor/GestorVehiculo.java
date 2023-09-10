@@ -5,9 +5,11 @@ import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -52,13 +54,33 @@ public class GestorVehiculo {
     }
 
     @PostMapping("/guardarVehiculo")
-    public String guardarVehiculo(@ModelAttribute Vehiculo vehiculo, Model model) {
+    public String guardarVehiculo(@Valid Vehiculo vehiculo, BindingResult error, Model model) {
+        if (error.hasErrors()) {
+            model.addAttribute("modo","nuevo");
+            List<Modelo> modelos = modeloService.listarModelos();
+            List<Cliente> clientes = clienteService.listarClientes();
+            List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
+            model.addAttribute("modelos", modelos);
+            model.addAttribute("clientes", clientes);
+            model.addAttribute("tecnicos", tecnicos);
+            return "agregarModificarVehiculo";
+        }
         vehiculoService.guardar(vehiculo);
         return "redirect:/vehiculos";
     }
 
     @PostMapping("/actualizarVehiculo")
-    public String actualizarVehiculo(@ModelAttribute Vehiculo vehiculo) {
+    public String actualizarVehiculo(@Valid @ModelAttribute Vehiculo vehiculo, BindingResult error, Model model) {
+        if (error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            List<Modelo> modelos = modeloService.listarModelos();
+            List<Cliente> clientes = clienteService.listarClientes();
+            List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
+            model.addAttribute("modelos", modelos);
+            model.addAttribute("clientes", clientes);
+            model.addAttribute("tecnicos", tecnicos);
+            return "agregarModificarVehiculo";
+        }
         vehiculoService.actualizar(vehiculo);
         return "redirect:/vehiculos";
     }

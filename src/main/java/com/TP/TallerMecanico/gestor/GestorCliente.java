@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.naming.Binding;
+
 @Controller
 public class GestorCliente {
 
@@ -34,17 +36,21 @@ public class GestorCliente {
     }
 
     @PostMapping("/guardarCliente")
-    public String guardarCliente(@Valid Cliente cliente, BindingResult error){
+    public String guardarCliente(@Valid Cliente cliente, BindingResult error, Model model){
         if(error.hasErrors()){
+            model.addAttribute("modo","nuevo");
             return "agregarModificarCliente";
         }
-        
         clienteService.guardar(cliente);
         return "redirect:/clientes";
     }
 
     @PostMapping("/actualizarCliente")
-    public String actualizarVehiculo(@ModelAttribute Cliente cliente) {
+    public String actualizarVehiculo(@Valid @ModelAttribute Cliente cliente, BindingResult error,Model model) {
+        if(error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            return "agregarModificarCliente";
+        }
         clienteService.actualizar(cliente);
         return "redirect:/clientes";
     }

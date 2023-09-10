@@ -47,9 +47,9 @@ public class GestorModelo {
     @PostMapping("/guardarModelo")
     public String guardarModelo(@Valid Modelo modelo, BindingResult error, Model model) {
         if (error.hasErrors()) {
+            model.addAttribute("modo","nuevo");
             List<Marca> marcas = marcaService.listarMarcas(); // Obtener marcas activas
             model.addAttribute("marcas", marcas);
-
             return "agregarModificarModelo";
         }
 
@@ -58,7 +58,13 @@ public class GestorModelo {
     }
 
     @PostMapping("/actualizarModelo")
-    public String actualizarModelo(@ModelAttribute Modelo modelo) {
+    public String actualizarModelo(@Valid @ModelAttribute Modelo modelo, BindingResult error, Model model) {
+        if (error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            List<Marca> marcas = marcaService.listarMarcas();
+            model.addAttribute("marcas", marcas);
+            return "agregarModificarModelo";
+        }
         modeloService.actualizar(modelo);
         return "redirect:/modelos";
     }

@@ -40,6 +40,7 @@ public class Vehiculo implements Serializable {
 
     @Transient
     private String modo;
+
     private Boolean estado = true;
 
 }

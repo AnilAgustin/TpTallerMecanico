@@ -22,7 +22,6 @@ public class MarcaImplementacion implements IMarcaService {
     @Autowired 
     private IModeloService modeloService;
 
-    private List<Modelo> modelosAntesDeEliminar; 
 
     @Override
     @Transactional(readOnly = true)
@@ -46,10 +45,8 @@ public class MarcaImplementacion implements IMarcaService {
                 if (marcaActivada == null) {
 
                     marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
-
-                    if (!marcaExistente.equals(marca)) {
-                        marca.setIdMarca(marcaExistente.getIdMarca());
-                        marcaDao.save(marca);
+                    for (Modelo modelo : marcaExistente.getModelos()) {
+                        modeloService.activarModelo(modelo);
                     }
                 }
             }
@@ -80,12 +77,8 @@ public class MarcaImplementacion implements IMarcaService {
     @Transactional
     public void eliminar(Marca marca) {
         marcaDao.marcarComoEliminado(marca.getIdMarca());
-
-        modelosAntesDeEliminar =  modeloDao.findByMarcaAndEstadoTrue(marca);
-        
-        for (Modelo modelo : modelosAntesDeEliminar) {
-            modeloService.eliminar(modelo);
-            System.out.println(modelo.getNombre());
+        for (Modelo modelo : modeloDao.findByMarcaAndEstadoTrue(marca)) {
+              modeloService.eliminar(modelo);
         }
     }
 

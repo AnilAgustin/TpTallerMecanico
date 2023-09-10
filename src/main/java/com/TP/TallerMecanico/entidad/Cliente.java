@@ -39,10 +39,14 @@ public class Cliente implements Serializable {
     private String apellido;
 
     @OneToMany(mappedBy = "cliente")
-    private List<Vehiculo> vehiculo;
+    private List<Vehiculo> vehiculos;
 
     @Transient
     private String modo;
     private Boolean estado = true;
+
+    public List<Vehiculo> getVehiculos(){
+        return vehiculos;
+    }
 
 }

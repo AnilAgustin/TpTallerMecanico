@@ -1,14 +1,24 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Tecnico;
+import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import java.util.List;
+
+import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClienteImplementacion implements IClienteService {
+
+    @Autowired
+    private IVehiculoDao vehiculoDao;
+
+    @Autowired
+    private IVehiculoService vehiculoService;
 
     @Autowired
     private IClienteDao clienteDao;
@@ -23,27 +33,25 @@ public class ClienteImplementacion implements IClienteService {
     @Transactional
     public void guardar(Cliente cliente) {
         String dni = cliente.getDni();
-        Long id = cliente.getIdCliente();
-        //Cliente clienteExistente = clienteDao.findByIdCliente(id);
         Cliente dniExistente = clienteDao.findByDni(dni);
-        Cliente clienteActivado = clienteDao.findByDniAndEstadoTrue(dni);
+        Cliente dniActivado = clienteDao.findByDniAndEstadoTrue(dni);
 
-        if (dniExistente == null){ 
+        if (dniExistente == null) {
             clienteDao.save(cliente);
-        } else { 
-            // if (clienteExistente != null){ 
-            //     clienteDao.save(cliente); 
-            // }
-            if (clienteActivado == null){
+        } else {
+            if (dniActivado == null){
                 clienteDao.marcarComoActivo(dniExistente.getIdCliente());
-                if(!dniExistente.equals(cliente)){
+                for (Vehiculo vehiculo : dniExistente.getVehiculos()){
+                    vehiculoService.activarVehiculo(vehiculo);
+                }
+                if (!dniExistente.equals(cliente)){
                     cliente.setIdCliente(dniExistente.getIdCliente());
                     clienteDao.save(cliente);
                 }
             }
-
         }
     }
+
 
     @Override
     @Transactional
@@ -68,6 +76,9 @@ public class ClienteImplementacion implements IClienteService {
     @Transactional
     public void eliminar(Cliente cliente) {
         clienteDao.marcarComoEliminado(cliente.getIdCliente());
+        for (Vehiculo vehiculo : vehiculoDao.findByClienteAndEstadoTrue(cliente)){
+            vehiculoService.eliminar(vehiculo);
+        }
     }
 
     @Override

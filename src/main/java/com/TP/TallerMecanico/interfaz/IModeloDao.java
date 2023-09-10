@@ -19,13 +19,17 @@ public interface IModeloDao extends CrudRepository<Modelo, Long>{
     @Modifying
     @Query("UPDATE Modelo m SET m.estado = true WHERE m.idModelo = :idModelo")  //Update a estado true
     void marcarComoActivo(@Param("idModelo") Long idModelo);
-    
-    //Modelo findByNombre(String nombreModelo);
+
     Modelo findByNombreAndMarca(String nombreModelo, Marca marca);
+
+    Modelo findByNombreAndMarcaAndEstadoTrue(String nombreModelo, Marca marca);
+
+    Modelo findByNombreAndMarcaAndEstadoFalse(String nombreModelo, Marca marca);
     
     Modelo findByNombreAndEstadoTrue(String nombreModelo);
 
     Modelo findByMarca(Marca marca);
 
     List<Modelo> findByMarcaAndEstadoTrue(Marca marca);
+
 }

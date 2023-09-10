@@ -1,8 +1,11 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Tecnico;
+import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.ITecnicoDao;
 import java.util.List;
+
+import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +16,11 @@ public class TecnicoImplementacion implements ITecnicoService {
     @Autowired
     private ITecnicoDao tecnicoDao;
 
+    @Autowired
+    private IVehiculoDao vehiculoDao;
+
+    @Autowired
+    private IVehiculoService vehiculoService;
     @Override
     @Transactional(readOnly = true)
     public List<Tecnico> listarTecnicos() { return tecnicoDao.findByEstadoTrue(); }
@@ -22,14 +30,17 @@ public class TecnicoImplementacion implements ITecnicoService {
     public void guardar(Tecnico tecnico) {
         String legajo = tecnico.getLegajo();
         Tecnico legajoExistente = tecnicoDao.findByLegajo(legajo);
-        Tecnico tecnicoActivado = tecnicoDao.findByLegajoAndEstadoTrue(legajo);
+        Tecnico legajoActivado = tecnicoDao.findByLegajoAndEstadoTrue(legajo);
 
         if (legajoExistente == null) {
             tecnicoDao.save(tecnico);
         } else {
-            if (tecnicoActivado == null) {
+            if (legajoActivado == null){
                 tecnicoDao.marcarComoActivo(legajoExistente.getIdTecnico());
-                if(!legajoExistente.equals(tecnico)){
+                for (Vehiculo vehiculo : legajoExistente.getVehiculos()){
+                    vehiculoService.activarVehiculo(vehiculo);
+                }
+                if (!legajoExistente.equals(tecnico)){
                     tecnico.setIdTecnico(legajoExistente.getIdTecnico());
                     tecnicoDao.save(tecnico);
                 }
@@ -61,6 +72,9 @@ public class TecnicoImplementacion implements ITecnicoService {
     @Transactional
     public void eliminar(Tecnico tecnico) {
         tecnicoDao.marcarComoEliminado(tecnico.getIdTecnico());
+        for (Vehiculo vehiculo: vehiculoDao.findByTecnicoAndEstadoTrue(tecnico)){
+            vehiculoService.eliminar(vehiculo);
+        }
     }
 
     @Override

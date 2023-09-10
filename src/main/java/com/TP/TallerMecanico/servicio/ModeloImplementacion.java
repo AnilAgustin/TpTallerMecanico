@@ -8,6 +8,8 @@ import com.TP.TallerMecanico.interfaz.IModeloDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 
 import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +26,6 @@ public class ModeloImplementacion implements IModeloService {
     @Autowired
     private IVehiculoService vehiculoService;
 
-    private List<Vehiculo> vehiculosAntesDeEliminar;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,23 +37,17 @@ public class ModeloImplementacion implements IModeloService {
     @Transactional
     public void guardar(Modelo modelo) {
         modelo.setNombre(modelo.getNombre().toUpperCase());
-        String nombreModelo = modelo.getNombre();
-        
-        Marca marcaModelo = modelo.getMarca(); // Obtén la marca del modelo
-        Modelo modeloExistente = modeloDao.findByNombreAndMarca(nombreModelo, marcaModelo);
-        Modelo modeloActivado = modeloDao.findByNombreAndEstadoTrue(nombreModelo);
+        String nombreNuevo = modelo.getNombre();
+        Marca marcaNueva = modelo.getMarca();
 
-        if (!nombreModelo.trim().isEmpty()) {
-            if (modeloExistente == null) {
-                modeloDao.save(modelo);
-            } else {
-                if (modeloActivado == null) {
-                    modeloDao.marcarComoActivo(modeloExistente.getIdModelo());
-                    if (!modeloExistente.equals(modelo)) {
-                        modelo.setIdModelo(modeloExistente.getIdModelo());
-                        modeloDao.save(modelo);
-                    }
-                }
+        Modelo modeloExistente = modeloDao.findByNombreAndMarcaAndEstadoTrue(nombreNuevo, marcaNueva);
+        Modelo modeloActivado = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
+
+        if (modeloExistente == null) {
+            modeloDao.save(modelo);
+        } else {
+            if (modeloActivado != null) {
+                activarModelo(modeloExistente);
             }
         }
     }
@@ -60,17 +55,30 @@ public class ModeloImplementacion implements IModeloService {
     @Override
     @Transactional
     public void actualizar(Modelo modelo){
-        Long modeloId = modelo.getIdModelo();
-        Modelo modeloExistente = modeloDao.findById(modeloId).orElse(null);
-        if (modeloExistente != null) {
-            Marca marcaNueva = modelo.getMarca();
-            Marca marcaExistente = modeloExistente.getMarca();
+        modelo.setNombre(modelo.getNombre().toUpperCase());
+        Marca marcaNueva = modelo.getMarca();
+        String nombreNuevo = modelo.getNombre();
 
-            if (marcaNueva.equals(marcaExistente) || !modeloExisteEnBaseDeDatos(marcaNueva)) {
-                modelo.setNombre(modelo.getNombre().toUpperCase());
+        Modelo modeloViejo = modeloDao.findById(modelo.getIdModelo()).orElse(null);
+        Marca marcaExistente = modeloViejo.getMarca();
+        String nombreViejo = modeloViejo.getNombre();
+
+        if (marcaNueva.equals((marcaExistente))){
+            if (!nombreNuevo.equals((nombreViejo))) {
+                Modelo checkNM1 = modeloDao.findByNombreAndMarca(nombreNuevo, marcaNueva);
+                if (checkNM1 == null) {
+                    modeloDao.save(modelo);
+                }
+            }
+        } else {
+            Modelo checkNM2 = modeloDao.findByNombreAndMarca(nombreNuevo, marcaNueva);
+            if (checkNM2 == null){
                 modeloDao.save(modelo);
             }
+
+
         }
+
     }
 
     private boolean modeloExisteEnBaseDeDatos(Marca marca) {
@@ -81,10 +89,8 @@ public class ModeloImplementacion implements IModeloService {
     @Transactional
     public void activarModelo(Modelo modelo){
         modeloDao.marcarComoActivo(modelo.getIdModelo());
-
-        for (Vehiculo vehiculo : vehiculosAntesDeEliminar) {
+        for (Vehiculo vehiculo : modelo.getVehiculos()) {
             vehiculoService.activarVehiculo(vehiculo);
-            System.out.println("ACTIVADO"+vehiculo.getPatente());
         }
         
     }
@@ -93,12 +99,8 @@ public class ModeloImplementacion implements IModeloService {
     @Transactional
     public void eliminar(Modelo modelo) {
         modeloDao.marcarComoEliminado(modelo.getIdModelo());
-        
-        vehiculosAntesDeEliminar = vehiculoDao.findByModeloAndEstadoTrue(modelo);
-
-        for (Vehiculo vehiculo: vehiculosAntesDeEliminar){
+        for (Vehiculo vehiculo: vehiculoDao.findByModeloAndEstadoTrue(modelo)){
             vehiculoService.eliminar(vehiculo);
-            System.out.println("ELIMINADO"+vehiculo.getPatente());
         }
     }
 

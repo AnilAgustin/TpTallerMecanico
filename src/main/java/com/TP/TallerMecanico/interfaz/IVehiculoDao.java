@@ -1,6 +1,8 @@
 package com.TP.TallerMecanico.interfaz;
 
+import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Modelo;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
@@ -30,4 +32,8 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
     Vehiculo findByIdVehiculo(Long idVehiculo);
 
     List<Vehiculo> findByModeloAndEstadoTrue(Modelo modelo);
+
+    List<Vehiculo> findByClienteAndEstadoTrue(Cliente cliente);
+
+    List<Vehiculo> findByTecnicoAndEstadoTrue(Tecnico tecnico);
 }

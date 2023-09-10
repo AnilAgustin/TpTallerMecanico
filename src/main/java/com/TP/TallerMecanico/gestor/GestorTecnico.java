@@ -34,17 +34,21 @@ public class GestorTecnico {
     }
 
     @PostMapping("/guardarTecnico")
-    public String guardarTecnico(@Valid Tecnico tecnico, BindingResult error){
+    public String guardarTecnico(@Valid Tecnico tecnico, BindingResult error, Model model){
         if(error.hasErrors()){
+            model.addAttribute("modo","nuevo");
             return "agregarModificarTecnico";
         }
-        
         tecnicoService.guardar(tecnico);
         return "redirect:/tecnicos";
     }
 
     @PostMapping("/actualizarTecnico")
-    public String actualizarVehiculo(@ModelAttribute Tecnico tecnico) {
+    public String actualizarVehiculo(@Valid @ModelAttribute Tecnico tecnico, BindingResult error, Model model) {
+        if (error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            return "agregarModificarTecnico";
+        }
         tecnicoService.actualizar(tecnico);
         return "redirect:/tecnicos";
     }

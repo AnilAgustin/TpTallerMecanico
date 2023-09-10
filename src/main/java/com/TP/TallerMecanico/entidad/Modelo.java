@@ -23,7 +23,7 @@ public class Modelo implements Serializable {
     
     @NotEmpty(message = "El campo no debe estar vacio")
     @Size(max=50, message = "El nombre de la marca no debe superar los 50 caracteres") 
-    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\\d\\s]+$", message = "El nombre de la marca debe contener caracteres alfabéticos y números")
+    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\\d\\s.]+$", message = "El nombre de la marca debe contener caracteres alfabéticos y números")
     private String nombre;
     
     @ManyToOne
@@ -36,4 +36,8 @@ public class Modelo implements Serializable {
     @Transient
     private String modo;
     private Boolean estado = true;
+
+    public List<Vehiculo> getVehiculos(){
+        return vehiculos;
+    }
 }

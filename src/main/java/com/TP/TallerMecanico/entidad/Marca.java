@@ -29,4 +29,9 @@ public class Marca implements Serializable{
 
     @OneToMany(mappedBy = "marca")
     private List<Modelo> modelos;
+
+
+    public List<Modelo> getModelos(){
+        return modelos;
+    }
 }

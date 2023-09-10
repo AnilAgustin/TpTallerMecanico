@@ -40,8 +40,9 @@ public class GestorMarca {
     }
 
     @PostMapping("/guardarMarca")
-    public String guardarMarca(@Valid Marca marca, BindingResult error) {
+    public String guardarMarca(@Valid Marca marca, BindingResult error, Model model) {
         if (error.hasErrors()) {
+            model.addAttribute("modo","nuevo");
             return "agregarModificarMarca";
         }
         marcaService.guardar(marca);
@@ -49,7 +50,11 @@ public class GestorMarca {
     }
 
     @PostMapping("/actualizarMarca")
-    public String actualizarModelo(@ModelAttribute Marca marca) {
+    public String actualizarModelo(@Valid @ModelAttribute Marca marca, BindingResult error, Model model) {
+        if (error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            return "agregarModificarMarca";
+        }
         marcaService.actualizar(marca);
         return "redirect:/marcas";
     }
