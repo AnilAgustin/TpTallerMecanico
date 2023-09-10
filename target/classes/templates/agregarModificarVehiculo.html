@@ -8,60 +8,137 @@
 <body>
 <div class="container mt-4">
     <div class="col-sm-6">
-        <form th:action="@{/guardarVehiculo}" th:object=${vehiculo} method="POST">
-            <div class="card">
-                <div class="card-header">
-                    <h3>Vehiculo</h3>
+        <div th:if="${modo eq 'nuevo'}">
+            <form th:action="@{/guardarVehiculo}" th:object="${vehiculo}" method="POST">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Vehiculo</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="hidden" name="idVehiculo" th:field="*{idVehiculo}"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Patente</label>
+                            <input class="form-control" type="text" name="patenteVehiculo" th:field="*{patente}" />
+                            <span th:if="${#fields.hasErrors('patente')}" th:errors="*{patente}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Modelo</label>
+
+                            <select class="form-control" id="modelo" name="modelo" required>
+                                <option value="" disabled selected>Selecciona un Modelo</option>
+                                <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}" th:selected="${vehiculo.modelo != null and modelo.idModelo == vehiculo.modelo.idModelo}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Cliente</label>
+
+                            <select class="form-control" id="cliente" name="cliente" required>
+                                <option value="" disabled selected>Selecciona un Cliente</option>
+                                <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}+' - DNI: '+${cliente.dni}" th:selected="${vehiculo.cliente != null and cliente.idCliente == vehiculo.cliente.idCliente}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Tecnico</label>
+
+                            <select class="form-control" id="tecnico" name="tecnico" required>
+                                <option value="" disabled selected>Selecciona un Tecnico</option>
+                                <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${vehiculo.tecnico != null and tecnico.idTecnico == vehiculo.tecnico.idTecnico}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="estadoVehiculo" th:field="*{estado}"/>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
+                                            <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
+                        <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <input type="hidden" name="idVehiculo" th:field="*{idVehiculo}"/>
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+        <div th:if="${modo eq 'editar'}">
+            <form th:action="@{/actualizarVehiculo}" th:object="${vehiculo}" method="POST">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Vehiculo</h3>
                     </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="hidden" name="idVehiculo" th:field="*{idVehiculo}"/>
+                        </div>
 
-                    <div class="form-group">
-                        <label style="font-weight: bold;">Patente</label>
-                        <input class="form-control" type="text" name="patenteVehiculo" th:field="*{patente}" />
-                        <span th:if="${#fields.hasErrors('patente')}" th:errors="*{patente}"></span>
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Patente</label>
+                            <input class="form-control" type="text" name="patenteVehiculo" th:field="*{patente}" />
+                            <span th:if="${#fields.hasErrors('patente')}" th:errors="*{patente}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Modelo</label>
+
+                            <select class="form-control" id="modelo" name="modelo" required>
+                                <option value="" disabled selected>Selecciona un Modelo</option>
+                                <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}" th:selected="${vehiculo.modelo != null and modelo.idModelo == vehiculo.modelo.idModelo}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Cliente</label>
+
+                            <select class="form-control" id="cliente" name="cliente" required>
+                                <option value="" disabled selected>Selecciona un Cliente</option>
+                                <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}+' - DNI: '+${cliente.dni}" th:selected="${vehiculo.cliente != null and cliente.idCliente == vehiculo.cliente.idCliente}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Tecnico</label>
+
+                            <select class="form-control" id="tecnico" name="tecnico" required>
+                                <option value="" disabled selected>Selecciona un Tecnico</option>
+                                <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${vehiculo.tecnico != null and tecnico.idTecnico == vehiculo.tecnico.idTecnico}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="estadoVehiculo" th:field="*{estado}"/>
+                        </div>
+
                     </div>
-
-                    <div class="form-group">
-                        <label style="font-weight: bold;">Modelo</label>
-
-                        <select class="form-control" id="modelo" name="modelo" required>
-                            <option value="" disabled selected>Selecciona un Modelo</option>
-                            <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}" th:selected="${vehiculo.modelo != null and modelo.idModelo == vehiculo.modelo.idModelo}"></option>
-                        </select>
+                    <div class="card-footer">
+                        <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
+                                            <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
+                        <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
                     </div>
-
-                    <div class="form-group">
-                        <label style="font-weight: bold;">Cliente</label>
-
-                        <select class="form-control" id="cliente" name="cliente" required>
-                            <option value="" disabled selected>Selecciona un Cliente</option>
-                            <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}+' - DNI: '+${cliente.dni}" th:selected="${vehiculo.cliente != null and cliente.idCliente == vehiculo.cliente.idCliente}"></option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label style="font-weight: bold;">Tecnico</label>
-
-                        <select class="form-control" id="tecnico" name="tecnico" required>
-                            <option value="" disabled selected>Selecciona un Tecnico</option>
-                            <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${vehiculo.tecnico != null and tecnico.idTecnico == vehiculo.tecnico.idTecnico}"></option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="hidden" name="estadoVehiculo" th:field="*{estado}"/>
-                    </div>
-
                 </div>
-                <div class="card-footer">
-                    <input type="submit" class="btn btn-success" value="Guardar"/>
-                    <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
-                </div>
-            </div>
-        </form>
+                <button type="submit">Actualizar</button>
+            </form>
+
+
+        </div>
     </div>
 </div>
 </body>

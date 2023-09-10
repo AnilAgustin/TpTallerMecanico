@@ -19,6 +19,10 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
     @Query("UPDATE Vehiculo m SET m.estado = true WHERE m.idVehiculo = :idVehiculo")
     void marcarComoActivo(@Param("idVehiculo") Long idVehiculo);
 
+    @Modifying
+    @Query("UPDATE Vehiculo m SET m.cliente.id = :clienteId WHERE m.idVehiculo = :vehiculoId")
+    void actualizarIdCliente(@Param("vehiculoId") Long vehiculoId, @Param("clienteId") Long clienteId);
+
     Vehiculo findByPatente(String patente);
 
     Vehiculo findByPatenteAndEstadoTrue(String patente);

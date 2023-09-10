@@ -1,6 +1,8 @@
 package com.TP.TallerMecanico.servicio;
 
-
+import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Modelo;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import java.util.List;
@@ -14,7 +16,6 @@ public class VehiculoImplementacion implements IVehiculoService {
     @Autowired
     private IVehiculoDao vehiculoDao;
 
-
     @Override
     @Transactional(readOnly = true)
     public List<Vehiculo> listarVehiculos() { return vehiculoDao.findByEstadoTrue(); }
@@ -23,18 +24,13 @@ public class VehiculoImplementacion implements IVehiculoService {
     @Transactional
     public void guardar(Vehiculo vehiculo) {
         String patente = vehiculo.getPatente();
-        Long id = vehiculo.getIdVehiculo();
-        Vehiculo vehiculoExistente = vehiculoDao.findByIdVehiculo(id);
         Vehiculo patenteExistente = vehiculoDao.findByPatente(patente);
-        Vehiculo vehiculoRegistrado = vehiculoDao.findByPatenteAndEstadoTrue(patente);
+        Vehiculo vehiculoActivado = vehiculoDao.findByPatenteAndEstadoTrue(patente);
 
-        if (patenteExistente == null){ //Chequeamos si la patente ya existe, y si no existe guardamos directamente
+        if (patenteExistente == null) { //Chequeamos si la patente ya existe, y si no existe guardamos directamente
             vehiculoDao.save(vehiculo);
-        } else { //Si la patente existe
-            if (vehiculoExistente != null){ //Chequeamos si estamos agregando o editando un vehiculo (comparando por id)
-                vehiculoDao.save(vehiculo); //Guardamos el vehiculo (editado)
-            }
-            if (vehiculoRegistrado == null){
+        } else {
+            if (vehiculoActivado == null) {
                 vehiculoDao.marcarComoActivo(patenteExistente.getIdVehiculo());
             }
         }
@@ -42,13 +38,26 @@ public class VehiculoImplementacion implements IVehiculoService {
 
     @Override
     @Transactional
-    public void activarVehiculo(List<Vehiculo> vehiculos){
+    public void actualizar(Vehiculo vehiculo){
+        Long vehiculoId = vehiculo.getIdVehiculo();
+        Vehiculo vehiculoExistente = vehiculoDao.findById(vehiculoId).orElse(null);
+        if (vehiculoExistente != null) {
+            // Verificar si la patente ha cambiado
+            String nuevaPatente = vehiculo.getPatente();
+            String patenteExistente = vehiculoExistente.getPatente();
 
-        for (Vehiculo vehiculo : vehiculos){
-            vehiculoDao.marcarComoActivo(vehiculo.getIdVehiculo());
+            if (nuevaPatente.equals(patenteExistente) || !patenteExisteEnBaseDeDatos(nuevaPatente)) {
+                // La patente es igual a la existente o no existe en la base de datos, actualizar valores
+                vehiculoDao.save(vehiculo);
+            }
         }
-        
     }
+
+    private boolean patenteExisteEnBaseDeDatos(String patente) {
+        return vehiculoDao.findByPatente(patente) != null;
+    }
+
+    // Resto de métodos del servicio
 
 
     @Override
@@ -59,7 +68,7 @@ public class VehiculoImplementacion implements IVehiculoService {
 
     @Override
     @Transactional(readOnly = true)
-    public Vehiculo buscarVehiculo(Vehiculo vehiculo) {
-        return vehiculoDao.findById(vehiculo.getIdVehiculo()).orElse(null);
+    public Vehiculo buscarVehiculo(Long vehiculo) {
+        return vehiculoDao.findById(vehiculo).orElse(null);
     }
 }

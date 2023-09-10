@@ -38,7 +38,8 @@ public class Vehiculo implements Serializable {
     @JoinColumn(name = "modelo_id")
     private Modelo modelo;
 
+    @Transient
+    private String modo;
     private Boolean estado = true;
-
 
 }

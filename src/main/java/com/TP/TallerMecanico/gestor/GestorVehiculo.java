@@ -1,5 +1,6 @@
 package com.TP.TallerMecanico.gestor;
 
+import jakarta.servlet.http.HttpServletRequest;
 import com.TP.TallerMecanico.entidad.*;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IModeloService;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -40,8 +43,11 @@ public class GestorVehiculo {
         model.addAttribute("clientes", clientes);
         model.addAttribute("tecnicos", tecnicos);
         model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("modo", "nuevo");
         return "agregarModificarVehiculo";
     }
+
+
 
     @GetMapping("/vehiculos")
     public String listarVehiculos(Model model) {
@@ -50,35 +56,31 @@ public class GestorVehiculo {
         return "vehiculos";
     }
     @PostMapping("/guardarVehiculo")
-    public String guardarVehiculo(@Valid Vehiculo vehiculo, BindingResult error, Model model){
-        if(error.hasErrors()){
-            List<Modelo> modelos = modeloService.listarModelos();
-            List<Cliente> clientes = clienteService.listarClientes();
-            List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
-            model.addAttribute("modelos", modelos);
-            model.addAttribute("clientes", clientes);
-            model.addAttribute("tecnicos", tecnicos);
-            return "agregarModificarVehiculo";
-        }
-
+    public String guardarVehiculo(@ModelAttribute Vehiculo vehiculo, Model model) {
         vehiculoService.guardar(vehiculo);
         return "redirect:/vehiculos";
     }
 
-    @GetMapping("/modificarVehiculo/{idVehiculo}")
-    public String modificarVehiculo(Vehiculo vehiculo, Model model){
-        vehiculo = vehiculoService.buscarVehiculo(vehiculo);
-        model.addAttribute("vehiculo", vehiculo);
+    @PostMapping("/actualizarVehiculo")
+    public String actualizarVehiculo(@ModelAttribute Vehiculo vehiculo) {
+        vehiculoService.actualizar(vehiculo);
+        return "redirect:/vehiculos";
+    }
 
+    @GetMapping("/modificarVehiculo/{idVehiculo}")
+    public String mostrarFormularioEditar(@PathVariable Long idVehiculo, Model model) {
+        var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
         List<Modelo> modelos = modeloService.listarModelos();
         List<Cliente> clientes = clienteService.listarClientes();
         List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
         model.addAttribute("modelos", modelos);
         model.addAttribute("clientes", clientes);
         model.addAttribute("tecnicos", tecnicos);
-
+        model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("modo", "editar");
         return "agregarModificarVehiculo";
     }
+
     @GetMapping("/eliminarVehiculo/{idVehiculo}")
     public String eliminarVehiculo(Vehiculo vehiculo){
         vehiculoService.eliminar(vehiculo);
