@@ -43,13 +43,27 @@ public class ModeloImplementacion implements IModeloService {
         Modelo modeloExistente = modeloDao.findByNombreAndMarcaAndEstadoTrue(nombreNuevo, marcaNueva);
         Modelo modeloActivado = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
 
-        if (modeloExistente == null) {
-            modeloDao.save(modelo);
+        //Nueva verificacion
+        if (modeloActivado == null) {
+            if (modeloExistente == null) {
+                modeloDao.save(modelo);
+            }
         } else {
             if (modeloActivado != null) {
-                activarModelo(modeloExistente);
+                System.out.println("ENTROOOOOOO");
+                activarModelo(modeloActivado);
             }
         }
+
+        //Vieja verificacion
+        // if (modeloExistente == null) {
+        //     modeloDao.save(modelo);
+        // } else {
+        //     if (modeloActivado != null) {
+        //         System.out.println("ENTROOOOOOO");
+        //         activarModelo(modeloActivado);
+        //     }
+        // }
     }
 
     @Override
