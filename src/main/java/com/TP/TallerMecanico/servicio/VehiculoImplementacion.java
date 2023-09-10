@@ -71,4 +71,9 @@ public class VehiculoImplementacion implements IVehiculoService {
     public Vehiculo buscarVehiculo(Long vehiculo) {
         return vehiculoDao.findById(vehiculo).orElse(null);
     }
+
+    @Override
+    public void activarVehiculo(List<Vehiculo> vehiculos) {
+
+    }
 }
