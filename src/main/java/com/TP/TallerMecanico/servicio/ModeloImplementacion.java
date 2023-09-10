@@ -49,10 +49,7 @@ public class ModeloImplementacion implements IModeloService {
                 modeloDao.save(modelo);
             }
         } else {
-            if (modeloActivado != null) {
-                System.out.println("ENTROOOOOOO");
-                activarModelo(modeloActivado);
-            }
+            activarModelo(modeloActivado);
         }
 
         //Vieja verificacion
