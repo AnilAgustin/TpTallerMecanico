@@ -2,14 +2,10 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
-import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IModeloDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
-
 import java.util.List;
-import java.util.Objects;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +39,7 @@ public class ModeloImplementacion implements IModeloService {
         Modelo modeloExistente = modeloDao.findByNombreAndMarcaAndEstadoTrue(nombreNuevo, marcaNueva);
         Modelo modeloActivado = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
 
-        //Nueva verificacion
+        //Verificacion para no guardar modelos repetidos 
         if (modeloActivado == null) {
             if (modeloExistente == null) {
                 modeloDao.save(modelo);
@@ -52,15 +48,7 @@ public class ModeloImplementacion implements IModeloService {
             activarModelo(modeloActivado);
         }
 
-        //Vieja verificacion
-        // if (modeloExistente == null) {
-        //     modeloDao.save(modelo);
-        // } else {
-        //     if (modeloActivado != null) {
-        //         System.out.println("ENTROOOOOOO");
-        //         activarModelo(modeloActivado);
-        //     }
-        // }
+
     }
 
     @Override
@@ -92,9 +80,6 @@ public class ModeloImplementacion implements IModeloService {
 
     }
 
-    private boolean modeloExisteEnBaseDeDatos(Marca marca) {
-        return modeloDao.findByMarca(marca) != null;
-    }
 
     @Override
     @Transactional

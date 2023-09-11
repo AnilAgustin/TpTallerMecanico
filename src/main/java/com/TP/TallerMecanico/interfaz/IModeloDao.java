@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface IModeloDao extends CrudRepository<Modelo, Long>{
     
     @Modifying
-    @Query("UPDATE Modelo m SET m.estado = false WHERE m.idModelo = :idModelo")
+    @Query("UPDATE Modelo m SET m.estado = false WHERE m.idModelo = :idModelo") //Query para el Soft Delete
     void marcarComoEliminado(@Param("idModelo") Long idModelo);
     
     List<Modelo> findByEstadoTrue(); //arma una consulta SQL personalizada con estado

@@ -1,11 +1,9 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Cliente;
-import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import java.util.List;
-
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ClienteImplementacion implements IClienteService {
+
 
     @Autowired
     private IVehiculoDao vehiculoDao;
@@ -27,25 +26,31 @@ public class ClienteImplementacion implements IClienteService {
     @Transactional(readOnly = true)
     public List<Cliente> listarClientes() { return clienteDao.findByEstadoTrue(); }
 
-    //private List<Vehiculo> vehiculosAntesDeEliminar;
+    
+
 
     @Override
-    @Transactional
-    public void guardar(Cliente cliente) {
+    @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta 
+    public void guardar(Cliente cliente) {//Metodo para guardar un nuevo cliente
         cliente.setNombre(cliente.getNombre().toUpperCase());
         cliente.setApellido(cliente.getApellido().toUpperCase());
         String dni = cliente.getDni();
         Cliente dniExistente = clienteDao.findByDni(dni);
         Cliente dniActivado = clienteDao.findByDniAndEstadoTrue(dni);
-
+        
+        //Si el DNI ingresado no existe en la BD se guarda el cliente 
         if (dniExistente == null) {
             clienteDao.save(cliente);
         } else {
+            //Si existe ser verifica si el cliente con ese DNI esta activado 
             if (dniActivado == null){
+                //Se activa el cliente y todos sus vehiculos asociados 
                 clienteDao.marcarComoActivo(dniExistente.getIdCliente());
                 for (Vehiculo vehiculo : dniExistente.getVehiculos()){
                     vehiculoService.activarVehiculo(vehiculo);
                 }
+                
+                //Metodo para sobreescribir un cliente eliminado con datos diferentes a los cargados (Ver)
                 if (!dniExistente.equals(cliente)){
                     cliente.setIdCliente(dniExistente.getIdCliente());
                     clienteDao.save(cliente);
@@ -57,15 +62,17 @@ public class ClienteImplementacion implements IClienteService {
 
     @Override
     @Transactional
-    public void actualizar(Cliente cliente){
+    public void actualizar(Cliente cliente){//Metodo para actualizar un cliente existente activado 
         cliente.setNombre(cliente.getNombre().toUpperCase());
         cliente.setApellido(cliente.getApellido().toUpperCase());
         Long clienteId = cliente.getIdCliente();
         Cliente clienteExistente = clienteDao.findById(clienteId).orElse(null);
+
         if (clienteExistente != null) {
             String nuevoDni = cliente.getDni();
             String dniExistente = clienteExistente.getDni();
 
+            //Para controlar que no haya duplicaciones de DNI
             if (nuevoDni.equals(dniExistente) || !dniExisteEnBaseDeDatos(nuevoDni)) {
                 clienteDao.save(cliente);
             }

@@ -2,7 +2,6 @@ package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
-import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 
@@ -21,12 +20,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class GestorModelo {
 
+    //El Autowired sirve para la inyeccion de dependencias 
     @Autowired
     private IModeloService modeloService; // Inyeccion de la clase (modeloImplementacion) a la interfaz modeloService
 
     @Autowired
     private IMarcaService marcaService;
 
+    //Listar todos los modelos cuando la URL sea /modelos
     @GetMapping("/modelos")
     public String listarModelos(Model model) {
         var modelo = modeloService.listarModelos();
@@ -34,6 +35,7 @@ public class GestorModelo {
         return "modelos";
     }
 
+    //Permitir agregar un modelo cuando la URL sea /agregarModelo
     @GetMapping("/agregarModelo")
     public String agregarModelo(Model model) {
         var modelo = new Modelo(); // Crear una nueva instancia de Modelo
@@ -44,6 +46,7 @@ public class GestorModelo {
         return "agregarModificarModelo";
     }
 
+    //Permite guardar un modelo cuando la solicitud POST sea guardarModelo 
     @PostMapping("/guardarModelo")
     public String guardarModelo(@Valid Modelo modelo, BindingResult error, Model model) {
         if (error.hasErrors()) {
@@ -52,11 +55,12 @@ public class GestorModelo {
             model.addAttribute("marcas", marcas);
             return "agregarModificarModelo";
         }
-
+        //Se llama a la logica guardar definida en IModeloService, pero en realidad es ModeloImplementacion
         modeloService.guardar(modelo);
         return "redirect:/modelos";
     }
 
+    //Permite actualizar un modelo cuando la solicitud POST sea actualizarModelo
     @PostMapping("/actualizarModelo")
     public String actualizarModelo(@Valid @ModelAttribute Modelo modelo, BindingResult error, Model model) {
         if (error.hasErrors()) {
@@ -69,6 +73,7 @@ public class GestorModelo {
         return "redirect:/modelos";
     }
 
+    //Cuando se presiona el boton editar se retorna el html con todos los datos del modelo seleccionado para modificar 
     @GetMapping("/modificarModelo/{idModelo}")
     public String modificarModelo(Modelo modelo, Model model) {
         modelo = modeloService.buscarModelo(modelo);
@@ -79,6 +84,7 @@ public class GestorModelo {
         return "agregarModificarModelo";
     }
 
+    //Cuando se presiona el boton eliminar se pasa el ID del modelo y este se elimina (Soft Delete)
     @GetMapping("/eliminarModelo/{idModelo}")
     public String eliminarModelo(Modelo modelo) {
         modeloService.eliminar(modelo);

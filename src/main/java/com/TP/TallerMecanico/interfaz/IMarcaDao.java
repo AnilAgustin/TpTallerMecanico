@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface IMarcaDao extends CrudRepository<Marca, Long>{
     
     @Modifying
-    @Query("UPDATE Marca m SET m.estado = false WHERE m.idMarca = :idMarca")
+    @Query("UPDATE Marca m SET m.estado = false WHERE m.idMarca = :idMarca") //Query para el Soft Delete
     void marcarComoEliminado(@Param("idMarca") Long idMarca);
     
     List<Marca> findByEstadoTrue(); //arma una consulta SQL personalizada con estado

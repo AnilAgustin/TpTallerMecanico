@@ -1,8 +1,6 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Tecnico;
-import com.TP.TallerMecanico.entidad.Vehiculo;
-
 import java.util.List;
 public interface ITecnicoService {
 

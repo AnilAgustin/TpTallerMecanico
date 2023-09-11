@@ -1,8 +1,6 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Marca;
-import com.TP.TallerMecanico.entidad.Modelo;
-
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,14 +14,19 @@ import com.TP.TallerMecanico.servicio.IMarcaService;
 @Controller
 public class GestorMarca {
 
+    //Inyeccion de la clase (MarcaImplementacion) a la interfaz MarcaService
     @Autowired
-    private IMarcaService marcaService; //Inyeccion de la clase (MarcaImplementacion) a la interfaz MarcaService
+    private IMarcaService marcaService; 
 
+
+    //Cuando ingresamos a la URL del puerto nos dirigimos al index 
     @GetMapping("/")
     public String inicio() {
         return "index";
     }
 
+
+    //Listar todos las marcas cuando la URL sea /marcas
     @GetMapping("/marcas")
     public String listarMarcas(Model model) {
         var marca = marcaService.listarMarcas();
@@ -31,6 +34,7 @@ public class GestorMarca {
         return "marcas";
     }
 
+    //Permitir agregar una marca cuando la URL sea /agregarMarca
     @GetMapping("/agregarMarca")
     public String agregarMarca(Model model) {
         var marca = new Marca();
@@ -39,16 +43,20 @@ public class GestorMarca {
         return "agregarModificarMarca";
     }
 
+
+    //Permite guardar una marca cuando la solicitud POST sea guardarMarca
     @PostMapping("/guardarMarca")
     public String guardarMarca(@Valid Marca marca, BindingResult error, Model model) {
         if (error.hasErrors()) {
             model.addAttribute("modo","nuevo");
             return "agregarModificarMarca";
         }
+        //Se llama a la logica guardar definida en IMarcaService, pero en realidad es MarcaImplementacion
         marcaService.guardar(marca);
         return "redirect:/marcas";
     }
 
+    //Permite actualizar una marca cuando la solicitud POST sea actualizarMarca
     @PostMapping("/actualizarMarca")
     public String actualizarModelo(@Valid @ModelAttribute Marca marca, BindingResult error, Model model) {
         if (error.hasErrors()) {
@@ -59,6 +67,7 @@ public class GestorMarca {
         return "redirect:/marcas";
     }
 
+    //Cuando se presiona el boton editar se retorna el html con todos los datos de la marca seleccionada para modificar 
     @GetMapping("/modificarMarca/{idMarca}")
     public String modificarMarca(Marca marca, Model model) {
         marca = marcaService.buscarMarca(marca);
@@ -67,6 +76,7 @@ public class GestorMarca {
         return "agregarModificarMarca";
     }
 
+    //Cuando se presiona el boton eliminar se pasa el ID de la marca y esta se elimina (Soft Delete)
     @GetMapping("/eliminarMarca/{idMarca}")
     public String eliminarMarca(Marca marca) {
         marcaService.eliminar(marca);

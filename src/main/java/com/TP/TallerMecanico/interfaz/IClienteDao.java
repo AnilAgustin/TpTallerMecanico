@@ -1,5 +1,4 @@
 package com.TP.TallerMecanico.interfaz;
-
 import com.TP.TallerMecanico.entidad.Cliente;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
@@ -8,8 +7,9 @@ import org.springframework.data.repository.query.Param;
 
 public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
+
     @Modifying
-    @Query("UPDATE Cliente m SET m.estado = false WHERE m.idCliente = :idCliente")
+    @Query("UPDATE Cliente m SET m.estado = false WHERE m.idCliente = :idCliente") //Query para el Soft Delete
     void marcarComoEliminado(@Param("idCliente") Long idCliente);
 
     List<Cliente> findByEstadoTrue();

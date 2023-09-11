@@ -37,13 +37,11 @@ public class MarcaImplementacion implements IMarcaService {
         Marca marcaExistente = marcaDao.findByNombre(nombreMarca);
         Marca marcaActivada = marcaDao.findByNombreAndEstadoTrue(nombreMarca);
 
-        if (!nombreMarca.trim().isEmpty()) {
+        if (!nombreMarca.trim().isEmpty()) {//Para que no se ingresen solamente caracters vacios
             if (marcaExistente == null) {
                 marcaDao.save(marca);
             } else {
-
                 if (marcaActivada == null) {
-
                     marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
                     for (Modelo modelo : marcaExistente.getModelos()) {
                         modeloService.activarModelo(modelo);
@@ -78,7 +76,7 @@ public class MarcaImplementacion implements IMarcaService {
     public void eliminar(Marca marca) {
         marcaDao.marcarComoEliminado(marca.getIdMarca());
         for (Modelo modelo : modeloDao.findByMarcaAndEstadoTrue(marca)) {
-              modeloService.eliminar(modelo);
+            modeloService.eliminar(modelo);
         }
     }
 

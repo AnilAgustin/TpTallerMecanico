@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface ITecnicoDao extends CrudRepository<Tecnico, Long> {
 
     @Modifying
-    @Query("UPDATE Tecnico t SET t.estado = false WHERE t.idTecnico = :idTecnico")
+    @Query("UPDATE Tecnico t SET t.estado = false WHERE t.idTecnico = :idTecnico") //Query para el Soft Delete
     void marcarComoEliminado(@Param("idTecnico") Long idTecnico);
 
     List<Tecnico> findByEstadoTrue();

@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
 
     @Modifying
-    @Query("UPDATE Vehiculo m SET m.estado = false WHERE m.idVehiculo = :idVehiculo")
+    @Query("UPDATE Vehiculo m SET m.estado = false WHERE m.idVehiculo = :idVehiculo") //Query para el Soft Delete
     void marcarComoEliminado(@Param("idVehiculo") Long idVehiculo);
 
     List<Vehiculo> findByEstadoTrue();

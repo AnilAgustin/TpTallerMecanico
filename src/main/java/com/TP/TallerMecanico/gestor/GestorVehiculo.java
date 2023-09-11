@@ -20,6 +20,7 @@ import java.util.List;
 @Controller
 public class GestorVehiculo {
 
+    //El Autowired sirve para la inyeccion de dependencias 
     @Autowired
     private IVehiculoService vehiculoService;
 
@@ -32,6 +33,15 @@ public class GestorVehiculo {
     @Autowired
     private ITecnicoService tecnicoService;
 
+    //Listar todos los vehiculos cuando la URL sea /vehiculos
+    @GetMapping("/vehiculos")
+    public String listarVehiculos(Model model) {
+        var vehiculo = vehiculoService.listarVehiculos();
+        model.addAttribute("vehiculo", vehiculo);
+        return "vehiculos";
+    }
+
+    //Permitir agregar un vehiculo cuando la URL sea /agregarVehiculo
     @GetMapping("/agregarVehiculo")
     public String agregarVehiculos(Model model) {
         var vehiculo = new Vehiculo();
@@ -46,13 +56,8 @@ public class GestorVehiculo {
         return "agregarModificarVehiculo";
     }
 
-    @GetMapping("/vehiculos")
-    public String listarVehiculos(Model model) {
-        var vehiculo = vehiculoService.listarVehiculos();
-        model.addAttribute("vehiculo", vehiculo);
-        return "vehiculos";
-    }
 
+    //Permite guardar un cliente cuando la solicitud POST sea guardarVehiculo 
     @PostMapping("/guardarVehiculo")
     public String guardarVehiculo(@Valid Vehiculo vehiculo, BindingResult error, Model model) {
         if (error.hasErrors()) {
@@ -65,10 +70,13 @@ public class GestorVehiculo {
             model.addAttribute("tecnicos", tecnicos);
             return "agregarModificarVehiculo";
         }
+
+        //Se llama a la logica guardar definida en IVehiculoService, pero en realidad es VehiculoImplementacion
         vehiculoService.guardar(vehiculo);
         return "redirect:/vehiculos";
     }
 
+    //Permite actualizar un vehiculo cuando la solicitud POST sea actualizarVehiculo
     @PostMapping("/actualizarVehiculo")
     public String actualizarVehiculo(@Valid @ModelAttribute Vehiculo vehiculo, BindingResult error, Model model) {
         if (error.hasErrors()) {
@@ -85,6 +93,7 @@ public class GestorVehiculo {
         return "redirect:/vehiculos";
     }
 
+    //Cuando se presiona el boton editar se retorna el html con todos los datos del vehiculo seleccionado para modificar 
     @GetMapping("/modificarVehiculo/{idVehiculo}")
     public String mostrarFormularioEditar(@PathVariable Long idVehiculo, Model model) {
         var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
@@ -99,6 +108,7 @@ public class GestorVehiculo {
         return "agregarModificarVehiculo";
     }
 
+    //Cuando se presiona el boton eliminar se pasa el ID del vehiculo y este se elimina (Soft Delete)
     @GetMapping("/eliminarVehiculo/{idVehiculo}")
     public String eliminarVehiculo(Vehiculo vehiculo) {
 
