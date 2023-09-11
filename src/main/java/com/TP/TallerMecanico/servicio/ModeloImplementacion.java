@@ -75,6 +75,12 @@ public class ModeloImplementacion implements IModeloService {
                 modeloDao.save(modelo);
             }
 
+            //Verificacion para activiar modelo en el editar
+            Modelo checkNM3 = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
+            if (checkNM3 != null) {
+                activarModelo(checkNM3);
+                modeloDao.marcarComoEliminado(modelo.getIdModelo());
+            }
 
         }
 

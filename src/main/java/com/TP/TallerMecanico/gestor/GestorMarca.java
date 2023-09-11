@@ -58,7 +58,7 @@ public class GestorMarca {
 
     //Permite actualizar una marca cuando la solicitud POST sea actualizarMarca
     @PostMapping("/actualizarMarca")
-    public String actualizarModelo(@Valid @ModelAttribute Marca marca, BindingResult error, Model model) {
+    public String actualizarMarca(@Valid @ModelAttribute Marca marca, BindingResult error, Model model) {
         if (error.hasErrors()) {
             model.addAttribute("modo","editar");
             return "agregarModificarMarca";
