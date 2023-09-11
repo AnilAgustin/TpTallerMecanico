@@ -39,14 +39,11 @@ public class TecnicoImplementacion implements ITecnicoService {
             tecnicoDao.save(tecnico);
         } else {
             if (legajoActivado == null){
-                tecnicoDao.marcarComoActivo(legajoExistente.getIdTecnico());
-                for (Vehiculo vehiculo : legajoExistente.getVehiculos()){
-                    vehiculoService.activarVehiculo(vehiculo);
+                activarTecnico(legajoExistente);
                 }
                 if (!legajoExistente.equals(tecnico)){
                     tecnico.setIdTecnico(legajoExistente.getIdTecnico());
                     tecnicoDao.save(tecnico);
-                }
             }
         }
     }
@@ -59,6 +56,10 @@ public class TecnicoImplementacion implements ITecnicoService {
         tecnico.setApellido(tecnico.getApellido().toUpperCase());
         Long tecnicoId = tecnico.getIdTecnico();
         Tecnico tecnicoExistente = tecnicoDao.findById(tecnicoId).orElse(null);
+
+        Tecnico tecnicoByLegajo = tecnicoDao.findByLegajo(tecnico.getLegajo());
+        activarTecnico(tecnicoByLegajo);
+        
         if (tecnicoExistente != null) {
             // Verificar si el tecnico ha cambiado
             String nuevoLegajo = tecnico.getLegajo();
@@ -87,5 +88,14 @@ public class TecnicoImplementacion implements ITecnicoService {
     @Transactional(readOnly = true)
     public Tecnico buscarTecnico(Long idTecnico) {
         return tecnicoDao.findById(idTecnico).orElse(null);
+    }
+
+    @Override
+    @Transactional
+    public void activarTecnico(Tecnico tecnico){
+        tecnicoDao.marcarComoActivo(tecnico.getIdTecnico());
+        for (Vehiculo vehiculo : tecnico.getVehiculos()){
+            vehiculoService.activarVehiculo(vehiculo);
+        }
     }
 }

@@ -42,25 +42,29 @@ public class MarcaImplementacion implements IMarcaService {
                 marcaDao.save(marca);
             } else {
                 if (marcaActivada == null) {
-                    marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
-                    for (Modelo modelo : marcaExistente.getModelos()) {
-                        modeloService.activarModelo(modelo);
-                    }
+                    activarMarca(marcaExistente);
+//                    marcaDao.marcarComoActivo(marcaExistente.getIdMarca());
+//                    for (Modelo modelo : marcaExistente.getModelos()) {
+//                        modeloService.activarModelo(modelo);
                 }
             }
         }
     }
+
 
     @Override
     @Transactional
     public void actualizar(Marca marca){
         marca.setNombre(marca.getNombre().toUpperCase());
         Long marcaId = marca.getIdMarca();
+        String nuevoNombre = marca.getNombre();
         Marca marcaExistente = marcaDao.findById(marcaId).orElse(null);
-        if(marcaExistente != null){
-            String nuevoNombre = marca.getNombre();
-            String nombreExistente = marcaExistente.getNombre();
+        Marca marcaExistenteByNombre = marcaDao.findByNombre(nuevoNombre);
+        activarMarca(marcaExistenteByNombre);
 
+        if(marcaExistente != null){           
+            String nombreExistente = marcaExistente.getNombre();
+ 
             if(nuevoNombre.equals(nombreExistente) || !nombreExisteEnBaseDeDatos(nuevoNombre)){
                 marcaDao.save(marca);
             }
@@ -86,4 +90,12 @@ public class MarcaImplementacion implements IMarcaService {
         return marcaDao.findById(marca.getIdMarca()).orElse(null);
     }
 
+    @Override
+    @Transactional
+    public void activarMarca(Marca marca){
+        marcaDao.marcarComoActivo(marca.getIdMarca());
+        for (Modelo modelo : marca.getModelos()) {
+            modeloService.activarModelo(modelo);
+        }
+    }
 }

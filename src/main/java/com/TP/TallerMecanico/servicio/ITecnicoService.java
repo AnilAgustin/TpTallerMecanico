@@ -9,4 +9,5 @@ public interface ITecnicoService {
     public void actualizar(Tecnico tecnico);
     public void eliminar(Tecnico tecnico);
     public Tecnico buscarTecnico(Long idTecnico);
+    public void activarTecnico(Tecnico tecnico);
 }

@@ -10,4 +10,5 @@ public interface IClienteService {
     public void actualizar(Cliente cliente);
     public void eliminar(Cliente cliente);
     public Cliente buscarCliente(Cliente cliente);
+    public void activarCliente(Cliente cliente);
 }

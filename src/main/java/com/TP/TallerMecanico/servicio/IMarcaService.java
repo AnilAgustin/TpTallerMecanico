@@ -10,4 +10,5 @@ public interface IMarcaService {
     public void actualizar(Marca marca);
     public void eliminar(Marca marca);
     public Marca buscarMarca(Marca marca);
+    public void activarMarca(Marca marca);
 }

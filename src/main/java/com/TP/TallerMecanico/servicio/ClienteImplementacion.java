@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import java.util.List;
@@ -45,11 +46,7 @@ public class ClienteImplementacion implements IClienteService {
             //Si existe ser verifica si el cliente con ese DNI esta activado 
             if (dniActivado == null){
                 //Se activa el cliente y todos sus vehiculos asociados 
-                clienteDao.marcarComoActivo(dniExistente.getIdCliente());
-                for (Vehiculo vehiculo : dniExistente.getVehiculos()){
-                    vehiculoService.activarVehiculo(vehiculo);
-                }
-                
+                activarCliente(dniExistente);
                 //Metodo para sobreescribir un cliente eliminado con datos diferentes a los cargados (Ver)
                 if (!dniExistente.equals(cliente)){
                     cliente.setIdCliente(dniExistente.getIdCliente());
@@ -67,6 +64,9 @@ public class ClienteImplementacion implements IClienteService {
         cliente.setApellido(cliente.getApellido().toUpperCase());
         Long clienteId = cliente.getIdCliente();
         Cliente clienteExistente = clienteDao.findById(clienteId).orElse(null);
+        
+        Cliente clienteByDni = clienteDao.findByDni(cliente.getDni());
+        activarCliente(clienteByDni);
 
         if (clienteExistente != null) {
             String nuevoDni = cliente.getDni();
@@ -96,5 +96,14 @@ public class ClienteImplementacion implements IClienteService {
     @Transactional(readOnly = true)
     public Cliente buscarCliente(Cliente cliente) {
         return clienteDao.findById(cliente.getIdCliente()).orElse(null);
+    }
+
+        @Override
+    @Transactional
+    public void activarCliente(Cliente cliente){
+        clienteDao.marcarComoActivo(cliente.getIdCliente());
+        for (Vehiculo vehiculo : cliente.getVehiculos()){
+            vehiculoService.activarVehiculo(vehiculo);
+        }
     }
 }
