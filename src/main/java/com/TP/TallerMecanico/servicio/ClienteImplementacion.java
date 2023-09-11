@@ -32,6 +32,8 @@ public class ClienteImplementacion implements IClienteService {
     @Override
     @Transactional
     public void guardar(Cliente cliente) {
+        cliente.setNombre(cliente.getNombre().toUpperCase());
+        cliente.setApellido(cliente.getApellido().toUpperCase());
         String dni = cliente.getDni();
         Cliente dniExistente = clienteDao.findByDni(dni);
         Cliente dniActivado = clienteDao.findByDniAndEstadoTrue(dni);
@@ -56,6 +58,8 @@ public class ClienteImplementacion implements IClienteService {
     @Override
     @Transactional
     public void actualizar(Cliente cliente){
+        cliente.setNombre(cliente.getNombre().toUpperCase());
+        cliente.setApellido(cliente.getApellido().toUpperCase());
         Long clienteId = cliente.getIdCliente();
         Cliente clienteExistente = clienteDao.findById(clienteId).orElse(null);
         if (clienteExistente != null) {

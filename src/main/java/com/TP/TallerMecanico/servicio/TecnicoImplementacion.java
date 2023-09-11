@@ -28,6 +28,9 @@ public class TecnicoImplementacion implements ITecnicoService {
     @Override
     @Transactional
     public void guardar(Tecnico tecnico) {
+
+        tecnico.setNombre(tecnico.getNombre().toUpperCase());
+        tecnico.setApellido(tecnico.getApellido().toUpperCase());
         String legajo = tecnico.getLegajo();
         Tecnico legajoExistente = tecnicoDao.findByLegajo(legajo);
         Tecnico legajoActivado = tecnicoDao.findByLegajoAndEstadoTrue(legajo);
@@ -51,6 +54,9 @@ public class TecnicoImplementacion implements ITecnicoService {
     @Override
     @Transactional
     public void actualizar(Tecnico tecnico){
+        
+        tecnico.setNombre(tecnico.getNombre().toUpperCase());
+        tecnico.setApellido(tecnico.getApellido().toUpperCase());
         Long tecnicoId = tecnico.getIdTecnico();
         Tecnico tecnicoExistente = tecnicoDao.findById(tecnicoId).orElse(null);
         if (tecnicoExistente != null) {
