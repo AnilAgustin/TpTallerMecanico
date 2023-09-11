@@ -79,7 +79,7 @@ public class ModeloImplementacion implements IModeloService {
             Modelo checkNM3 = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
             if (checkNM3 != null) {
                 activarModelo(checkNM3);
-                modeloDao.marcarComoEliminado(modelo.getIdModelo());
+                eliminar(modelo);
             }
 
         }
