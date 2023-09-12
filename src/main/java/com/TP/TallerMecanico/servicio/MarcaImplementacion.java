@@ -87,11 +87,13 @@ public class MarcaImplementacion implements IMarcaService {
         
         //Metodos de marcaDao que se encargan de comunicarse con la base de datos para obtener (o no) un objeto marca especifico
         Marca marcaExistente = marcaDao.findById(marcaId).orElse(null);
-        Marca marcaExistenteByNombre = marcaDao.findByNombre(nuevoNombre);
+        Marca marcaExistenteByNombreAndEstado = marcaDao.findByNombreAndEstadoFalse(nuevoNombre);
 
         //En el caso de que el nombre ingresado ya exista en la base de datos y se encuentre en estado eliminado(false)
         //lo activamos
-        activarMarca(marcaExistenteByNombre);
+        if (marcaExistenteByNombreAndEstado!=null) {
+            activarMarca(marcaExistenteByNombreAndEstado);
+        }
 
         //Aca empieza la logica del actualizar 
 
