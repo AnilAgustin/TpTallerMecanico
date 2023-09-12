@@ -102,9 +102,14 @@ public class ModeloImplementacion implements IModeloService {
 
                 //Verificamos que el nombre nuevo y la marca nueva/vieja no exista en la base de datos
                 Modelo checkNM1 = modeloDao.findByNombreAndMarca(nombreNuevo, marcaNueva);
+                Modelo checkNM2 = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
                 
                 //Activamos el modelo en caso de que el mismo se encuentre eliminado
-                activarModelo(checkNM1);
+                
+                if (checkNM2 != null) {
+                    activarModelo(checkNM2);
+                }
+
                 //Hacemos el control de la variable antes definida
                 if (checkNM1 == null) {
                     //Si no existe en la BD entonces lo guardamos
@@ -117,17 +122,22 @@ public class ModeloImplementacion implements IModeloService {
         } else {
 
             //Verificamos que el nombre nuevo y la marca nueva no exista en la base de datos
-            Modelo checkNM2 = modeloDao.findByNombreAndMarca(nombreNuevo, marcaNueva);
+            Modelo checkNM3 = modeloDao.findByNombreAndMarca(nombreNuevo, marcaNueva);
+            Modelo checkNM4 = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
             
             //Hacemos el control de la variable antes definida
-            if (checkNM2 == null){
+            if (checkNM3 == null){
                 
                 //Si no existe en la BD entonces lo guardamos
                 modeloDao.save(modelo);
             }
             
-            //Activamos el modelo en caso de que el mismo se encuentre eliminado
-            activarModelo(checkNM2);
+            if (checkNM4 != null) {
+                //Activamos el modelo en caso de que el mismo se encuentre eliminado
+                activarModelo(checkNM4);
+            }
+            
+            
         }
     }
 
