@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.interfaz;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
@@ -36,4 +37,6 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
     List<Vehiculo> findByClienteAndEstadoTrue(Cliente cliente);
 
     List<Vehiculo> findByTecnicoAndEstadoTrue(Tecnico tecnico);
+
+    List<Vehiculo> findByPatenteAndModeloMarcaNombreAndModeloNombre(String patente, Marca marca, Modelo modelo);
 }

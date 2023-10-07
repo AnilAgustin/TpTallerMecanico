@@ -1,5 +1,7 @@
 package com.TP.TallerMecanico.servicio;
 
+import com.TP.TallerMecanico.entidad.Marca;
+import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 
 import java.util.List;
@@ -10,5 +12,6 @@ public interface IVehiculoService {
     public void actualizar(Vehiculo vehiculo);
     public void eliminar(Vehiculo vehiculo);
     public Vehiculo buscarVehiculo(Long idVehiculo);
-    public void activarVehiculo(Vehiculo vehiculo) ;
+    public void activarVehiculo(Vehiculo vehiculo);
+    public List<Vehiculo> filtrarVehiculos(String patente, Marca marca, Modelo modelo);
 }
