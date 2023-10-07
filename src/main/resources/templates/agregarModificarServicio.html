@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaft.org">
+
+<head>
+    <title>Servicio</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="col-sm-6">
+            <div th:if="${modo eq 'nuevo'}">
+                <form th:action="@{/guardarServicio}" th:object=${servicio} method="POST">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Servicio</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input type="hidden" name="idServicio" th:field="*{idServicio}" />
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-weight: bold;">Nombre</label>
+                                <input class="form-control" type="text" name="nombreServicio" th:field="*{nombre}" />
+                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-weight: bold;">Precio</label>
+                                <input class="form-control" type="text" name="precioServicio" th:field="*{precio}" />
+                                <span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-weight: bold;">Repuesto</label>
+                                <input class="form-control" type="text" name="repuestoServicio" th:field="*{repuesto}" />
+                                <span th:if="${#fields.hasErrors('repuesto')}" th:errors="*{repuesto}"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="hidden" name="estadoServicio" th:field="*{estado}" />
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <input type="submit" class="btn btn-success" value="Guardar" />
+                            <a class="btn btn-danger" th:href="@{/servicios}">Regresar</a>
+                        </div>
+                    </div>
+                </form>
+            </div> <!-- Nuevo form para guardar-->
+            <div th:if="${modo eq 'editar'}">
+                <form th:action="@{/actualizarServicio}" th:object=${servicio} method="POST">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>Servicio</h3>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="form-group">
+                                <input type="hidden" name="idServicio" th:field="*{idServicio}" />
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-weight: bold;">Nombre</label>
+                                <input class="form-control" type="text" name="nombreServicio" th:field="*{nombre}" />
+                                <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-weight: bold;">Precio</label>
+                                <input class="form-control" type="text" name="precioServicio" th:field="*{precio}" />
+                                <span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label style="font-weight: bold;">Repuesto</label>
+                                <input class="form-control" type="text" name="repuestoServicio" th:field="*{repuesto}" />
+                                <span th:if="${#fields.hasErrors('repuesto')}" th:errors="*{repuesto}"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="hidden" name="estadoServicio" th:field="*{estado}" />
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <input type="submit" class="btn btn-success" value="Actualizar" />
+                            <a class="btn btn-danger" th:href="@{/servicios}">Regresar</a>
+                        </div>
+                    </div>
+                </form>
+            </div> <!-- Nuevo form para actualizar-->
+        </div>
+    </div>
+</body>
+
+</html>

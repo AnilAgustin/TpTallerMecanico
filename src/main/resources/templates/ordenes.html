@@ -1,6 +1,7 @@
+<!DOCTYPE html>
 <html>
-<head xmlns:th="http://www.thymeleaft.org">
-    <title>Tecnicos</title>
+<head>
+    <title>Ordens</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -15,13 +16,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-link" th:href="@{/marcas}">Marcas</a>
-                    <a class="nav-link" th:href="@{/modelos}">Modelos</a>
-                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link " th:href="@{/marcas}">Marcas</a>
                     <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
-                    <a class="nav-link active" aria-current="page" th:href="@{/tecnicos}">Tecnicos</a>
+                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link " th:href="@{/modelos}">Modelos</a>
+                    <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                     <a class="nav-link" th:href="@{/servicios}">Servicios</a>
-                    <a class="nav-link" th:href="@{/ordenes}">Ordenes</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/ordenes}">Ordenes</a>
                 </div>
             </div>
         </div>
@@ -29,37 +30,29 @@
 </header>
 
 <div class="container mt-4">
-    <h3>Listado Tecnicos</h3>
+    <h3>Listado Ordenes</h3>
     <br>
-    <a th:href="@{/agregarTecnico}" class="btn btn-primary">Agregar</a>
+    <a th:href="@{/agregarOrden}" class="btn btn-primary">Agregar</a>
     <br>
-    <div th:if="${tecnico != null and !tecnico.empty}">
+    <div th:if="${orden != null and !orden.empty}">
         <table class="table">
             <thead>
             <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Legajo</th>
-                <th>Acciones</th>
+                <th>Numero</th>
             </tr>
             </thead>
 
-            <tr th:each="tecnico :${tecnico}">
-                <td th:text="${tecnico.nombre}">Mostrar Nombre</td>
-                <td th:text="${tecnico.apellido}">Mostrar Apellido</td>
-                <td th:text="${tecnico.legajo}">Mostrar Legajo</td>
-                <td> <a class="btn btn-warning" th:href="@{/modificarTecnico/} + ${tecnico.idTecnico}" th:text="Editar"/>
-                    <a class="btn btn-danger" th:href="@{/eliminarTecnico/} + ${tecnico.idTecnico}" th:text="Eliminar"/></td>
+            <tr th:each="orden :${orden}">
+                <td th:text="${orden.id}">Mostrar Numero</td>
+                <td> <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
+                    <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/></td>
             </tr>
         </table>
     </div>
-
-    <br>
-
-    <div th:if="${tecnico == null or tecnico.empty}">
-        La lista de tecnicos esta vacia
+    <br/>
+    <div th:if="${orden == null or orden.empty}">
+        La lista de ordens esta vacia
     </div>
 </div>
-
 </body>
 </html>
