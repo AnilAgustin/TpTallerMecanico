@@ -34,6 +34,7 @@ public class ServicioImplementacion implements IServicioService {
         //Setteamos el nombre en mayusculas
         servicio.setNombre(servicio.getNombre().toUpperCase());
         servicio.setPrecio(servicio.getPrecio());
+        servicio.setRepuesto(servicio.getRepuesto());
 
         //Creamos 3 variables de entorno para guarar el nombre de la servicio, y para buscar y guardar servicios
         //en base al nombre y al estado
@@ -55,11 +56,16 @@ public class ServicioImplementacion implements IServicioService {
             //Caso contrario
             } else {
 
+
                 //Verificamos si la servicio con el mismo nombre se encuentra activada en la base de datos
                 if (servicioActivada == null) {
 
                     //Llamamos al metodo activarServicio
                     activarServicio(servicioExistente);
+                    if (!servicioExistente.equals(servicio)){
+                        servicio.setIdServicio(servicioExistente.getIdServicio());
+                        servicioDao.save(servicio);
+                    }
                 }
             }
         }
