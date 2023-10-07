@@ -1,9 +1,7 @@
 package com.TP.TallerMecanico.gestor;
 
-import com.TP.TallerMecanico.entidad.Marca;
-import com.TP.TallerMecanico.entidad.Orden;
-import com.TP.TallerMecanico.entidad.Tecnico;
-import com.TP.TallerMecanico.entidad.Vehiculo;
+import com.TP.TallerMecanico.entidad.*;
+import com.TP.TallerMecanico.servicio.IDetalleOrdenService;
 import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
@@ -28,6 +26,9 @@ public class GestorOrden {
 
     @Autowired
     private IVehiculoService vehiculoService;
+
+    @Autowired
+    private IDetalleOrdenService detallesService;
 
     @Autowired
     private ITecnicoService tecnicoService;
@@ -88,6 +89,15 @@ public class GestorOrden {
         model.addAttribute("orden", orden);
         model.addAttribute("modo", "editar");
         return "agregarModificarOrden";
+    }
+
+    @GetMapping("/ordenes/detallesOrden/{idOrden}")
+    public String detallesOrden(@PathVariable ("idOrden") Long id, Model model) {
+        Orden orden = ordenService.buscarOrden(id);
+        List<DetalleOrden> detalles = detallesService.listarDetallesPorOrden(orden);
+        model.addAttribute("orden", orden);
+        model.addAttribute("detalles", detalles);
+        return "detallesOrden";
     }
 
     //Cuando se presiona el boton eliminar se pasa el ID del orden y este se elimina (Soft Delete)

@@ -17,12 +17,12 @@
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
                             <a class="nav-link" th:href="@{/marcas}">Marcas</a>
-                            <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
-                            <a class="nav-link" th:href="@{/clientes}">Clientes</a>
                             <a class="nav-link" th:href="@{/modelos}">Modelos</a>
-                            <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
-                            <a class="nav-link active" aria-current="page" th:href="@{/servicios}">Servicios</a> 
+                            <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                            <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
                             <a class="nav-link" th:href="@{/ordenes}">Ordenes</a>
+                            <a class="nav-link active" aria-current="page" th:href="@{/servicios}">Servicios</a>
+                            <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                         </div>
                     </div>
                 </div>
@@ -49,7 +49,10 @@
                     <tr th:each="servicio :${servicio}">
                         <td th:text="${servicio.nombre}">Mostrar Nombre</td>
                         <td th:text="${servicio.precio}">Mostrar Precio</td>
-                        <td th:text="${servicio.repuesto}">Mostrar Repuesto</td>
+                        <td>
+                            <span th:if="${servicio.repuesto != null and servicio.repuesto != ''}" th:text="${servicio.repuesto}">Mostrar Repuesto</span>
+                            <span th:unless="${servicio.repuesto != null and servicio.repuesto != ''}">(No Ingresado)</span>
+                        </td>
                         <td> <a class="btn btn-warning" th:href="@{/modificarServicio/} + ${servicio.idServicio}" th:text="Editar"/>
                             <a class="btn btn-danger" th:href="@{/eliminarServicio/} + ${servicio.idServicio}" th:text="Eliminar"/></td>
                     </tr>

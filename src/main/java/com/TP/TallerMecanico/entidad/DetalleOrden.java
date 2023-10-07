@@ -25,6 +25,8 @@ public class DetalleOrden implements Serializable {
     @NotEmpty(message = "El campo no debe estar vacio")
     @Pattern(regexp = "^[0-9]+$", message = "La cantidad debe contener solo números")
     private String cantidad;
+
+    private int subtotal;
     
     @ManyToOne
     @JoinColumn(name = "servicio_id")
