@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
@@ -37,6 +38,9 @@ public class Vehiculo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "modelo_id")
     private Modelo modelo;
+
+    @OneToMany(mappedBy = "vehiculo")
+    private List<Orden> ordenes;
 
     @Transient
     private String modo;

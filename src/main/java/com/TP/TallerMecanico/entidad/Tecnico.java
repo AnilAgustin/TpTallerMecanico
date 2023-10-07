@@ -1,5 +1,4 @@
 package com.TP.TallerMecanico.entidad;
-//Hola
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -41,12 +40,13 @@ public class Tecnico implements Serializable {
     @OneToMany(mappedBy = "tecnico")
     private List<Vehiculo> vehiculos;
 
+    @OneToMany(mappedBy = "tecnico")
+    private List<Orden> ordenes;
+
     @Transient
     private String modo;
     private Boolean estado = true;
 
-    public List<Vehiculo> getVehiculos(){
-        return vehiculos;
-    }
+
 
 }
