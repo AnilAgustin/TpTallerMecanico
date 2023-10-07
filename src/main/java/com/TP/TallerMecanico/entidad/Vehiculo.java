@@ -26,13 +26,18 @@ public class Vehiculo implements Serializable {
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "La patente debe contener caracteres alfabéticos y numéricos")
     private String patente;
 
+    @NotEmpty(message = "El año no debe estar vacio")
+    @Pattern(regexp = "^(19|20)[0-9]{2}$", message = "Debe empezar con '19' o '20' seguido de dos dígitos.")
+    @Pattern(regexp = "^[0-9]{1,4}$", message = "Debe ser un número de 1 a 4 dígitos.")
+    private String year;
+
+    @NotEmpty(message = "El kilometraje no debe estar vacio")
+    @Pattern(regexp = "^[0-9]{1,8}$", message = "Debe ser un número de 1 a 8 dígitos.")
+    private String kilometros;
+
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
-
-    @ManyToOne
-    @JoinColumn(name = "tecnico_id")
-    private Tecnico tecnico;
 
     @ManyToOne
     @JoinColumn(name = "modelo_id")

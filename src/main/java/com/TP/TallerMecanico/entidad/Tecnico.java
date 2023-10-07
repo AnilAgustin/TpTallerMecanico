@@ -38,15 +38,7 @@ public class Tecnico implements Serializable {
     @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El apellido debe contener solo caracteres alfabeticos")
     private String apellido;
 
-    @OneToMany(mappedBy = "tecnico")
-    private List<Vehiculo> vehiculos;
-
     @Transient
     private String modo;
     private Boolean estado = true;
-
-    public List<Vehiculo> getVehiculos(){
-        return vehiculos;
-    }
-
 }

@@ -1,6 +1,5 @@
-<!DOCTYPE html>
 <html>
-<head>
+<head xmlns:th="http://www.thymeleaf.org">
     <title>Vehiculos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,9 +16,9 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link " th:href="@{/marcas}">Marcas</a>
-                    <a class="nav-link active" aria-current="page" th:href="@{/vehiculos}">Vehiculos</a>
-                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
                     <a class="nav-link " th:href="@{/modelos}">Modelos</a>
+                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/vehiculos}">Vehiculos</a>
                     <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                 </div>
             </div>
@@ -37,33 +36,36 @@
             <thead>
             <tr>
                 <th>Patente</th>
+                <th>Año</th>
+                <th>Kilometros</th>
                 <th>Modelo</th>
                 <th>Marca</th>
                 <th>Cliente</th>
                 <th>DNI</th>
-                <th>Tecnico</th>
-                <th>Legajo</th>
                 <th>Acciones</th>
             </tr>
             </thead>
 
             <tr th:each="vehiculo :${vehiculo}">
                 <td th:text="${vehiculo.patente}">Mostrar Patente</td>
+                <td th:text="${vehiculo.year}">Mostrar Year</td>
+                <td th:text="${vehiculo.kilometros}">Mostrar Kilometros</td>
                 <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
                 <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                 <td th:text="${vehiculo.cliente.nombre}">Mostrar Nombre Cliente</td>
                 <td th:text="${vehiculo.cliente.dni}">Mostrar DNI Cliente</td>
-                <td th:text="${vehiculo.tecnico.nombre}">Mostrar Nombre Tecnico</td>
-                <td th:text="${vehiculo.tecnico.legajo}">Mostrar Legajo Tecnico</td>
                 <td> <a class="btn btn-warning" th:href="@{/modificarVehiculo/} + ${vehiculo.idVehiculo}" th:text="Editar"/>
                     <a class="btn btn-danger" th:href="@{/eliminarVehiculo/} + ${vehiculo.idVehiculo}" th:text="Eliminar"/></td>
             </tr>
         </table>
     </div>
+
     <br/>
+
     <div th:if="${vehiculo == null or vehiculo.empty}">
         La lista de vehiculos esta vacia
     </div>
 </div>
+
 </body>
 </html>

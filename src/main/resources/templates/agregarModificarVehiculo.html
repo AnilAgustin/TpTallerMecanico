@@ -26,6 +26,18 @@
                         </div>
 
                         <div class="form-group">
+                            <label style="font-weight: bold;">Año</label>
+                            <input class="form-control" type="text" name="yearVehiculo" th:field="*{year}" />
+                            <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Kilometros</label>
+                            <input class="form-control" type="text" name="kilometrosVehiculo" th:field="*{kilometros}" />
+                            <span th:if="${#fields.hasErrors('kilometros')}" th:errors="*{kilometros}"></span>
+                        </div>
+
+                        <div class="form-group">
                             <label style="font-weight: bold;">Modelo</label>
 
                             <select class="form-control" id="modelo" name="modelo" required>
@@ -36,19 +48,12 @@
 
                         <div class="form-group">
                             <label style="font-weight: bold;">Cliente</label>
-
                             <select class="form-control" id="cliente" name="cliente" required>
                                 <option value="" disabled selected>Selecciona un Cliente</option>
-                                <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}+' - DNI: '+${cliente.dni}" th:selected="${vehiculo.cliente != null and cliente.idCliente == vehiculo.cliente.idCliente}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label style="font-weight: bold;">Tecnico</label>
-
-                            <select class="form-control" id="tecnico" name="tecnico" required>
-                                <option value="" disabled selected>Selecciona un Tecnico</option>
-                                <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${vehiculo.tecnico != null and tecnico.idTecnico == vehiculo.tecnico.idTecnico}"></option>
+                                <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}"
+                                        th:text="${cliente.nombre}+' - DNI: '+${cliente.dni}"
+                                        th:selected="${vehiculo.cliente != null and cliente.idCliente == vehiculo.cliente.idCliente}">
+                                </option>
                             </select>
                         </div>
 
@@ -58,8 +63,6 @@
 
                     </div>
                     <div class="card-footer">
-                        <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
-                                            <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
                     <button type="submit" class="btn btn-success ">Guardar</button>
                     <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
                         
@@ -88,6 +91,18 @@
                         </div>
 
                         <div class="form-group">
+                            <label style="font-weight: bold;">Año</label>
+                            <input class="form-control" type="text" name="yearVehiculo" th:field="*{year}" />
+                            <span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Kilometros</label>
+                            <input class="form-control" type="text" name="kilometrosVehiculo" th:field="*{kilometros}" />
+                            <span th:if="${#fields.hasErrors('kilometros')}" th:errors="*{kilometros}"></span>
+                        </div>
+
+                        <div class="form-group">
                             <label style="font-weight: bold;">Modelo</label>
 
                             <select class="form-control" id="modelo" name="modelo" required>
@@ -106,22 +121,11 @@
                         </div>
 
                         <div class="form-group">
-                            <label style="font-weight: bold;">Tecnico</label>
-
-                            <select class="form-control" id="tecnico" name="tecnico" required>
-                                <option value="" disabled selected>Selecciona un Tecnico</option>
-                                <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${vehiculo.tecnico != null and tecnico.idTecnico == vehiculo.tecnico.idTecnico}"></option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
                             <input type="hidden" name="estadoVehiculo" th:field="*{estado}"/>
                         </div>
 
                     </div>
                     <div class="card-footer">
-                        <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
-                                            <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
                         <button type="submit" class="btn btn-success">Actualizar</button>
                         <a  class="btn btn-danger" th:href="@{/vehiculos}">Regresar</a>
                         
