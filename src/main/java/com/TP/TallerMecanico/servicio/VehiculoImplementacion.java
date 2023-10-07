@@ -4,6 +4,8 @@ import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +53,7 @@ public class VehiculoImplementacion implements IVehiculoService {
 
         //Caso contrario
         } else {
-
+            
             //Verificamos si el vehiculo con la misma patente se encuentra activado en la BD
             if (vehiculoActivado == null) {
 
@@ -69,10 +71,35 @@ public class VehiculoImplementacion implements IVehiculoService {
 
     @Override
     @Transactional
-    public List<Vehiculo> filtrarVehiculos(String patente, Marca marca, Modelo modelo){
-        List<Vehiculo> busquedaVehiculos = vehiculoDao.findByPatenteAndModeloMarcaNombreAndModeloNombre(patente, marca, modelo);
-        return busquedaVehiculos;
+    public List<Vehiculo> filtrarVehiculos(String patente, Long idMarca, Long idModelo) {
+        System.out.println(patente);
+        System.out.println(idMarca);
+        System.out.println(idModelo);
+    
+        // Realiza la búsqueda de vehículos según las condiciones combinadas
+        if (patente != "" && idMarca != -1 && idModelo != -1) {
+            return vehiculoDao.filtrarVehiculo(patente, idMarca, idModelo);
+        } else if (patente != "" && idMarca != -1) {
+            return vehiculoDao.filtrarVehiculoPorPatenteYMarca(patente, idMarca);
+        } else if (patente != "" && idModelo != -1) {
+            return vehiculoDao.filtrarVehiculoPorPatenteYModelo(patente, idModelo);
+        } else if (patente == "" && idMarca != -1 && idModelo != -1) {
+            return vehiculoDao.filtrarVehiculoPorMarcaYModelo(idMarca, idModelo);
+        } else if (patente != "" && idMarca == -1 && idModelo == -1) {
+            return vehiculoDao.filtrarVehiculoPorPatente(patente);
+        } else if (patente == "" && idMarca != -1 && idModelo == -1) {
+            return vehiculoDao.filtrarVehiculoPorMarca(idMarca);
+        } else if (patente == "" && idMarca == -1 && idModelo != -1) {
+            return vehiculoDao.filtrarVehiculoPorModelo(idModelo);
+        } else if (patente == "" && idModelo == -1 && idMarca == -1) {
+            // No se proporcionaron parámetros, devolver todos los vehículos
+            return listarVehiculos();
+        }
+    
+        // En caso de que ninguna condición se cumpla, se devuelve una lista vacía
+        return new ArrayList<>();
     }
+    
 
     @Override
     @Transactional
