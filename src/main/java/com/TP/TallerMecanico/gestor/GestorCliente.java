@@ -3,6 +3,8 @@ package com.TP.TallerMecanico.gestor;
 import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import jakarta.validation.Valid;
+
+import org.hibernate.mapping.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -28,6 +31,18 @@ public class GestorCliente {
         return "clientes";
     }
 
+    @GetMapping("/buscarClientes")
+    public String buscarPorNombre(@RequestParam(name = "nombre", required = false) String nombre, Model model){
+        if (nombre != null) {
+            nombre = nombre.toUpperCase();
+        }
+        if(nombre != null && !nombre.isEmpty()) {
+            model.addAttribute("cliente", clienteService.buscarClienteNombre(nombre));
+        }else{
+            model.addAttribute("cliente", clienteService.listarClientes());
+        }
+        return "clientes";
+    }
 
     //Permitir agregar un cliente cuando la URL sea /agregarCliente
     @GetMapping("/agregarCliente")

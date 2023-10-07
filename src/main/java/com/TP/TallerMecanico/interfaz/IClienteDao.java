@@ -24,5 +24,5 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
     Cliente findByDniAndEstadoTrue(String dni);
 
-
+    List<Cliente> findByNombre(String nombre);
 }

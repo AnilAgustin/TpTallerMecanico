@@ -1,7 +1,5 @@
 package com.TP.TallerMecanico.servicio;
 
-import com.TP.TallerMecanico.entidad.Marca;
-import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import java.util.List;
@@ -66,13 +64,6 @@ public class VehiculoImplementacion implements IVehiculoService {
             }
         }
     } 
-
-    @Override
-    @Transactional
-    public List<Vehiculo> filtrarVehiculos(String patente, Marca marca, Modelo modelo){
-        List<Vehiculo> busquedaVehiculos = vehiculoDao.findByPatenteAndModeloMarcaNombreAndModeloNombre(patente, marca, modelo);
-        return busquedaVehiculos;
-    }
 
     @Override
     @Transactional

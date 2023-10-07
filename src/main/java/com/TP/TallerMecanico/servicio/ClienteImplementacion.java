@@ -26,6 +26,10 @@ public class ClienteImplementacion implements IClienteService {
 
     //A continuacion todos los metodos de la clase
 
+    @Override
+    public List<Cliente> buscarClienteNombre(String nombre){
+        return clienteDao.findByNombre(nombre);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -33,7 +37,6 @@ public class ClienteImplementacion implements IClienteService {
     public List<Cliente> listarClientes() { 
         return clienteDao.findByEstadoTrue();  //Devuelve una lista de clientes en estadoTrue
     }
-
 
     @Override
     @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta 

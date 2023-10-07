@@ -11,4 +11,5 @@ public interface IClienteService {
     public void eliminar(Cliente cliente);
     public Cliente buscarCliente(Cliente cliente);
     public void activarCliente(Cliente cliente);
+    public List<Cliente> buscarClienteNombre(String nombre);
 }

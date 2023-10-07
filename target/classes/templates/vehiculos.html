@@ -1,94 +1,69 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Vehiculos</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 </head>
-
 <body>
-    <header>
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-            <div class="container-fluid">
-                <a class="navbar-brand" th:href="@{/}">TALLER MECANICO</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <div class="navbar-nav">
-                        <a class="nav-link " th:href="@{/marcas}">Marcas</a>
-                        <a class="nav-link active" aria-current="page" th:href="@{/vehiculos}">Vehiculos</a>
-                        <a class="nav-link" th:href="@{/clientes}">Clientes</a>
-                        <a class="nav-link " th:href="@{/modelos}">Modelos</a>
-                        <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
-                    </div>
+<header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" th:href="@{/}">TALLER MECANICO</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link " th:href="@{/marcas}">Marcas</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/vehiculos}">Vehiculos</a>
+                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link " th:href="@{/modelos}">Modelos</a>
+                    <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container mt-4">
-        <h3>Listado Vehiculos</h3>
-        <br>
-        <div>
-            <form class="d-flex" role="search" th:action="@{/buscarVehiculo}" method="POST">
-                <input class="form-control me-2 mb-3" type="search" placeholder="Ingrese una patente"
-                    aria-label="Search">
-                <select class="form-select me-3 mb-3" aria-label="Default select example">
-                    <option selected>Seleccione una marca</option>
-                    <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}">
-                    </option>
-                </select>
-                <select class="form-select me-3 mb-3" aria-label="Default select example">
-                    <option selected>Seleccione un modelo</option>
-                    <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}">
-                </select>
-                <button class="btn btn-success mb-3" type="submit">Buscar</button>
-            </form>
         </div>
+    </nav>
+</header>
 
-        <a th:href="@{/agregarVehiculo}" class="btn btn-primary mt-4">Agregar</a>
-        <br>
-        <div th:if="${vehiculo != null and !vehiculo.empty}">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Patente</th>
-                        <th>Modelo</th>
-                        <th>Marca</th>
-                        <th>Cliente</th>
-                        <th>DNI</th>
-                        <th>Tecnico</th>
-                        <th>Legajo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
+<div class="container mt-4">
+    <h3>Listado Vehiculos</h3>
+    <br>
+    <a th:href="@{/agregarVehiculo}" class="btn btn-primary">Agregar</a>
+    <br>
+    <div th:if="${vehiculo != null and !vehiculo.empty}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Patente</th>
+                <th>Modelo</th>
+                <th>Marca</th>
+                <th>Cliente</th>
+                <th>DNI</th>
+                <th>Tecnico</th>
+                <th>Legajo</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
 
-                <tr th:each="vehiculo :${vehiculo}">
-                    <td th:text="${vehiculo.patente}">Mostrar Patente</td>
-                    <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
-                    <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
-                    <td th:text="${vehiculo.cliente.nombre}">Mostrar Nombre Cliente</td>
-                    <td th:text="${vehiculo.cliente.dni}">Mostrar DNI Cliente</td>
-                    <td th:text="${vehiculo.tecnico.nombre}">Mostrar Nombre Tecnico</td>
-                    <td th:text="${vehiculo.tecnico.legajo}">Mostrar Legajo Tecnico</td>
-                    <td> <a class="btn btn-warning" th:href="@{/modificarVehiculo/} + ${vehiculo.idVehiculo}"
-                            th:text="Editar" />
-                        <a class="btn btn-danger" th:href="@{/eliminarVehiculo/} + ${vehiculo.idVehiculo}"
-                            th:text="Eliminar" />
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <br />
-        <div th:if="${vehiculo == null or vehiculo.empty}">
-            La lista de vehiculos esta vacia
-        </div>
+            <tr th:each="vehiculo :${vehiculo}">
+                <td th:text="${vehiculo.patente}">Mostrar Patente</td>
+                <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
+                <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
+                <td th:text="${vehiculo.cliente.nombre}">Mostrar Nombre Cliente</td>
+                <td th:text="${vehiculo.cliente.dni}">Mostrar DNI Cliente</td>
+                <td th:text="${vehiculo.tecnico.nombre}">Mostrar Nombre Tecnico</td>
+                <td th:text="${vehiculo.tecnico.legajo}">Mostrar Legajo Tecnico</td>
+                <td> <a class="btn btn-warning" th:href="@{/modificarVehiculo/} + ${vehiculo.idVehiculo}" th:text="Editar"/>
+                    <a class="btn btn-danger" th:href="@{/eliminarVehiculo/} + ${vehiculo.idVehiculo}" th:text="Eliminar"/></td>
+            </tr>
+        </table>
     </div>
+    <br/>
+    <div th:if="${vehiculo == null or vehiculo.empty}">
+        La lista de vehiculos esta vacia
+    </div>
+</div>
 </body>
-
 </html>

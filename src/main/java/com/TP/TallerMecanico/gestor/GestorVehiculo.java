@@ -2,7 +2,6 @@ package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
 import com.TP.TallerMecanico.servicio.IClienteService;
-import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -35,30 +33,14 @@ public class GestorVehiculo {
     @Autowired
     private ITecnicoService tecnicoService;
 
-    @Autowired
-    private IMarcaService marcaService;
-
     //Listar todos los vehiculos cuando la URL sea /vehiculos
     @GetMapping("/vehiculos")
     public String listarVehiculos(Model model) {
         var vehiculo = vehiculoService.listarVehiculos();
-        List<Marca> marcas = marcaService.listarMarcas();
-        List<Modelo> modelos = modeloService.listarModelos();
         model.addAttribute("vehiculo", vehiculo);
-        model.addAttribute("marcas", marcas);
-        model.addAttribute("modelos", modelos);
         return "vehiculos";
     }
 
-    @GetMapping("/buscarVehiculo")
-    public String buscarVehiculo(@RequestParam(name = "patente", required = false) String patente, 
-                                @RequestParam(name = "marca", required = false) Marca marca, 
-                                @RequestParam(name = "modelo", required = false) Modelo modelo, Model model){
-                                    List<Vehiculo> busquedaVehiculos = vehiculoService.filtrarVehiculos(patente, marca, modelo);
-                                    model.addAttribute("filtroVehiculos", busquedaVehiculos);
-                                    System.out.println(busquedaVehiculos);
-                                    return "vehiculos";
-    }
     //Permitir agregar un vehiculo cuando la URL sea /agregarVehiculo
     @GetMapping("/agregarVehiculo")
     public String agregarVehiculos(Model model) {
