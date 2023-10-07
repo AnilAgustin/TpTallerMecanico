@@ -1,7 +1,12 @@
 package com.TP.TallerMecanico.gestor;
 
+import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.entidad.Tecnico;
+import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.servicio.IOrdenService;
+import com.TP.TallerMecanico.servicio.ITecnicoService;
+import com.TP.TallerMecanico.servicio.IVehiculoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,12 +17,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class GestorOrden {
 
     //El Autowired sirve para la inyeccion de dependencias 
     @Autowired
     private IOrdenService ordenService;
+
+    @Autowired
+    private IVehiculoService vehiculoService;
+
+    @Autowired
+    private ITecnicoService tecnicoService;
 
     //Listar todos los ordenes cuando la URL sea /ordenes
     @GetMapping("/ordenes")
@@ -31,6 +44,10 @@ public class GestorOrden {
     @GetMapping("/agregarOrden")
     public String agregarOrden(Model model){
         var orden = new Orden();
+        List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
+        model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+        List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
+        model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
         model.addAttribute("orden", orden);
         model.addAttribute("modo", "nuevo");
         return "agregarModificarOrden";
@@ -64,6 +81,10 @@ public class GestorOrden {
     @GetMapping("/modificarOrden/{idOrden}")
     public String modificarOrden(@PathVariable Long idOrden, Model model){
         var orden = ordenService.buscarOrden(idOrden);
+        List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
+        model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+        List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
+        model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
         model.addAttribute("orden", orden);
         model.addAttribute("modo", "editar");
         return "agregarModificarOrden";

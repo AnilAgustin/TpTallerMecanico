@@ -20,21 +20,24 @@ public class Servicio implements Serializable{
     
     @NotEmpty(message = "El campo no debe estar vacio")
     @Size(max=50, message = "El nombre de la marca no debe superar los 50 caracteres")
-    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El nombre de la marca debe contener solo caracteres alfabeticos")    
+    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El nombre del servicio debe contener solo caracteres alfabeticos")
     private String nombre;
-    
-    
-    private int precio;
 
-    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\\d\\s.]+$", message = "El nombre de la marca debe contener caracteres alfabéticos y números")
+    @NotEmpty(message = "El campo no debe estar vacio")
+    @Pattern(regexp = "^[0-9]+$", message = "El precio debe contener solo números")
+    private String precio;
+
+    @Pattern(regexp = "(|[a-zA-Z0-9\\s])$", message = "El nombre del repuesto debe contener caracteres alfabéticos y números")
     private String repuesto;
 
     @Transient
     private String modo;
     private Boolean estado = true;
 
+    public int getPrecioEntero(){
+        int precio = Integer.parseInt(this.precio);
+        return precio;
+    }
     @OneToMany(mappedBy = "servicio")
     private List<DetalleOrden> detallesOrden;
-
-
 }

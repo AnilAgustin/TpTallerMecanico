@@ -22,8 +22,6 @@ public class Orden implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrden;
-    
-    
 
     @OneToMany(mappedBy = "orden")
     private List<DetalleOrden> detallesOrden;

@@ -19,8 +19,9 @@
                             <input type="hidden" name="idOrden" th:field="*{idOrden}"/>
                         </div>
 
+
                         <div class="form-group">
-                            <label style="font-weight: bold;">Modelo</label>
+                            <label style="font-weight: bold;">Vehiculo</label>
 
                             <select class="form-control" id="vehiculo" name="vehiculo" required>
                                 <option value="" disabled selected>Selecciona un Vehiculo</option>
@@ -68,28 +69,14 @@
                         </div>
 
                         <div class="form-group">
-                            <label style="font-weight: bold;">Patente</label>
-                            <input class="form-control" type="text" name="patenteOrden" th:field="*{patente}" />
-                            <span th:if="${#fields.hasErrors('patente')}" th:errors="*{patente}"></span>
-                        </div>
+                            <label style="font-weight: bold;">Vehiculo</label>
 
-                        <div class="form-group">
-                            <label style="font-weight: bold;">Modelo</label>
-
-                            <select class="form-control" id="modelo" name="modelo" required>
-                                <option value="" disabled selected>Selecciona un Modelo</option>
-                                <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}" th:selected="${orden.modelo != null and modelo.idModelo == orden.modelo.idModelo}"></option>
+                            <select class="form-control" id="vehiculo" name="vehiculo" required>
+                                <option value="" disabled selected>Selecciona un Vehiculo</option>
+                                <option th:each="vehiculo : ${vehiculos}" th:value="${vehiculo.idVehiculo}" th:text="${vehiculo.patente}" th:selected="${orden.vehiculo != null and vehiculo.idVehiculo == orden.vehiculo.idVehiculo}"></option>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label style="font-weight: bold;">Cliente</label>
-
-                            <select class="form-control" id="cliente" name="cliente" required>
-                                <option value="" disabled selected>Selecciona un Cliente</option>
-                                <option th:each="cliente : ${clientes}" th:value="${cliente.idCliente}" th:text="${cliente.nombre}+' - DNI: '+${cliente.dni}" th:selected="${orden.cliente != null and cliente.idCliente == orden.cliente.idCliente}"></option>
-                            </select>
-                        </div>
 
                         <div class="form-group">
                             <label style="font-weight: bold;">Tecnico</label>

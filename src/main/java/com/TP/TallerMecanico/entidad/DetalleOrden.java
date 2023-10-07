@@ -7,6 +7,8 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -19,8 +21,10 @@ public class DetalleOrden implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDetalleOrden;
-    
-    private int subtotal;
+
+    @NotEmpty(message = "El campo no debe estar vacio")
+    @Pattern(regexp = "^[0-9]+$", message = "La cantidad debe contener solo números")
+    private String cantidad;
     
     @ManyToOne
     @JoinColumn(name = "servicio_id")
@@ -30,6 +34,10 @@ public class DetalleOrden implements Serializable {
     @JoinColumn(name = "orden_id")
     private Orden orden;
 
+    public int calcularSubtotal(){
+        int cantidad = Integer.parseInt(this.cantidad);
+        return (cantidad * servicio.getPrecioEntero());
+    }
 
 
     @Transient

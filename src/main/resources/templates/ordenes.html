@@ -17,12 +17,12 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link " th:href="@{/marcas}">Marcas</a>
-                    <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
-                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
                     <a class="nav-link " th:href="@{/modelos}">Modelos</a>
-                    <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
-                    <a class="nav-link" th:href="@{/servicios}">Servicios</a>
+                    <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
                     <a class="nav-link active" aria-current="page" th:href="@{/ordenes}">Ordenes</a>
+                    <a class="nav-link" th:href="@{/servicios}">Servicios</a>
+                    <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                 </div>
             </div>
         </div>
@@ -39,11 +39,14 @@
             <thead>
             <tr>
                 <th>Numero</th>
+                <th>Vehiculo</th>
+                <th>Tecnico</th>
             </tr>
             </thead>
-
             <tr th:each="orden :${orden}">
-                <td th:text="${orden.id}">Mostrar Numero</td>
+                <td th:text="${orden.idOrden}">Mostrar Numero</td>
+                <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
+                <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
                 <td> <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
                     <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/></td>
             </tr>

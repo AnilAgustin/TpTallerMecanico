@@ -33,10 +33,8 @@ public class ServicioImplementacion implements IServicioService {
         
         //Setteamos el nombre en mayusculas
         servicio.setNombre(servicio.getNombre().toUpperCase());
-        servicio.setPrecio(servicio.getPrecio());
-        servicio.setRepuesto(servicio.getRepuesto());
 
-        //Creamos 3 variables de entorno para guarar el nombre de la servicio, y para buscar y guardar servicios
+        //Creamos 3 variables de entorno para guarar el nombre del servicio, y para buscar y guardar servicios
         //en base al nombre y al estado
         String nombreServicio = servicio.getNombre();
 
