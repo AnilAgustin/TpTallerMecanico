@@ -80,18 +80,17 @@ public class VehiculoImplementacion implements IVehiculoService {
         
         //En el caso de que la patente ingresado ya exista en la base de datos y se encuentre en estado eliminado(false)
         //lo activamos
-        vehiculoDao.marcarComoActivo(vehiculoByPatente.getIdVehiculo());
+        if (vehiculoByPatente != null){
+            vehiculoDao.marcarComoActivo(vehiculoByPatente.getIdVehiculo());
+        }
 
         //Aca empieza la logica del actualizar
 
         //Si ya existe un vehiculo en la BD con ese id (solo en casos especiales no se cumplirira)
         if (vehiculoExistente != null) {
-
-
             //Guardamos los nuevos datos cargados por el usuario
             String nuevaPatente = vehiculo.getPatente();
             String patenteExistente = vehiculoExistente.getPatente();
-
             //Controlamos que la patente nuevo sea igual al existente, o que la patente nuevo no exista en la base de datos
             if (nuevaPatente.equals(patenteExistente) || !patenteExisteEnBaseDeDatos(nuevaPatente)) {
                 //Guardamos el vehiculo
@@ -102,7 +101,6 @@ public class VehiculoImplementacion implements IVehiculoService {
 
     //Metodo boolean que nos sirve para simplificar el chequeo realizado en la linea 96
     private boolean patenteExisteEnBaseDeDatos(String patente) {
-
         //Devuelve true si encuentra un objeto
         return vehiculoDao.findByPatente(patente) != null;
     }

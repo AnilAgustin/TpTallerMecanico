@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaft.org">
+<head>
+    <title>DetalleOrden</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="col-sm-6">
+        <div th:if="${modo eq 'nuevo'}">
+            <form th:action="@{/ordenes/guardarDetalleOrden/} + ${orden.idOrden}" th:object="${detalleOrden}" method="POST">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>DetalleOrden</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="hidden" name="idDetalleOrden" th:field="*{idDetalleOrden}"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Servicio</label>
+
+                            <select class="form-control" id="servicio" name="servicio" required>
+                                <option value="" disabled selected>Selecciona un Servicio</option>
+                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}"></option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Cantidad</label>
+                            <input class="form-control" type="text" name="cantidadDetalle" th:field="*{cantidad}" />
+                            <span th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="estadoDetalleOrden" th:field="*{estado}"/>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
+                                            <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
+                        <button type="submit" class="btn btn-success ">Guardar</button>
+                        <a  class="btn btn-danger" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}">Regresar</a>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!--Actualizar-->
+        <div th:if="${modo eq 'editar'}">
+            <form th:action="@{/ordenes/actualizarDetalleOrden/} + ${orden.idOrden}" th:object="${detalleOrden}" method="POST">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>DetalleOrden</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="hidden" name="idDetalleOrden" th:field="*{idDetalleOrden}"/>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Servicio</label>
+
+                            <select class="form-control" id="servicio" name="servicio" required>
+                                <option value="" disabled selected>Selecciona un Servicio</option>
+                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}"></option>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Cantidad</label>
+                            <input class="form-control" type="text" name="cantidadDetalle" th:field="*{cantidad}" />
+                            <span th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></span>
+                        </div>
+
+
+                        <div class="form-group">
+                            <input type="hidden" name="estadoDetalleOrden" th:field="*{estado}"/>
+                        </div>
+
+                    </div>
+                    <div class="card-footer">
+                        <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
+                                            <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
+                        <button type="submit" class="btn btn-success">Actualizar</button>
+                        <a  class="btn btn-danger" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}">Regresar</a>
+                    </div>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

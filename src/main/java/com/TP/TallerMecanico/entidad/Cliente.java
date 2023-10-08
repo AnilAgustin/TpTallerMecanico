@@ -38,6 +38,24 @@ public class Cliente implements Serializable {
     @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El apellido debe contener solo caracteres alfabeticos")
     private String apellido;
 
+
+    @Pattern(regexp = "^(|[0-9]{1,8})$", message = "La licencia debe contener solo números y tener un máximo de 8 dígitos")
+    private String licencia;
+
+
+    @Size(max = 50, message = "La direccion del cliente no debe superar los 50 caracteres")
+    @Pattern(regexp = "^(|[a-zA-Z0-9\\s]+)$", message = "La direccion debe contener solo caracteres alfanuméricos")
+    private String direccion;
+
+
+    @Size(max=50, message = "El email del cliente no debe superar los 50 caracteres")
+    @Pattern(regexp = "^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})$",message = "Asegurese que el mail ingresado se encuentre en el formato correcto")
+    private String email;
+
+
+    @Pattern(regexp = "^(|[0-9]{1,15})$", message = "El telefono debe contener solo números y tener un máximo de 15 dígitos")
+    private String telefono;
+
     @OneToMany(mappedBy = "cliente")
     private List<Vehiculo> vehiculos;
 

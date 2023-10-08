@@ -1,7 +1,6 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Tecnico;
-import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.ITecnicoDao;
 import java.util.List;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
@@ -17,12 +16,6 @@ public class TecnicoImplementacion implements ITecnicoService {
 
     @Autowired
     private ITecnicoDao tecnicoDao;
-
-    @Autowired
-    private IVehiculoDao vehiculoDao;
-
-    @Autowired
-    private IVehiculoService vehiculoService;
 
     //A continuacion todos los metodos de la clase
 
@@ -94,7 +87,9 @@ public class TecnicoImplementacion implements ITecnicoService {
         
         //En el caso de que el legajo ingresado ya exista en la base de datos y se encuentre en estado eliminado(false)
         //lo activamos
-        activarTecnico(tecnicoByLegajo);
+        if (tecnicoByLegajo != null){
+            activarTecnico(tecnicoByLegajo);
+        }
         
         //Aca empieza la logica del actualizar
 
@@ -127,12 +122,8 @@ public class TecnicoImplementacion implements ITecnicoService {
         //Llamamos al metodo marcarComoEliminado del tecnicoDao para cambiar el estado del tecnico a false
         tecnicoDao.marcarComoEliminado(tecnico.getIdTecnico());
 
-        //Realizamos un ciclo que recorra todos los vehiculos asociados al id de ese tecnico y llamamos al metodo
-        //eliminar de cada vehiculo, el cual ejecutara el mismo metodo marcarComoEliminado de vehiculoDao
-        for (Vehiculo vehiculo: vehiculoDao.findByTecnicoAndEstadoTrue(tecnico)){
-            vehiculoService.eliminar(vehiculo);
-        }
     }
+
 
     @Override
     @Transactional(readOnly = true)
@@ -148,11 +139,5 @@ public class TecnicoImplementacion implements ITecnicoService {
 
         //Llamamos al metodo marcarComoActivo del tecnicoDao para cambiar el estado del tecnico a true
         tecnicoDao.marcarComoActivo(tecnico.getIdTecnico());
-
-        //Realizamos un ciclo que recorra todos los vehiculos asociados al id de ese tecnico y llamamos al metodo
-        //al metodo activar de cada vehiculo, el cual ejecutara el mismo metodo marcarComoActivo de vehiculoDao
-        for (Vehiculo vehiculo : tecnico.getVehiculos()){
-            vehiculoService.activarVehiculo(vehiculo);
-        }
     }
 }

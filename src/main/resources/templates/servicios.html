@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head xmlns:th="http://www.thymeleaft.org">
+        <title>Servicios</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid">
+                    <a class="navbar-brand" th:href="@{/}">TALLER MECANICO</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav">
+                            <a class="nav-link" th:href="@{/marcas}">Marcas</a>
+                            <a class="nav-link" th:href="@{/modelos}">Modelos</a>
+                            <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                            <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
+                            <a class="nav-link" th:href="@{/ordenes}">Ordenes</a>
+                            <a class="nav-link active" aria-current="page" th:href="@{/servicios}">Servicios</a>
+                            <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="container mt-4">
+            <h3>Listado Servicios</h3>
+            <br>
+            <a th:href="@{/agregarServicio}" class="btn btn-primary">Agregar</a>
+            <br>
+            <div th:if="${servicio != null and !servicio.empty}">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Precio</th>
+                            <th>Repuesto</th>
+                            <th>Acciones</th>
+
+                        </tr>
+                    </thead>
+
+                    <tr th:each="servicio :${servicio}">
+                        <td th:text="${servicio.nombre}">Mostrar Nombre</td>
+                        <td th:text="${servicio.precio}">Mostrar Precio</td>
+                        <td>
+                            <span th:if="${servicio.repuesto != null and servicio.repuesto != ''}" th:text="${servicio.repuesto}">Mostrar Repuesto</span>
+                            <span th:unless="${servicio.repuesto != null and servicio.repuesto != ''}">(No Ingresado)</span>
+                        </td>
+                        <td> <a class="btn btn-warning" th:href="@{/modificarServicio/} + ${servicio.idServicio}" th:text="Editar"/>
+                            <a class="btn btn-danger" th:href="@{/eliminarServicio/} + ${servicio.idServicio}" th:text="Eliminar"/></td>
+                    </tr>
+                </table>
+            </div>
+            <br/>
+            <div th:if="${servicio == null or servicio.empty}">
+                La lista de servicios esta vacia
+            </div>
+        </div>
+    </body>
+</html>

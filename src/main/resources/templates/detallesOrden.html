@@ -1,0 +1,67 @@
+<html>
+<head xmlns:th="http://www.thymeleaft.org">
+    <title>Detalles Orden</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">TALLER MECANICO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link " th:href="@{/marcas}">Marcas</a>
+                        <a class="nav-link " th:href="@{/modelos}">Modelos</a>
+                        <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                        <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
+                        <a class="nav-link active" aria-current="page" th:href="@{/ordenes}">Ordenes</a>
+                        <a class="nav-link" th:href="@{/servicios}">Servicios</a>
+                        <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+<div class="container mt-4">
+    <h3>Listado DetallesOrden</h3>
+    <br>
+    <a th:href="@{/ordenes/agregarDetalleOrden/} + ${orden.idOrden}" class="btn btn-primary">Agregar</a>
+    <br>
+    <div th:if="${detalleOrden != null and !detalleOrden.empty}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Subtotal</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+
+            <tr th:each="detalleOrden :${detalleOrden}">
+                <td th:text="${detalleOrden.servicio.nombre}">Mostrar Servicio</td>
+                <td th:text="${detalleOrden.servicio.precio}">Mostrar Precio</td>
+                <td th:text="${detalleOrden.cantidad}">Mostrar Cantidad</td>
+                <td th:text="${detalleOrden.subtotal}">Mostrar Subtotal</td>
+                <td> <a class="btn btn-warning" th:href="@{/ordenes/modificarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden} " th:text="Editar"/>
+                    <a class="btn btn-danger" th:href="@{/ordenes/eliminarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden} " th:text="Eliminar"/></td>
+            </tr>
+        </table>
+    </div>
+
+    <br>
+
+    <div th:if="${detalleOrden == null or detalleOrden.empty}">
+        La lista de Detalles esta vacia
+    </div>
+</div>
+
+</body>
+</html>

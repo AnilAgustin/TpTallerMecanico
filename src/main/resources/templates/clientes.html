@@ -1,5 +1,5 @@
 <html>
-<head xmlns:th="http://www.thymeleaft.org">
+<head xmlns:th="http://www.thymeleaf.org">
     <title>Clientes</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,9 +16,11 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-link" th:href="@{/marcas}">Marcas</a>
-                    <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
-                    <a class="nav-link active" aria-current="page" th:href="@{/clientes}">Clientes</a>
                     <a class="nav-link" th:href="@{/modelos}">Modelos</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/clientes}">Clientes</a>
+                    <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
+                    <a class="nav-link" th:href="@{/ordenes}">Ordenes</a>
+                    <a class="nav-link" th:href="@{/servicios}">Servicios</a>
                     <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                 </div>
             </div>
@@ -42,6 +44,10 @@
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>DNI</th>
+                <th>Licencia</th>
+                <th>Direccion</th>
+                <th>Email</th>
+                <th>Telefono</th>
                 <th>Acciones</th>
             </tr>
             </thead>
@@ -50,6 +56,22 @@
                 <td th:text="${cliente.nombre}">Mostrar Nombre</td>
                 <td th:text="${cliente.apellido}">Mostrar Apellido</td>
                 <td th:text="${cliente.dni}">Mostrar Dni</td>
+                <td>
+                    <span th:if="${cliente.licencia != null and cliente.licencia != ''}" th:text="${cliente.licencia}">Mostrar Licencia</span>
+                    <span th:unless="${cliente.licencia != null and cliente.licencia != ''}">(No Ingresado)</span>
+                </td>
+                <td>
+                    <span th:if="${cliente.direccion != null and cliente.direccion != ''}" th:text="${cliente.direccion}">Mostrar Direccion</span>
+                    <span th:unless="${cliente.direccion != null and cliente.direccion != ''}">(No Ingresado)</span>
+                </td>
+                <td>
+                    <span th:if="${cliente.email != null and cliente.email != ''}" th:text="${cliente.email}">Mostrar Email</span>
+                    <span th:unless="${cliente.email != null and cliente.email != ''}">(No Ingresado)</span>
+                </td>
+                <td>
+                    <span th:if="${cliente.telefono != null and cliente.telefono != ''}" th:text="${cliente.telefono}">Mostrar Telefono</span>
+                    <span th:unless="${cliente.telefono != null and cliente.telefono != ''}">(No Ingresado)</span>
+                </td>
                 <td> <a class="btn btn-warning" th:href="@{/modificarCliente/} + ${cliente.idCliente}" th:text="Editar"/>
                     <a class="btn btn-danger" th:href="@{/eliminarCliente/} + ${cliente.idCliente}" th:text="Eliminar"/></td>
             </tr>

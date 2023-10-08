@@ -34,6 +34,4 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
     List<Vehiculo> findByModeloAndEstadoTrue(Modelo modelo);
 
     List<Vehiculo> findByClienteAndEstadoTrue(Cliente cliente);
-
-    List<Vehiculo> findByTecnicoAndEstadoTrue(Tecnico tecnico);
 }
