@@ -66,6 +66,7 @@
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Tecnico</th>
+                <th>Total</th>
             </tr>
             </thead>
             <tr th:each="orden :${orden}">
@@ -75,6 +76,7 @@
                 <td th:text="${orden.vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                 <td th:text="${orden.vehiculo.modelo.nombre}">Mostrar Modelo</td>
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
+                <td th:text="${orden.calcularTotal()}">Calcular Total</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
                     <a class="btn btn-success" th:href="@{/archivos/} + ${orden.idOrden}" th:text="Archivos"/>
                     <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>

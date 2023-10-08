@@ -46,4 +46,12 @@ public class Orden implements Serializable {
     public List<DetalleOrden> getDetallesOrden(){
         return detallesOrden;
     }
+
+    public int calcularTotal(){
+        int total = 0;
+        for (DetalleOrden detalleOrden : detallesOrden) {
+            total+=detalleOrden.getSubtotal();
+        }
+        return total;
+    }
 }
