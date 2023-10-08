@@ -1,11 +1,19 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.servicio.IClienteService;
+import com.TP.TallerMecanico.servicio.IOrdenService;
+
 import jakarta.validation.Valid;
 
-import org.hibernate.mapping.List;
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
+
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +31,9 @@ public class GestorCliente {
     @Autowired
     private IClienteService clienteService;
 
+    @Autowired
+    private IOrdenService ordenService;
+
     //Listar todos los clientes cuando la URL sea /clientes
     @GetMapping("/clientes")
     public String listarClientes(Model model) {
@@ -32,13 +43,29 @@ public class GestorCliente {
     }
 
     @GetMapping("/buscarClientes")
-    public String buscarPorNombre(@RequestParam(name = "nombre", required = false) String nombre, Model model){
+    public String buscarNombreFechaCliente(@RequestParam(name = "nombre", required = false) String nombre,
+    @RequestParam(name = "fechaUltimaVisita", required = false) LocalDate fechaUltimaVisita,
+    Model model){
+        
         if (nombre != null) {
-            nombre = nombre.toUpperCase();
-        }
-        if(nombre != null && !nombre.isEmpty()) {
+           nombre = nombre.toUpperCase();
+         }
+        //INGRESA SOLAMENTE NOMBRE
+        if(nombre != null && !nombre.isEmpty() && fechaUltimaVisita == null) {
             model.addAttribute("cliente", clienteService.buscarClienteNombre(nombre));
-        }else{
+        //INGRESA NOMBRE Y FECHA
+        }else if(nombre != null && !nombre.isEmpty() && fechaUltimaVisita != null){
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+            List<Cliente> clientes = new ArrayList<>();
+
+            for (Orden orden : ordenes) {
+                if(orden.getVehiculo().getCliente().getNombre() == nombre){
+                    clientes.add(orden.getVehiculo().getCliente());
+                }
+            }
+            model.addAttribute("cliente", clientes);
+        }
+        else{
             model.addAttribute("cliente", clienteService.listarClientes());
         }
         return "clientes";

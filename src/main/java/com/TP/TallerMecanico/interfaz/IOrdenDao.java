@@ -1,5 +1,7 @@
 package com.TP.TallerMecanico.interfaz;
 import com.TP.TallerMecanico.entidad.Orden;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.CrudRepository;
@@ -21,5 +23,6 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     Orden findByIdOrden(Long idOrden);
     Orden findByIdOrdenAndEstadoTrue(Long idOrden);
 
+    List<Orden> findByFecha(LocalDate fecha);
 
 }

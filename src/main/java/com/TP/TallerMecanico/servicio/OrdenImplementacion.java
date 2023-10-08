@@ -18,7 +18,11 @@ public class OrdenImplementacion implements IOrdenService {
     private IOrdenDao ordenDao;
 
     //A continuacion todos los metodos de la clase
-
+    @Override
+    @Transactional(readOnly = true)
+    public List<Orden> listarOrdenesFecha(LocalDate fechaOrden){
+        return ordenDao.findByFecha(fechaOrden);
+    }
 
     @Override
     @Transactional(readOnly = true)

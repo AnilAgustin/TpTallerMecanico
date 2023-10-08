@@ -2,6 +2,7 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Orden;
 
+import java.time.LocalDate;
 import java.util.List;
 public interface IOrdenService {
 
@@ -10,5 +11,6 @@ public interface IOrdenService {
     public void actualizar(Orden orden);
     public void eliminar(Orden orden);
     public Orden buscarOrden(Long idOrden);
-    public void activarOrden(Orden orden) ;
+    public void activarOrden(Orden orden);
+    public List<Orden> listarOrdenesFecha(LocalDate fechaOrden);
 }

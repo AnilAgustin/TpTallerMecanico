@@ -3,6 +3,8 @@ package com.TP.TallerMecanico.servicio;
 import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
+
+import java.time.LocalDate;
 import java.util.List;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +28,11 @@ public class ClienteImplementacion implements IClienteService {
 
     //A continuacion todos los metodos de la clase
 
+
     @Override
     public List<Cliente> buscarClienteNombre(String nombre){
         return clienteDao.findByNombre(nombre);
     }
-
     @Override
     @Transactional(readOnly = true)
     //Metodo para listar todos los clientes activos
