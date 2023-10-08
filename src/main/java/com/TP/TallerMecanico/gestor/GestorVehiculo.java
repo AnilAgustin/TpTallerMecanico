@@ -3,6 +3,7 @@ package com.TP.TallerMecanico.gestor;
 import com.TP.TallerMecanico.entidad.*;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import com.TP.TallerMecanico.servicio.IClienteService;
+import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -72,15 +74,6 @@ public class GestorVehiculo {
         return "vehiculos";
     }
 
-    @GetMapping("/buscarVehiculo")
-    public String buscarVehiculo(@RequestParam(name = "patente", required = false) String patente, 
-                                @RequestParam(name = "marca", required = false) Marca marca, 
-                                @RequestParam(name = "modelo", required = false) Modelo modelo, Model model){
-                                    List<Vehiculo> busquedaVehiculos = vehiculoService.filtrarVehiculos(patente, marca, modelo);
-                                    model.addAttribute("filtroVehiculos", busquedaVehiculos);
-                                    System.out.println(busquedaVehiculos);
-                                    return "vehiculos";
-    }
     //Permitir agregar un vehiculo cuando la URL sea /agregarVehiculo
     @GetMapping("/agregarVehiculo")
     public String agregarVehiculos(Model model) {
