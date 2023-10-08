@@ -10,11 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.List;
 
 @Controller
@@ -105,6 +104,26 @@ public class GestorOrden {
     public String eliminarOrden(Orden orden){
         ordenService.eliminar(orden);
         return "redirect:/ordenes";
+    }
+
+
+    @GetMapping("/archivos/{idOrden}")
+    public String archivoString(){
+        return "archivos";
+    }
+
+    @PostMapping("/upload")
+    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model){
+        String fileName = file.getOriginalFilename();
+        try {
+            file.transferTo(new File("/J:/2. Universidad/4to Año/Programacion Avanzada/Segunda Entrega/upload/" + fileName));
+            String mensajeExito = "Archivo subido con éxito";
+            model.addAttribute("mensaje", mensajeExito);
+        } catch (Exception e) {
+            String mensajeError = "Error al subir el archivo: " + e.getMessage();
+            model.addAttribute("error", mensajeError);
+        }
+        return "archivos";
     }
 
 

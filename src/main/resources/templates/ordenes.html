@@ -50,6 +50,7 @@
                 <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
+                    <a class="btn btn-success" th:href="@{/archivos/} + ${orden.idOrden}" th:text="Archivos"/>
                     <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
                     <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/></td>
 
