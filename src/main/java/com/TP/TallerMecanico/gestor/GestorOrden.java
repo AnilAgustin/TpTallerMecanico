@@ -1,12 +1,16 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
+<<<<<<< HEAD
 import com.TP.TallerMecanico.servicio.IDetalleOrdenService;
 import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
+=======
+import com.TP.TallerMecanico.servicio.*;
+>>>>>>> origin/Peluk
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -24,6 +32,9 @@ public class GestorOrden {
     //El Autowired sirve para la inyeccion de dependencias 
     @Autowired
     private IOrdenService ordenService;
+
+    @Autowired
+    private IImagenService imagenService;
 
     @Autowired
     private IVehiculoService vehiculoService;
@@ -130,32 +141,19 @@ public class GestorOrden {
         return "detallesOrden";
     }
 
+    @GetMapping("/ordenes/imagenesOrden/{idOrden}")
+    public String imagenesOrden(@PathVariable ("idOrden") Long id, Model model){
+        Orden orden = ordenService.buscarOrden(id);
+        List<Imagen> imagenes = imagenService.listarImagenes(orden);
+        model.addAttribute("orden", orden);
+        model.addAttribute("imagen", imagenes);
+        return "imagenesOrden";
+    }
+
     //Cuando se presiona el boton eliminar se pasa el ID del orden y este se elimina (Soft Delete)
     @GetMapping("/eliminarOrden/{idOrden}")
     public String eliminarOrden(Orden orden){
         ordenService.eliminar(orden);
         return "redirect:/ordenes";
     }
-
-
-    @GetMapping("/archivos/{idOrden}")
-    public String archivoString(){
-        return "archivos";
-    }
-
-    @PostMapping("/upload")
-    public String handleFileUpload(@RequestParam("file") MultipartFile file, Model model){
-        String fileName = file.getOriginalFilename();
-        try {
-            file.transferTo(new File("/J:/2. Universidad/4to Año/Programacion Avanzada/Segunda Entrega/upload/" + fileName));
-            String mensajeExito = "Archivo subido con éxito";
-            model.addAttribute("mensaje", mensajeExito);
-        } catch (Exception e) {
-            String mensajeError = "Error al subir el archivo: " + e.getMessage();
-            model.addAttribute("error", mensajeError);
-        }
-        return "archivos";
-    }
-
-
 }
