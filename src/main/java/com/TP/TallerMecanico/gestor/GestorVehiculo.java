@@ -44,7 +44,6 @@ public class GestorVehiculo {
                                   @RequestParam(name = "modelo", required = false) Long modeloId,  Model model) {
         List<Vehiculo> vehiculos;
 
-
         //Lógica para filtrar
         if (patente!=null) {
             patente = patente.toUpperCase();
@@ -60,7 +59,6 @@ public class GestorVehiculo {
             vehiculos = vehiculoService.listarVehiculos();
         }
 
-        
         //Lógica para mostrar todos 
         List<Marca> marcas = marcaService.listarMarcas();
         List<Modelo> modelos = modeloService.listarModelos();
