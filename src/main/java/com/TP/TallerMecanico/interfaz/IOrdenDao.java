@@ -34,6 +34,8 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
 
     @Query("SELECT o FROM Orden o WHERE  o.vehiculo.modelo.id = :modeloId")
     List<Orden> filtrarVehiculoPorModelo(@Param("modeloId") Long modeloId);
+
+    List<Orden> findByFecha(LocalDate fechaOrden);
     
 
 

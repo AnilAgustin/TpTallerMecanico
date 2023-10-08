@@ -7,6 +7,7 @@ import java.util.List;
 public interface IOrdenService {
 
     public List<Orden> listarOrdenes();
+    public List<Orden> listarOrdenesFecha(LocalDate fechaOrden);
     public void guardar(Orden orden);
     public void actualizar(Orden orden);
     public void eliminar(Orden orden);
