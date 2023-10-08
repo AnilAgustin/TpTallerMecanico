@@ -54,10 +54,6 @@ public class GestorVehiculo {
 
         if ((patente != null) || (marcaId != null) || (modeloId != null)) {
             // Si se envió algún parámetro de búsqueda (patente, marca o modelo), realiza la búsqueda
-            System.out.println(patente);
-            System.out.println(marcaId);
-            System.out.println(modeloId);
-
             vehiculos = vehiculoService.filtrarVehiculos(patente, marcaId, modeloId);
         } else {
             // Si no se enviaron parámetros de búsqueda, lista todos los vehículos

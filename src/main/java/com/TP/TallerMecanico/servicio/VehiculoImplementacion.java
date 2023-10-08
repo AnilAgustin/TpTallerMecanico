@@ -72,10 +72,6 @@ public class VehiculoImplementacion implements IVehiculoService {
     @Override
     @Transactional
     public List<Vehiculo> filtrarVehiculos(String patente, Long idMarca, Long idModelo) {
-        System.out.println(patente);
-        System.out.println(idMarca);
-        System.out.println(idModelo);
-    
         // Realiza la búsqueda de vehículos según las condiciones combinadas
         if (patente != "" && idMarca != -1 && idModelo != -1) {
             return vehiculoDao.filtrarVehiculo(patente, idMarca, idModelo);
