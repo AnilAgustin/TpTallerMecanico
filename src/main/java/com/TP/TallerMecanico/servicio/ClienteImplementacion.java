@@ -31,8 +31,9 @@ public class ClienteImplementacion implements IClienteService {
 
     @Override
     public List<Cliente> buscarClienteNombre(String nombre){
-        return clienteDao.findByNombre(nombre);
+        return clienteDao.findByNombreStartingWithAndEstadoTrue(nombre);
     }
+
     @Override
     @Transactional(readOnly = true)
     //Metodo para listar todos los clientes activos

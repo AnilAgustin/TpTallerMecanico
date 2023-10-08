@@ -26,6 +26,8 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
     Cliente findByDniAndEstadoTrue(String dni);
 
-    List<Cliente> findByNombre(String nombre);
+    @Query("SELECT c FROM Cliente c WHERE c.nombre LIKE :nombre% AND c.estado = true")
+    List<Cliente> findByNombreStartingWithAndEstadoTrue(@Param("nombre") String nombre);
+    //List<Cliente> findByNombre(String nombre);
 
 }
