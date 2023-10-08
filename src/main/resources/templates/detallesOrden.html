@@ -51,7 +51,7 @@
                 <td th:text="${detalleOrden.cantidad}">Mostrar Cantidad</td>
                 <td th:text="${detalleOrden.subtotal}">Mostrar Subtotal</td>
                 <td> <a class="btn btn-warning" th:href="@{/ordenes/modificarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden} " th:text="Editar"/>
-                    <a class="btn btn-danger" th:href="@{/eliminarDetalleOrden/} + ${detalleOrden.idDetalleOrden}" th:text="Eliminar"/></td>
+                    <a class="btn btn-danger" th:href="@{/ordenes/eliminarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden} " th:text="Eliminar"/></td>
             </tr>
         </table>
     </div>

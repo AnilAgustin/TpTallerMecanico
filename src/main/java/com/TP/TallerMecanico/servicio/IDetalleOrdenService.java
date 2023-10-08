@@ -9,7 +9,7 @@ public interface IDetalleOrdenService {
 
     public List<DetalleOrden> listarDetallesOrden();
     public void guardar(DetalleOrden detalleOrden);
-    public void actualizar(DetalleOrden detalleOrden);
+    public void actualizar(DetalleOrden detalleOrden, Long idOrden);
     public void eliminar(DetalleOrden detalleOrden);
     public DetalleOrden buscarDetalleOrden(Long idDetalleOrden);
     public void activarDetalleOrden(DetalleOrden detalleOrden);

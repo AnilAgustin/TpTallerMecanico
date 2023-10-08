@@ -87,7 +87,9 @@ public class TecnicoImplementacion implements ITecnicoService {
         
         //En el caso de que el legajo ingresado ya exista en la base de datos y se encuentre en estado eliminado(false)
         //lo activamos
-        activarTecnico(tecnicoByLegajo);
+        if (tecnicoByLegajo != null){
+            activarTecnico(tecnicoByLegajo);
+        }
         
         //Aca empieza la logica del actualizar
 

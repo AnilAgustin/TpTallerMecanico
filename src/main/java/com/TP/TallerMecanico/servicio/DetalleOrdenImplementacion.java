@@ -2,8 +2,12 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.entidad.Servicio;
+import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IDetalleOrdenDao;
 import java.util.List;
+
+import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +18,9 @@ public class DetalleOrdenImplementacion implements IDetalleOrdenService {
     @Autowired
     private IDetalleOrdenDao detalleOrdenDao;
 
+    @Autowired
+    private IOrdenDao ordenDao;
+
     @Override
     @Transactional(readOnly = true)
     public List<DetalleOrden> listarDetallesOrden() {
@@ -23,41 +30,27 @@ public class DetalleOrdenImplementacion implements IDetalleOrdenService {
     @Override
     @Transactional
     public List<DetalleOrden> listarDetallesPorOrden(Orden orden){
-        return detalleOrdenDao.findByOrden(orden);
+        return detalleOrdenDao.findByOrdenAndEstadoTrue(orden);
     }
 
     @Override
     @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta
     public void guardar(DetalleOrden detalleOrden) {    //Metodo para guardar un nuevo tecnico
 
-        //Setteamos los valores ingresados de nombre y apellido en mayusculas
+        Servicio nuevoServicio = detalleOrden.getServicio();
+        Orden ordenDetalleOrden = detalleOrden.getOrden();
+        DetalleOrden detalleByServicioAndOrden = detalleOrdenDao.findByServicioAndOrden(nuevoServicio, ordenDetalleOrden);
+        DetalleOrden detalleOrdenActivado = detalleOrdenDao.findByServicioAndOrdenAndEstadoTrue(nuevoServicio, ordenDetalleOrden);
 
-        //Creamos 3 variables de entorno para guardar el dni del cliente, y para buscar y guardar clientes
-        //en base al dni y al estad
-
-        Long Id = detalleOrden.getIdDetalleOrden();
-        detalleOrden.setSubtotal(detalleOrden.calcularSubtotal());
-        //Metodos de clienteDao, que se encargan de comunicarse con la base de datos para obtener (o no) un objeto cliente especifico
-        DetalleOrden detalleExistente = detalleOrdenDao.findByIdDetalleOrden(Id);
-        DetalleOrden detalleActivado = detalleOrdenDao.findByIdDetalleOrdenAndEstadoTrue(Id);
-
-        //Aca empieza la logica del guardado
-
-        //Si el DNI ingresado no existe en la BD se guarda el cliente
-        if (detalleExistente == null) {
+        if (detalleByServicioAndOrden == null) {
             detalleOrdenDao.save(detalleOrden);
-            //Caso contrario
         } else {
+            if ((detalleOrdenActivado) == null) {
 
-            //Verificamos si el orden con la misma patente se encuentra activado en la BD
-            if (detalleActivado == null) {
+                detalleOrdenDao.marcarComoActivo(detalleByServicioAndOrden.getIdDetalleOrden());
 
-                //Llamamos al metodo marcarComoActivo de ordenDao para cambiar su estado a True
-                detalleOrdenDao.marcarComoActivo(detalleExistente.getIdDetalleOrden());
-
-                //Metodo para sobreescribir un orden eliminado con datos diferentes a los cargados
-                if (!detalleExistente.equals(detalleOrden)){
-                    detalleOrden.setIdDetalleOrden(detalleExistente.getIdDetalleOrden());
+                if (!detalleByServicioAndOrden.equals(detalleOrden)) {
+                    detalleOrden.setIdDetalleOrden(detalleByServicioAndOrden.getIdDetalleOrden());
                     detalleOrdenDao.save(detalleOrden);
                 }
             }
@@ -66,12 +59,29 @@ public class DetalleOrdenImplementacion implements IDetalleOrdenService {
 
     @Override
     @Transactional
-    public void actualizar(DetalleOrden detalleOrden){ //Metodo para actualizar un detalleOrden existente activado
+    public void actualizar(DetalleOrden detalleOrden, Long idOrden){ //Metodo para actualizar un detalleOrden existente activado
+        //Aca empieza la logica del actualizar
+        detalleOrden.setOrden(ordenDao.findByIdOrden(idOrden));
+        Servicio nuevoServicio = detalleOrden.getServicio();
+        Long detalleOrdenId = detalleOrden.getIdDetalleOrden();
+        DetalleOrden servicioExistente = detalleOrdenDao.findById(detalleOrdenId).orElse(null);
+        DetalleOrden detalleByServicioAndOrden = detalleOrdenDao.findByServicioAndOrden(nuevoServicio, detalleOrden.getOrden());
 
-        
-        detalleOrdenDao.marcarComoActivo(detalleOrden.getIdDetalleOrden());
+        //CHEQUEO POR SERVICIO Y ORDEN PORQUE EL SERVICIO PUEDE EXISTIR EN OTRO DETALLE DE OTRA ORDEN
+        //Y ME DEVOLVERIA UN RESULTADO
+
+        if (detalleByServicioAndOrden != null) {
+            detalleOrdenDao.marcarComoActivo(detalleByServicioAndOrden.getIdDetalleOrden());
+        }
+
+        if (servicioExistente != null){
+
+            if (nuevoServicio.equals(servicioExistente.getServicio()) || detalleByServicioAndOrden==null) {
+                detalleOrden.setSubtotal(detalleOrden.calcularSubtotal());
+                detalleOrdenDao.save(detalleOrden);
+            }
+        }
     }
-
 
     @Override
     @Transactional

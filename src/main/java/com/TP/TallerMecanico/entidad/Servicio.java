@@ -27,7 +27,7 @@ public class Servicio implements Serializable{
     @Pattern(regexp = "^[0-9]+$", message = "El precio debe contener solo números")
     private String precio;
 
-    @Pattern(regexp = "(|[a-zA-Z0-9\\s])$", message = "El nombre del repuesto debe contener caracteres alfabéticos y números")
+    @Pattern(regexp = "^(|[a-zA-Z0-9\\s]+)$", message = "El nombre del repuesto debe contener caracteres alfabéticos y números")
     private String repuesto;
 
     @Transient

@@ -78,10 +78,12 @@ public class GestorDetalleOrden {
             model.addAttribute("modo", "editar");
             return "agregarModificarDetallesOrden";
         }
-        detalleOrdenService.actualizar(detalleOrden);
+        detalleOrdenService.actualizar(detalleOrden,id);
         // Obtén el id de la orden después de guardar el detalle, asumiendo que puedes obtenerlo desde detalleOrden
         var orden = ordenService.buscarOrden(id);
-        detalleOrden.setOrden(orden);
+        detalleOrden.setOrden(orden); //ESTO NO SE SI ESTA BIEN
+        //SE SUPONE QUE SI ESTO ESTA ENCIMA DEL ACUTALIZAR NO HABRIA RAZON PARA TENER QUE PASAR UN IDORDEN POR PARAMETRO AL ACTUALIZAR
+        //CHQUEAR EN ALGUN MOMENTO, NI IDEA
         // Construye la URL de redireccionamiento con el id de la orden
         String redirectUrl = "redirect:/ordenes/detallesOrden/" + id;
 
@@ -103,9 +105,13 @@ public class GestorDetalleOrden {
     }
 
     //Cuando se presiona el boton eliminar se pasa el ID del detalleOrden y este se elimina (Soft Delete)
-    @GetMapping("/eliminarDetalleOrden/{idDetalleOrden}")
-    public String eliminarDetalleOrden(DetalleOrden detalleOrden) {
+    @GetMapping("/ordenes/eliminarDetalleOrden/{idDetalleOrden}/{idOrden}")
+    public String eliminarDetalleOrden(@PathVariable ("idOrden") Long idOrden, DetalleOrden detalleOrden) {
         detalleOrdenService.eliminar(detalleOrden);
-        return "redirect:/ordenes";
+        var orden = ordenService.buscarOrden(idOrden);
+        String redirectUrl = "redirect:/ordenes/detallesOrden/" + idOrden;
+
+        // Redirige a la URL construida
+        return redirectUrl;
     }
 }

@@ -94,7 +94,9 @@ public class ClienteImplementacion implements IClienteService {
 
         //En el caso de que el Dni ingresado ya exista en la base de datos y se encuentre en estado eliminado(false)
         //lo activamos
-        activarCliente(clienteByDni);
+        if (clienteByDni != null){
+            activarCliente(clienteByDni);
+        }
 
         //Aca empieza la logica del actualizar
 

@@ -1,15 +1,18 @@
 package com.TP.TallerMecanico.entidad;
 
+import java.time.LocalDate;
 import jakarta.persistence.*;
 // import jakarta.validation.constraints.NotEmpty;
 // import jakarta.validation.constraints.Pattern;
 // import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 //import org.springframework.jmx.export.annotation.ManagedResource;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
@@ -22,6 +25,8 @@ public class Orden implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrden;
+
+    private LocalDate fecha;
 
     @OneToMany(mappedBy = "orden")
     private List<DetalleOrden> detallesOrden;

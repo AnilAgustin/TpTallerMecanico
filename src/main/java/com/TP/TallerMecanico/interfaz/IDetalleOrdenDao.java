@@ -3,6 +3,8 @@ package com.TP.TallerMecanico.interfaz;
 import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.entidad.Orden;
 import java.util.List;
+
+import com.TP.TallerMecanico.entidad.Servicio;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -22,7 +24,11 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     @Query("UPDATE DetalleOrden m SET m.estado = true WHERE m.idDetalleOrden = :idDetalleOrden")  //Update a estado true
     void marcarComoActivo(@Param("idDetalleOrden") Long idDetalleOrden);
 
-    List<DetalleOrden> findByOrden(Orden orden);
+    List<DetalleOrden> findByOrdenAndEstadoTrue(Orden orden);
+
+    DetalleOrden findByServicioAndOrden(Servicio servicio, Orden orden);
+
+    DetalleOrden findByServicioAndOrdenAndEstadoTrue(Servicio servicio, Orden orden);
     DetalleOrden findByIdDetalleOrden(Long idDetalleOrden);
     DetalleOrden findByIdDetalleOrdenAndEstadoTrue(Long idDetalleOrden);
 }

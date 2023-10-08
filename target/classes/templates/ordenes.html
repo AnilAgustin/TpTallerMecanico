@@ -39,16 +39,18 @@
             <thead>
             <tr>
                 <th>Numero</th>
+                <th>Fecha</th>
                 <th>Vehiculo</th>
                 <th>Tecnico</th>
             </tr>
             </thead>
             <tr th:each="orden :${orden}">
                 <td th:text="${orden.idOrden}">Mostrar Numero</td>
+                <td th:text="${orden.fecha}">Mostrar Fecha</td>
                 <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
-                    <a class="btn btn-warning" th:href="@{/ordenes/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
+                    <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
                     <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/></td>
 
             </tr>
