@@ -32,7 +32,10 @@
     <h3>Listado Imagenes</h3>
     <br>
     <a th:href="@{/ordenes/agregarImagenesOrden/} + ${orden.idOrden}" class="btn btn-primary">Agregar</a>
+    <a  class="btn btn-secondary" th:href="@{/ordenes}">Regresar</a>
     <br>
+    
+    
     <div th:if="${imagen != null and !imagen.empty}">
         <table class="table">
             <thead>

@@ -1,16 +1,16 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
-<<<<<<< HEAD
+
 import com.TP.TallerMecanico.servicio.IDetalleOrdenService;
 import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
-=======
+
 import com.TP.TallerMecanico.servicio.*;
->>>>>>> origin/Peluk
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
