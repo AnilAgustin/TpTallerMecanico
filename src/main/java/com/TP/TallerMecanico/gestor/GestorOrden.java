@@ -2,6 +2,8 @@ package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
 import com.TP.TallerMecanico.servicio.IDetalleOrdenService;
+import com.TP.TallerMecanico.servicio.IMarcaService;
+import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
@@ -32,11 +34,40 @@ public class GestorOrden {
     @Autowired
     private ITecnicoService tecnicoService;
 
+    @Autowired
+    private IMarcaService marcaService;
+
+    @Autowired
+    private IModeloService modeloService;
+    
     //Listar todos los ordenes cuando la URL sea /ordenes
     @GetMapping("/ordenes")
-    public String listarOrdenes(Model model) {
-        var orden = ordenService.listarOrdenes();
-        model.addAttribute("orden", orden);
+    public String listarOrdenes( @RequestParam(name = "marca", required = false) Long marcaId, 
+                                 @RequestParam(name = "modelo", required = false) Long modeloId, 
+                                 Model model) {
+
+        List<Orden> ordenes;
+        //var orden = ordenService.listarOrdenes();
+        
+        if ((marcaId != null) || (modeloId != null)) {
+            ordenes = ordenService.filtrarOrdenes(marcaId,modeloId);
+        }else {
+            // Si no se enviaron parámetros de búsqueda, lista todos los vehículos
+            ordenes= ordenService.listarOrdenes();
+        }
+
+        //Lógica para mostrar todos 
+        List<Marca> marcas = marcaService.listarMarcas();
+        List<Modelo> modelos = modeloService.listarModelos();
+
+        model.addAttribute("orden", ordenes);
+        model.addAttribute("marcas", marcas);
+        model.addAttribute("modelos", modelos);
+
+        //Lógica para mostrar los filtros seleccionados
+        model.addAttribute("idModelo", modeloId);
+        model.addAttribute("idMarca", marcaId);
+        
         return "ordenes";
     }
 
