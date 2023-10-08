@@ -56,10 +56,16 @@
         </table>
     </div>
 
-    <br>
+    
 
     <div th:if="${detalleOrden == null or detalleOrden.empty}">
         La lista de Detalles esta vacia
+    </div>
+    
+    <br>
+
+    <div class="card-footer">
+        <a  class="btn btn-secondary" th:href="@{/ordenes}">Regresar</a>
     </div>
 </div>
 

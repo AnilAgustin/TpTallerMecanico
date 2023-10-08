@@ -1,5 +1,7 @@
 package com.TP.TallerMecanico.interfaz;
 import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.entidad.Tecnico;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -22,7 +24,8 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
 
     Orden findByIdOrden(Long idOrden);
     Orden findByIdOrdenAndEstadoTrue(Long idOrden);
-
+    List<Orden> findByTecnico(Tecnico tecnico);
+    
     //QUERYS PARA BUSQUEDA
 
     @Query("SELECT o FROM Orden o WHERE o.vehiculo.modelo.id = :modeloId AND o.vehiculo.modelo.marca.id = :marcaId")

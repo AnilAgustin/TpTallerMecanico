@@ -126,6 +126,29 @@ public class GestorVehiculo {
         return "redirect:/vehiculos";
     }
 
+    //Permite actualizar un vehiculo cuando la solicitud POST venga desde el formulario del modificarVehiculoPorTecnico
+    @PostMapping("/tecnico/actualizarVehiculoPorTecnico/{idTecnico}")
+    public String actualizarVehiculoPorTecnico(@PathVariable ("idTecnico") Long idTecnico, @Valid @ModelAttribute Vehiculo vehiculo, BindingResult error, Model model){
+        if (error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            List<Modelo> modelos = modeloService.listarModelos();
+            List<Cliente> clientes = clienteService.listarClientes();
+            Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
+
+            model.addAttribute("modelos", modelos);
+            model.addAttribute("clientes", clientes);
+            model.addAttribute("tecnico", tecnico);
+            return "modificarVehiculoPorTecnico";
+        }
+
+        vehiculoService.actualizarKilometraje(vehiculo);
+        
+        String redirectUrl = "redirect:/tecnico/vehiculos/" + idTecnico;
+
+        // Redirige a la URL construida
+        return redirectUrl;
+    }
+
     //Cuando se presiona el boton editar se retorna el html con todos los datos del vehiculo seleccionado para modificar 
     @GetMapping("/modificarVehiculo/{idVehiculo}")
     public String mostrarFormularioEditar(@PathVariable Long idVehiculo, Model model) {
@@ -141,13 +164,30 @@ public class GestorVehiculo {
         return "agregarModificarVehiculo";
     }
 
+    //Cuando se presiona el boton editar en "vehiculoPorTecnico" se retorna el html con todos los datos del vehiculo seleccionado para modificar 
+    @GetMapping("/tecnico/modificarVehiculoPorTecnico/{idVehiculo}/{idTecnico}")
+    public String mostrarFormularioEditarTecnico(@PathVariable ("idVehiculo") Long idVehiculo, @PathVariable ("idTecnico") Long idTecnico, Model model) {
+        var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
+        Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
+
+        List<Modelo> modelos = modeloService.listarModelos();
+        List<Cliente> clientes = clienteService.listarClientes();
+
+        //List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
+        model.addAttribute("modelos", modelos);
+        model.addAttribute("clientes", clientes);
+        model.addAttribute("tecnico", tecnico);
+        model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("modo", "editar");
+        
+        return "modificarVehiculoPorTecnico";
+    }
+
     //Cuando se presiona el boton eliminar se pasa el ID del vehiculo y este se elimina (Soft Delete)
     @GetMapping("/eliminarVehiculo/{idVehiculo}")
     public String eliminarVehiculo(Vehiculo vehiculo) {
-
         vehiculoService.eliminar(vehiculo);
         return "redirect:/vehiculos";
     }
-
     
 }
