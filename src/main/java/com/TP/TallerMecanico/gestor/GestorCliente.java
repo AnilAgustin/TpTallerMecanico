@@ -10,8 +10,10 @@ import jakarta.validation.Valid;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -43,45 +45,51 @@ public class GestorCliente {
     }
 
     @GetMapping("/buscarClientes")
-    public String buscarNombreFechaCliente(@RequestParam(name = "nombre", required = false) String nombre,
-        @RequestParam(name = "fechaUltimaVisita", required = false) LocalDate fechaUltimaVisita,
-        Model model) {
-    
-        if (nombre != null) {
-            nombre = nombre.toUpperCase();
-        }
-    
-        List<Cliente> clientes = new ArrayList<>();
-    
-        if (nombre != null && !nombre.isEmpty() && fechaUltimaVisita != null) {
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
-    
-            for (Orden orden : ordenes) {
-                if (orden.getVehiculo().getCliente().getNombre().equals(nombre)) {
-                    clientes.add(orden.getVehiculo().getCliente());
+        public String buscarNombreFechaCliente(@RequestParam(name = "nombre", required = false) String nombre,
+                                            @RequestParam(name = "fechaUltimaVisita", required = false) LocalDate fechaUltimaVisita,
+                                            Model model) {
+        
+            if (nombre != null) {
+                nombre = nombre.toUpperCase();
+            }
+        
+            Set<Cliente> clientesSet = new HashSet<>();  // Usar un Set para clientes únicos
+        
+            if (nombre != null && !nombre.isEmpty() && fechaUltimaVisita != null) {
+                // Si se proporciona tanto un nombre como una fecha, puedes buscar los clientes
+                // con ese nombre que tengan órdenes en la fecha especificada.
+                List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        
+                for (Orden orden : ordenes) {
+                    if (orden.getVehiculo().getCliente().getNombre().contains(nombre)) {
+                        clientesSet.add(orden.getVehiculo().getCliente());
+                    }
                 }
+        
+            } else if (fechaUltimaVisita != null) {
+                // Si solo se proporciona una fecha, puedes buscar los clientes que tienen órdenes
+                // en la fecha especificada.
+                List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        
+                for (Orden orden : ordenes) {
+                    clientesSet.add(orden.getVehiculo().getCliente());
+                }
+        
+            } else if (nombre != null && !nombre.isEmpty()) {
+                // Si solo se proporciona un nombre, puedes buscar los clientes por ese nombre.
+                clientesSet.addAll(clienteService.buscarClienteNombre(nombre));
+            } else {
+                // Si no se proporciona ni un nombre ni una fecha, puedes listar todos los clientes.
+                clientesSet.addAll(clienteService.listarClientes());
             }
-    
+        
+            List<Cliente> clientes = new ArrayList<>(clientesSet);  // Convertir Set a List
+        
             model.addAttribute("cliente", clientes);
-        } else if (fechaUltimaVisita != null) {
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
-            List<Cliente> clientesConOrdenes = new ArrayList<>();
-    
-            for (Orden orden : ordenes) {
-                clientesConOrdenes.add(orden.getVehiculo().getCliente());
-            }
-    
-            model.addAttribute("cliente", clientesConOrdenes);
-        } else if (nombre != null && !nombre.isEmpty()) {
-            model.addAttribute("cliente", clienteService.buscarClienteNombre(nombre));
-        } else {
-            model.addAttribute("cliente", clienteService.listarClientes());
+            model.addAttribute("nombre", nombre);
+            model.addAttribute("fechaUltimaVisita", fechaUltimaVisita);
+            return "clientes";
         }
-    
-        model.addAttribute("nombre", nombre);
-        model.addAttribute("fechaUltimaVisita", fechaUltimaVisita);
-        return "clientes";
-    }
 
     //Permitir agregar un cliente cuando la URL sea /agregarCliente
     @GetMapping("/agregarCliente")
