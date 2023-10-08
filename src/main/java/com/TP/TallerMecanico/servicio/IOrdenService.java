@@ -11,6 +11,6 @@ public interface IOrdenService {
     public void actualizar(Orden orden);
     public void eliminar(Orden orden);
     public Orden buscarOrden(Long idOrden);
-    public void activarOrden(Orden orden);
-    public List<Orden> listarOrdenesFecha(LocalDate fechaOrden);
+    public void activarOrden(Orden orden) ;
+    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId);
 }

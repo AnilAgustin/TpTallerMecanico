@@ -23,6 +23,18 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     Orden findByIdOrden(Long idOrden);
     Orden findByIdOrdenAndEstadoTrue(Long idOrden);
 
-    List<Orden> findByFecha(LocalDate fecha);
+    //QUERYS PARA BUSQUEDA
+
+    @Query("SELECT o FROM Orden o WHERE o.vehiculo.modelo.id = :modeloId AND o.vehiculo.modelo.marca.id = :marcaId")
+    List<Orden> filtrarVehiculoPorMarcaYModelo(@Param("marcaId") Long marcaId, @Param("modeloId") Long modeloId);
+
+
+    @Query("SELECT o FROM Orden o WHERE  o.vehiculo.modelo.marca.id = :marcaId")
+    List<Orden> filtrarVehiculoPorMarca(@Param("marcaId") Long marcaId);
+
+    @Query("SELECT o FROM Orden o WHERE  o.vehiculo.modelo.id = :modeloId")
+    List<Orden> filtrarVehiculoPorModelo(@Param("modeloId") Long modeloId);
+    
+
 
 }

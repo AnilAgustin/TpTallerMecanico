@@ -1,9 +1,12 @@
 package com.TP.TallerMecanico.servicio;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
-import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,9 +48,6 @@ public class OrdenImplementacion implements IOrdenService {
         ordenDao.save(orden);
     }
 
-
-
-
     @Override
     @Transactional
     public void eliminar(Orden orden) { //Metodo para eliminar un orden (borrado logico)
@@ -67,5 +67,27 @@ public class OrdenImplementacion implements IOrdenService {
 
         //Llamamos al metodo marcarComoActivo del ordenDao para cambiar el estado del orden a true
         ordenDao.marcarComoActivo(orden.getIdOrden());
+    }
+
+    @Override
+    @Transactional
+    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId){
+        if (marcaId!= -1 && modeloId != -1) {
+            //Busqueda para marca y modelo
+            return ordenDao.filtrarVehiculoPorMarcaYModelo(marcaId, modeloId);
+
+        }else if (marcaId != -1 && modeloId ==-1) {
+            //Busqueda para marca sola
+            return ordenDao.filtrarVehiculoPorMarca(marcaId);
+
+        }else if (marcaId ==-1 && modeloId!=-1) {
+            //Busqueda para modelo solo
+            return ordenDao.filtrarVehiculoPorModelo(modeloId);
+
+        }else if (marcaId == -1 && modeloId == -1) {
+            return listarOrdenes();
+        }
+
+        return new ArrayList<>();
     }
 }

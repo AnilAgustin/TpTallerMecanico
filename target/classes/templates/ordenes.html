@@ -32,6 +32,28 @@
 <div class="container mt-4">
     <h3>Listado Ordenes</h3>
     <br>
+    <div>
+        <form class="d-flex" method="get">
+            <select class="form-select me-3 mb-3" name="marca" aria-label="Default select example">
+                <option selected value="-1">Seleccione una marca</option>
+                <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}"
+                    th:selected="${marca.idMarca == idMarca}"></option>
+            </select>
+
+            <select class="form-select me-3 mb-3" name="modelo" aria-label="Default select example">
+                <option selected value="-1">Seleccione un modelo</option>
+                <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}"
+                    th:selected="${modelo.idModelo == idModelo}"></option>
+            </select>
+            <input type="submit" class="btn btn-success mb-3" value="Buscar">
+        </form>
+        
+    </div>
+
+
+
+
+
     <a th:href="@{/agregarOrden}" class="btn btn-primary">Agregar</a>
     <br>
     <div th:if="${orden != null and !orden.empty}">
@@ -41,6 +63,8 @@
                 <th>Numero</th>
                 <th>Fecha</th>
                 <th>Vehiculo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
                 <th>Tecnico</th>
             </tr>
             </thead>
@@ -48,6 +72,8 @@
                 <td th:text="${orden.idOrden}">Mostrar Numero</td>
                 <td th:text="${orden.fecha}">Mostrar Fecha</td>
                 <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
+                <td th:text="${orden.vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
+                <td th:text="${orden.vehiculo.modelo.nombre}">Mostrar Modelo</td>
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
                     <a class="btn btn-success" th:href="@{/archivos/} + ${orden.idOrden}" th:text="Archivos"/>

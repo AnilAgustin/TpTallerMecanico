@@ -28,6 +28,7 @@ public class GestorDetalleOrden {
 
     @Autowired
     private IOrdenService ordenService;
+    
     @Autowired
     private IDetalleOrdenService detalleOrdenService; // Inyeccion de la clase (detalleOrdenImplementacion) a la interfaz detalleOrdenService
 
