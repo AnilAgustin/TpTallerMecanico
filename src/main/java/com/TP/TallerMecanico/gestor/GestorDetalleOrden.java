@@ -38,7 +38,7 @@ public class GestorDetalleOrden {
     @GetMapping("/ordenes/agregarDetalleOrden/{idOrden}")
     public String agregarDetalleOrden(Model model, @PathVariable ("idOrden") Long id) {
         var detalleOrden = new DetalleOrden(); // Crear una nueva instancia de DetalleOrden
-        List<Servicio> servicios = servicioService.listarServicios(); // Obtener marcas activas
+        List<Servicio> servicios = servicioService.listarServicios(); // Obtener servicios activas
         Orden orden = ordenService.buscarOrden(id);
         model.addAttribute("orden", orden);
         model.addAttribute("servicios", servicios);// Agregar la lista de marcas al detalleOrden

@@ -1,7 +1,6 @@
-<!DOCTYPE html>
 <html>
-<head>
-    <title>Ordens</title>
+<head xmlns:th="http://www.thymeleaft.org">
+    <title>Imagenes</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -30,37 +29,33 @@
 </header>
 
 <div class="container mt-4">
-    <h3>Listado Ordenes</h3>
+    <h3>Listado Imagenes</h3>
     <br>
-    <a th:href="@{/agregarOrden}" class="btn btn-primary">Agregar</a>
+    <a th:href="@{/ordenes/agregarImagenesOrden/} + ${orden.idOrden}" class="btn btn-primary">Agregar</a>
     <br>
-    <div th:if="${orden != null and !orden.empty}">
+    <div th:if="${imagen != null and !imagen.empty}">
         <table class="table">
             <thead>
             <tr>
-                <th>Numero</th>
-                <th>Fecha</th>
-                <th>Vehiculo</th>
-                <th>Tecnico</th>
+                <th>Nombre Archivo</th>
+                <th>Imagen</th>
+                <th>Acciones</th>
             </tr>
             </thead>
-            <tr th:each="orden :${orden}">
-                <td th:text="${orden.idOrden}">Mostrar Numero</td>
-                <td th:text="${orden.fecha}">Mostrar Fecha</td>
-                <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
-                <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
-                <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
-                    <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
-                    <a class="btn btn-success" th:href="@{/ordenes/imagenesOrden/} + ${orden.idOrden}" th:text="Imagenes"/>
-                    <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/></td>
-
+            <tr th:each="imagen :${imagen}">
+                <td th:text="${imagen.nombreArchivo}">Mostrar Nombre Archivo</td>
+                <td> <img th:src="@{'/Recursos/' + ${imagen.nombreArchivo}}" alt="Imagen"  width="500"/> </td>
+                <td> <a class="btn btn-danger" th:href="@{/ordenes/eliminarImagenOrden/} + ${imagen.idImagen} + '/' + ${orden.idOrden} " th:text="Eliminar"/></td>
             </tr>
         </table>
     </div>
-    <br/>
-    <div th:if="${orden == null or orden.empty}">
-        La lista de ordens esta vacia
+
+    <br>
+
+    <div th:if="${imagen == null or imagen.empty}">
+        La lista de Imagenes esta vacia
     </div>
 </div>
+
 </body>
 </html>

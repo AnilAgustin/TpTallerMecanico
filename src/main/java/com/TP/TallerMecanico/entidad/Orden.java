@@ -31,6 +31,9 @@ public class Orden implements Serializable {
     @OneToMany(mappedBy = "orden")
     private List<DetalleOrden> detallesOrden;
 
+    @OneToMany(mappedBy = "orden")
+    private List<Imagen> imagenesOrden;
+
     @ManyToOne
     @JoinColumn(name="vehiculo_id")
     private Vehiculo vehiculo;
