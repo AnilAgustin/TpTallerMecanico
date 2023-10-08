@@ -34,8 +34,8 @@
             <div>
                 <a th:href="@{/agregarCliente}" class="btn btn-primary me-5 mt-3">Agregar</a>
             </div>
-            <input class="form-control me-2 mt-3" type="text" name="nombre" placeholder="Ingrese el nombre del cliente" aria-label="Search">
-            <input class="form-control me-2 mt-3" type="date" name="fechaUltimaVisita" placeholder="Fecha Orden" aria-label="Search">
+            <input class="form-control me-2 mt-3" type="text" name="nombre" placeholder="Ingrese el nombre del cliente" aria-label="Search" th:value="${nombre}">
+            <input class="form-control me-2 mt-3" type="date" name="fechaUltimaVisita" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaUltimaVisita}" />
 
             <button class="btn btn-success mt-3" type="submit">Buscar</button>
         </form>

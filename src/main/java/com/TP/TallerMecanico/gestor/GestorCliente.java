@@ -52,22 +52,41 @@ public class GestorCliente {
          }
         //INGRESA SOLAMENTE NOMBRE
         if(nombre != null && !nombre.isEmpty() && fechaUltimaVisita == null) {
+
             model.addAttribute("cliente", clienteService.buscarClienteNombre(nombre));
         //INGRESA NOMBRE Y FECHA
         }else if(nombre != null && !nombre.isEmpty() && fechaUltimaVisita != null){
             List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+
             List<Cliente> clientes = new ArrayList<>();
 
+            //System.out.println(fechaUltimaVisita);
             for (Orden orden : ordenes) {
-                if(orden.getVehiculo().getCliente().getNombre() == nombre){
+                //System.out.println(orden.getIdOrden());
+
+                if(orden.getVehiculo().getCliente().getNombre().equals(nombre)){
                     clientes.add(orden.getVehiculo().getCliente());
                 }
             }
+
             model.addAttribute("cliente", clientes);
-        }
-        else{
+
+        }else if (nombre == null && nombre.isEmpty() && fechaUltimaVisita != null) {
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+            List<Cliente> clientes = new ArrayList<>();
+
+            for (Orden orden : ordenes) {
+                //System.out.println(orden.getIdOrden());
+                clientes.add(orden.getVehiculo().getCliente());
+            }
+
+            model.addAttribute("cliente", clientes);
+        }else{
             model.addAttribute("cliente", clienteService.listarClientes());
         }
+
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("fechaUltimaVisita", fechaUltimaVisita);
         return "clientes";
     }
 
