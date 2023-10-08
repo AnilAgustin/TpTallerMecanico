@@ -1,7 +1,14 @@
 package com.TP.TallerMecanico.servicio;
 
+import com.TP.TallerMecanico.entidad.DetalleOrden;
+import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
+import com.TP.TallerMecanico.interfaz.IDetalleOrdenDao;
+import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +22,9 @@ public class VehiculoImplementacion implements IVehiculoService {
 
     @Autowired
     private IVehiculoDao vehiculoDao;
+
+    @Autowired
+    private IOrdenDao ordenDao;
 
     //A continuacion todos los metodos de la clase
 
@@ -64,6 +74,22 @@ public class VehiculoImplementacion implements IVehiculoService {
             }
         }
     } 
+    @Override
+    @Transactional   
+    public void actualizarKilometraje(Vehiculo vehiculo){
+        Long vehiculoId = vehiculo.getIdVehiculo();
+
+        Vehiculo vehiculoViejo = vehiculoDao.findByIdVehiculo(vehiculoId);
+
+        String kilometrajeNuevo = vehiculo.getKilometros();
+        String kilometrajeViejo = vehiculoViejo.getKilometros();
+
+        
+        if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
+            vehiculoViejo.setKilometros(kilometrajeNuevo);
+        }
+    }
+
 
     @Override
     @Transactional
@@ -122,10 +148,24 @@ public class VehiculoImplementacion implements IVehiculoService {
     }
 
     @Override
-    //Metodo para activar un vehiculo
+    //Método para activar un vehiculo
     public void activarVehiculo(Vehiculo vehiculo) {
 
-        //Llamamos al metodo marcarComoActivo del vehiculoDao para cambiar el estado del vehiculo a true
+        //Llamamos al método marcarComoActivo del vehiculoDao para cambiar el estado del vehiculo a true
         vehiculoDao.marcarComoActivo(vehiculo.getIdVehiculo());
+    }
+
+    //Método para listar todos lso vehiculos asociados a un técnico a traves de la orden
+    @Override
+    @Transactional
+    public List<Vehiculo> listarVehiculosPorTecnico(Tecnico tecnico){
+        List<Vehiculo> vehiculosTecnico = new ArrayList<>();
+        List<Orden> ordenes = ordenDao.findByTecnico(tecnico);
+
+        for (Orden orden : ordenes) {
+            vehiculosTecnico.add(orden.getVehiculo());
+        }
+
+        return vehiculosTecnico;
     }
 }

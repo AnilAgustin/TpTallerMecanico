@@ -48,12 +48,13 @@
                 <td th:text="${tecnico.nombre}">Mostrar Nombre</td>
                 <td th:text="${tecnico.apellido}">Mostrar Apellido</td>
                 <td th:text="${tecnico.legajo}">Mostrar Legajo</td>
-                <td> <a class="btn btn-warning" th:href="@{/modificarTecnico/} + ${tecnico.idTecnico}" th:text="Editar"/>
+                <td>
+                    <a class="btn btn-info" th:href="@{/tecnico/vehiculos/} + ${tecnico.idTecnico}" th:text="Vehiculos"></a>
+                    <a class="btn btn-warning" th:href="@{/modificarTecnico/} + ${tecnico.idTecnico}" th:text="Editar"/>
                     <a class="btn btn-danger" th:href="@{/eliminarTecnico/} + ${tecnico.idTecnico}" th:text="Eliminar"/></td>
             </tr>
         </table>
     </div>
-
     <br>
 
     <div th:if="${tecnico == null or tecnico.empty}">
