@@ -12,4 +12,6 @@ public interface IModeloService {
     public Modelo buscarModelo(Modelo modelo);
     public void activarModelo(Modelo modelo);
 
+    public Modelo obtenerModeloPorId(Long modeloId);
+
 }

@@ -10,5 +10,6 @@ public interface IVehiculoService {
     public void actualizar(Vehiculo vehiculo);
     public void eliminar(Vehiculo vehiculo);
     public Vehiculo buscarVehiculo(Long idVehiculo);
-    public void activarVehiculo(Vehiculo vehiculo) ;
+    public void activarVehiculo(Vehiculo vehiculo);
+    public List<Vehiculo> filtrarVehiculos(String patente, Long idMarca, Long idModelo);
 }

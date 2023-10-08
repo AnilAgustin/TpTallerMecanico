@@ -34,4 +34,42 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
     List<Vehiculo> findByModeloAndEstadoTrue(Modelo modelo);
 
     List<Vehiculo> findByClienteAndEstadoTrue(Cliente cliente);
+
+    List<Vehiculo> findByTecnicoAndEstadoTrue(Tecnico tecnico);
+
+    List<Vehiculo> findByPatenteAndModelo(String patente, Modelo modelo);
+
+    @Query("SELECT v FROM Vehiculo v WHERE v.patente = :patente AND v.modelo.marca.id = :marcaId AND v.modelo.id = :modeloId")
+    List<Vehiculo> filtrarVehiculo(@Param("patente") String patente, @Param("marcaId") Long marcaId, @Param("modeloId") Long modeloId);
+
+
+    @Query("SELECT v FROM Vehiculo v WHERE v.patente = :patente AND v.modelo.marca.id = :marcaId")
+    List<Vehiculo> filtrarVehiculoPorPatenteYMarca(@Param("patente") String patente, @Param("marcaId") Long marcaId);
+
+                               
+
+    @Query("SELECT v FROM Vehiculo v WHERE v.patente = :patente AND v.modelo.id = :modeloId")
+    List<Vehiculo> filtrarVehiculoPorPatenteYModelo(@Param("patente") String patente, @Param("modeloId") Long modeloId);
+
+    
+    @Query("SELECT v FROM Vehiculo v WHERE v.modelo.marca.id = :marcaId AND v.modelo.id = :modeloId")
+    List<Vehiculo> filtrarVehiculoPorMarcaYModelo(@Param("marcaId") Long marcaId, @Param("modeloId") Long modeloId);
+
+
+    @Query("SELECT v FROM Vehiculo v WHERE v.patente = :patente")
+    List<Vehiculo> filtrarVehiculoPorPatente(@Param("patente") String patente);
+     
+
+    @Query("SELECT v FROM Vehiculo v WHERE v.modelo.marca.id = :marcaId")
+    List<Vehiculo> filtrarVehiculoPorMarca(@Param("marcaId") Long marcaId);
+    
+
+    @Query("SELECT v FROM Vehiculo v WHERE v.modelo.id = :modeloId")
+    List<Vehiculo> filtrarVehiculoPorModelo(@Param("modeloId") Long modeloId);
+    
+    
+
+
+
+
 }

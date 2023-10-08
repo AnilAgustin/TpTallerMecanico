@@ -167,4 +167,10 @@ public class ModeloImplementacion implements IModeloService {
         return modeloDao.findById(modelo.getIdModelo()).orElse(null);
     }
 
+    @Override
+    @Transactional
+    public Modelo obtenerModeloPorId(Long modeloId){
+        return modeloDao.findById(modeloId).orElse(null);
+    }
+
 }

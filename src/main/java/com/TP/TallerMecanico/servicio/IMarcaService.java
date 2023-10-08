@@ -11,4 +11,6 @@ public interface IMarcaService {
     public void eliminar(Marca marca);
     public Marca buscarMarca(Marca marca);
     public void activarMarca(Marca marca);
+
+    public Marca obtenerMarcaPorId(Long idMarca);
 }

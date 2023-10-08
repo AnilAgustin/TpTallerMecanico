@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
+import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IModeloService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
@@ -19,7 +20,6 @@ import java.util.List;
 
 @Controller
 public class GestorVehiculo {
-
     //El Autowired sirve para la inyeccion de dependencias 
     @Autowired
     private IVehiculoService vehiculoService;
@@ -33,14 +33,54 @@ public class GestorVehiculo {
     @Autowired
     private ITecnicoService tecnicoService;
 
-    //Listar todos los vehiculos cuando la URL sea /vehiculos
+    @Autowired
+    private IMarcaService marcaService;
+
     @GetMapping("/vehiculos")
-    public String listarVehiculos(Model model) {
-        var vehiculo = vehiculoService.listarVehiculos();
-        model.addAttribute("vehiculo", vehiculo);
+    public String listarVehiculos(@RequestParam(name = "patente", required = false) String patente, 
+                                  @RequestParam(name = "marca", required = false) Long marcaId, 
+                                  @RequestParam(name = "modelo", required = false) Long modeloId,  Model model) {
+        List<Vehiculo> vehiculos;
+
+        //Lógica para filtrar
+        if (patente!=null) {
+            patente = patente.toUpperCase();
+        }else{
+            patente=null;
+        }
+
+        if ((patente != null) || (marcaId != null) || (modeloId != null)) {
+            // Si se envió algún parámetro de búsqueda (patente, marca o modelo), realiza la búsqueda
+            vehiculos = vehiculoService.filtrarVehiculos(patente, marcaId, modeloId);
+        } else {
+            // Si no se enviaron parámetros de búsqueda, lista todos los vehículos
+            vehiculos = vehiculoService.listarVehiculos();
+        }
+
+        //Lógica para mostrar todos 
+        List<Marca> marcas = marcaService.listarMarcas();
+        List<Modelo> modelos = modeloService.listarModelos();
+
+        model.addAttribute("patente", patente);
+        model.addAttribute("idModelo", modeloId);
+        model.addAttribute("idMarca", marcaId);
+
+        model.addAttribute("vehiculo", vehiculos);
+        model.addAttribute("marcas", marcas);
+        model.addAttribute("modelos", modelos);
+
         return "vehiculos";
     }
 
+    @GetMapping("/buscarVehiculo")
+    public String buscarVehiculo(@RequestParam(name = "patente", required = false) String patente, 
+                                @RequestParam(name = "marca", required = false) Marca marca, 
+                                @RequestParam(name = "modelo", required = false) Modelo modelo, Model model){
+                                    List<Vehiculo> busquedaVehiculos = vehiculoService.filtrarVehiculos(patente, marca, modelo);
+                                    model.addAttribute("filtroVehiculos", busquedaVehiculos);
+                                    System.out.println(busquedaVehiculos);
+                                    return "vehiculos";
+    }
     //Permitir agregar un vehiculo cuando la URL sea /agregarVehiculo
     @GetMapping("/agregarVehiculo")
     public String agregarVehiculos(Model model) {

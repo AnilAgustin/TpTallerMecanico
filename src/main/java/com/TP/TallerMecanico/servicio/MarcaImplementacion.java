@@ -153,4 +153,11 @@ public class MarcaImplementacion implements IMarcaService {
             modeloService.activarModelo(modelo);
         }
     }
+
+    @Override
+    @Transactional
+    public Marca obtenerMarcaPorId(Long idMarca){
+        Marca marca = marcaDao.findById(idMarca).orElse(null);
+        return marca;
+    }
 }

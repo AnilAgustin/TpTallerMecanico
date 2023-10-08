@@ -23,4 +23,6 @@ public interface IMarcaDao extends CrudRepository<Marca, Long>{
     Marca findByNombreAndEstadoTrue(String nombreMarca);
 
     Marca findByNombreAndEstadoFalse(String nuevoNombre);
+
+    
 }
