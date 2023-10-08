@@ -45,8 +45,7 @@
                         <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
                                             <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
                         <button type="submit" class="btn btn-success ">Guardar</button>
-                        <a  class="btn btn-danger" th:href="@{/detalleDetallesOrden} + ${orden.idOrden}">Regresar</a>
-
+                        <a  class="btn btn-danger" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}">Regresar</a>
                     </div>
                 </div>
 
@@ -55,7 +54,7 @@
 
         <!--Actualizar-->
         <div th:if="${modo eq 'editar'}">
-            <form th:action="@{/actualizarDetalleOrden}" th:object="${detalleOrden}" method="POST">
+            <form th:action="@{/ordenes/actualizarDetalleOrden/} + ${orden.idOrden}" th:object="${detalleOrden}" method="POST">
                 <div class="card">
                     <div class="card-header">
                         <h3>DetalleOrden</h3>
@@ -64,23 +63,20 @@
                         <div class="form-group">
                             <input type="hidden" name="idDetalleOrden" th:field="*{idDetalleOrden}"/>
                         </div>
-
                         <div class="form-group">
-                            <label style="font-weight: bold;">Vehiculo</label>
+                            <label style="font-weight: bold;">Servicio</label>
 
-                            <select class="form-control" id="vehiculo" name="vehiculo" required>
-                                <option value="" disabled selected>Selecciona un Vehiculo</option>
-                                <option th:each="vehiculo : ${vehiculos}" th:value="${vehiculo.idVehiculo}" th:text="${vehiculo.patente}" th:selected="${detalleOrden.vehiculo != null and vehiculo.idVehiculo == detalleOrden.vehiculo.idVehiculo}"></option>
+                            <select class="form-control" id="servicio" name="servicio" required>
+                                <option value="" disabled selected>Selecciona un Servicio</option>
+                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}"></option>
                             </select>
                         </div>
 
-                        <div class="form-group">
-                            <label style="font-weight: bold;">Tecnico</label>
 
-                            <select class="form-control" id="tecnico" name="tecnico" required>
-                                <option value="" disabled selected>Selecciona un Tecnico</option>
-                                <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${detalleOrden.tecnico != null and tecnico.idTecnico == detalleOrden.tecnico.idTecnico}"></option>
-                            </select>
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Cantidad</label>
+                            <input class="form-control" type="text" name="cantidadDetalle" th:field="*{cantidad}" />
+                            <span th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></span>
                         </div>
 
 
@@ -93,13 +89,11 @@
                         <!--                    <input type="submit" value="Guardar" th:if="${modo == 'nuevo'}">
                                             <input type="submit" value="Actualizar" th:if="${modo == 'editar'}"> -->
                         <button type="submit" class="btn btn-success">Actualizar</button>
-                        <a  class="btn btn-danger" th:href="@{/detalleDetallesOrden}">Regresar</a>
-
+                        <a  class="btn btn-danger" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}">Regresar</a>
                     </div>
                 </div>
 
             </form>
-
 
         </div>
     </div>

@@ -30,7 +30,6 @@ public class DetalleOrdenImplementacion implements IDetalleOrdenService {
     @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta
     public void guardar(DetalleOrden detalleOrden) {    //Metodo para guardar un nuevo tecnico
 
-
         //Setteamos los valores ingresados de nombre y apellido en mayusculas
 
         //Creamos 3 variables de entorno para guardar el dni del cliente, y para buscar y guardar clientes
@@ -69,6 +68,7 @@ public class DetalleOrdenImplementacion implements IDetalleOrdenService {
     @Transactional
     public void actualizar(DetalleOrden detalleOrden){ //Metodo para actualizar un detalleOrden existente activado
 
+        
         detalleOrdenDao.marcarComoActivo(detalleOrden.getIdDetalleOrden());
     }
 

@@ -96,7 +96,7 @@ public class GestorOrden {
         Orden orden = ordenService.buscarOrden(id);
         List<DetalleOrden> detalles = detallesService.listarDetallesPorOrden(orden);
         model.addAttribute("orden", orden);
-        model.addAttribute("detalles", detalles);
+        model.addAttribute("detalleOrden", detalles);
         return "detallesOrden";
     }
 

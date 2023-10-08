@@ -34,16 +34,6 @@ public class GestorDetalleOrden {
     @Autowired
     private IServicioService servicioService;
 
-    //Listar todos los detalleOrdenes cuando la URL sea /detalleOrdenes
-    @GetMapping("/detallesOrden/{idOrden}")
-    public String listarDetallesOrden(@PathVariable ("idOrden") Long id, Model model) {
-        Orden orden = ordenService.buscarOrden(id);
-        List<DetalleOrden> detalles = detalleOrdenService.listarDetallesPorOrden(orden);
-        model.addAttribute("orden", orden);
-        model.addAttribute("detalles", detalles);
-        return "detalleOrdenes";
-    }
-
     //Permitir agregar un detalleOrden cuando la URL sea /agregarDetalleOrden
     @GetMapping("/ordenes/agregarDetalleOrden/{idOrden}")
     public String agregarDetalleOrden(Model model, @PathVariable ("idOrden") Long id) {
@@ -100,10 +90,12 @@ public class GestorDetalleOrden {
     }
 
     //Cuando se presiona el boton editar se retorna el html con todos los datos del detalleOrden seleccionado para modificar
-    @GetMapping("/modificarDetalleOrden/{idDetalleOrden}")
-    public String modificarDetalleOrden(@PathVariable Long idDetalleOrden, Model model) {
+    @GetMapping("/ordenes/modificarDetalleOrden/{idDetalleOrden}/{idOrden}")
+    public String modificarDetalleOrden(@PathVariable ("idDetalleOrden") Long idDetalleOrden,@PathVariable ("idOrden") Long idOrden, Model model) {
         var detalleOrden = detalleOrdenService.buscarDetalleOrden(idDetalleOrden);
         List<Servicio> servicios = servicioService.listarServicios(); // Obtener marcas activas
+        Orden orden = ordenService.buscarOrden(idOrden);
+        model.addAttribute("orden", orden);
         model.addAttribute("servicios", servicios);
         model.addAttribute("detalleOrden", detalleOrden);
         model.addAttribute("modo", "editar");
