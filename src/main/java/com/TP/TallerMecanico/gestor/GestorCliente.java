@@ -61,7 +61,7 @@ public class GestorCliente {
                 List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
         
                 for (Orden orden : ordenes) {
-                    if (orden.getVehiculo().getCliente().getNombre().contains(nombre)) {
+                    if (orden.getVehiculo().getCliente().getNombre().startsWith(nombre)) {
                         clientesSet.add(orden.getVehiculo().getCliente());
                     }
                 }

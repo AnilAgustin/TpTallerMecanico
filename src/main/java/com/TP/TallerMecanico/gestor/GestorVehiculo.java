@@ -80,10 +80,10 @@ public class GestorVehiculo {
         var vehiculo = new Vehiculo();
         List<Modelo> modelos = modeloService.listarModelos();
         List<Cliente> clientes = clienteService.listarClientes();
-        List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
+        //List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
         model.addAttribute("modelos", modelos);
         model.addAttribute("clientes", clientes);
-        model.addAttribute("tecnicos", tecnicos);
+        //model.addAttribute("tecnicos", tecnicos);
         model.addAttribute("vehiculo", vehiculo);
         model.addAttribute("modo", "nuevo");
         return "agregarModificarVehiculo";
