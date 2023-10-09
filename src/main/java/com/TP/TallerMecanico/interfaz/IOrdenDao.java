@@ -25,6 +25,7 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     Orden findByIdOrden(Long idOrden);
     Orden findByIdOrdenAndEstadoTrue(Long idOrden);
     List<Orden> findByTecnico(Tecnico tecnico);
+    List<Orden> findByTecnicoAndEstadoTrue(Tecnico tecnico);
     
     //QUERYS PARA BUSQUEDA
 

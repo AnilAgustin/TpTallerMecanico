@@ -188,7 +188,7 @@ public class VehiculoImplementacion implements IVehiculoService {
     @Transactional
     public List<Vehiculo> listarVehiculosPorTecnico(Tecnico tecnico){
         List<Vehiculo> vehiculosTecnico = new ArrayList<>();
-        List<Orden> ordenes = ordenDao.findByTecnico(tecnico);
+        List<Orden> ordenes = ordenDao.findByTecnicoAndEstadoTrue(tecnico);
 
         for (Orden orden : ordenes) {
             vehiculosTecnico.add(orden.getVehiculo());
