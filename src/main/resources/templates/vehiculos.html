@@ -60,6 +60,8 @@
                 <thead>
                     <tr>
                         <th>Patente</th>
+                        <th>Año</th>
+                        <th>Kilometraje</th>
                         <th>Modelo</th>
                         <th>Marca</th>
                         <th>Cliente</th>
@@ -70,6 +72,8 @@
 
                 <tr th:each="vehiculo :${vehiculo}">
                     <td th:text="${vehiculo.patente}">Mostrar Patente</td>
+                    <td th:text="${vehiculo.year}">Mostrar Year</td>
+                    <td th:text="${vehiculo.kilometros}">Mostrar Kilometros</td>
                     <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
                     <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                     <td th:text="${vehiculo.cliente.nombre}">Mostrar Nombre Cliente</td>
