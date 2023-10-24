@@ -65,7 +65,6 @@
                         <th>Modelo</th>
                         <th>Marca</th>
                         <th>Cliente</th>
-                        <th>DNI</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -77,7 +76,6 @@
                     <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
                     <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                     <td th:text="${vehiculo.cliente.nombre}">Mostrar Nombre Cliente</td>
-                    <td th:text="${vehiculo.cliente.dni}">Mostrar DNI Cliente</td>
                     <td> <a class="btn btn-warning" th:href="@{/modificarVehiculo/} + ${vehiculo.idVehiculo}"
                             th:text="Editar" />
                         <a class="btn btn-danger" th:href="@{/eliminarVehiculo/} + ${vehiculo.idVehiculo}"
