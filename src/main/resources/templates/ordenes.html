@@ -34,6 +34,9 @@
     <br>
     <div>
         <form class="d-flex" method="get">
+            <input class="form-select me-3 mb-3" type="number" name="numero" placeholder="Ingrese el numero de la orden"
+             aria-label="Search" th:value="${numero}">
+
             <select class="form-select me-3 mb-3" name="marca" aria-label="Default select example">
                 <option selected value="-1">Seleccione una marca</option>
                 <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}"

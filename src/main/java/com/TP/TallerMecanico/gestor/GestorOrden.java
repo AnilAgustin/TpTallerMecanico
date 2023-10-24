@@ -54,14 +54,15 @@ public class GestorOrden {
     //Listar todos los ordenes cuando la URL sea /ordenes
     @GetMapping("/ordenes")
     public String listarOrdenes( @RequestParam(name = "marca", required = false) Long marcaId, 
-                                 @RequestParam(name = "modelo", required = false) Long modeloId, 
+                                 @RequestParam(name = "modelo", required = false) Long modeloId,
+                                 @RequestParam(name="numero", required = false) Long numero, 
                                  Model model) {
 
         List<Orden> ordenes;
         //var orden = ordenService.listarOrdenes();
         
-        if ((marcaId != null) || (modeloId != null)) {
-            ordenes = ordenService.filtrarOrdenes(marcaId,modeloId);
+        if ((marcaId != null) || (modeloId != null || numero!=null)) {
+            ordenes = ordenService.filtrarOrdenes(marcaId,modeloId, numero);
         }else {
             // Si no se enviaron parámetros de búsqueda, lista todos los vehículos
             ordenes= ordenService.listarOrdenes();
@@ -78,6 +79,7 @@ public class GestorOrden {
         //Lógica para mostrar los filtros seleccionados
         model.addAttribute("idModelo", modeloId);
         model.addAttribute("idMarca", marcaId);
+        model.addAttribute("numero", numero);
         
         return "ordenes";
     }

@@ -71,20 +71,33 @@ public class OrdenImplementacion implements IOrdenService {
 
     @Override
     @Transactional
-    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId){
-        if (marcaId!= -1 && modeloId != -1) {
+    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId,Long numero){
+        if (marcaId!= -1 && modeloId != -1 && numero!=null) {
+            //Busqueda para marca, modelo y numero
+            return ordenDao.filtrarVehiculoPorMarcaYModeloYNumero(marcaId, modeloId, numero);
+
+        }else if (marcaId != -1 && modeloId !=-1 && numero==null) {
             //Busqueda para marca y modelo
             return ordenDao.filtrarVehiculoPorMarcaYModelo(marcaId, modeloId);
+        }
+        else if (marcaId != -1 && modeloId ==-1 && numero!=null) {
+            //Busqueda para marca y numero
+            return ordenDao.filtrarVehiculoPorMarcaYNumero(marcaId,numero);
 
-        }else if (marcaId != -1 && modeloId ==-1) {
-            //Busqueda para marca sola
+        }else if (marcaId ==-1 && modeloId!=-1 && numero!=null) {
+            //Busqueda para modelo y numero
+            return ordenDao.filtrarVehiculoPorModeloYNumero(modeloId, numero);
+
+        }else if (numero!=null) {
+            //Busqueda por numero
+            return ordenDao.filtrarVehiculoPorNumero(numero);
+        }else if (marcaId != -1) {
+            //Filtrar solo por marca
             return ordenDao.filtrarVehiculoPorMarca(marcaId);
-
-        }else if (marcaId ==-1 && modeloId!=-1) {
-            //Busqueda para modelo solo
+        } else if (modeloId != -1) {
+            //Filtrar solo por modelo
             return ordenDao.filtrarVehiculoPorModelo(modeloId);
-
-        }else if (marcaId == -1 && modeloId == -1) {
+        }else if (marcaId == -1 && modeloId == -1 && numero==null) {
             return listarOrdenes();
         }
 

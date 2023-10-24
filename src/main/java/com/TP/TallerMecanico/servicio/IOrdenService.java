@@ -13,5 +13,5 @@ public interface IOrdenService {
     public void eliminar(Orden orden);
     public Orden buscarOrden(Long idOrden);
     public void activarOrden(Orden orden) ;
-    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId);
+    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero);
 }
