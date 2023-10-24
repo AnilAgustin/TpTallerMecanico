@@ -52,6 +52,10 @@ public class GestorDetalleOrden {
     @PostMapping("/ordenes/guardarDetalleOrden/{idOrden}")
     public String guardarDetalleOrden(@PathVariable ("idOrden") Long id, @Valid DetalleOrden detalleOrden, BindingResult error, Model model) {
         if (error.hasErrors()) {
+            //Esto es para pode trabajar con la orden dentro del form del detallesOrden
+            Orden orden = ordenService.buscarOrden(id);
+            model.addAttribute("orden", orden);
+
             List<Servicio> servicios = servicioService.listarServicios(); // Obtener marcas activas
             model.addAttribute("servicios", servicios);
             model.addAttribute("modo", "nuevo");
@@ -60,6 +64,7 @@ public class GestorDetalleOrden {
         // Obtén el id de la orden después de guardar el detalle, asumiendo que puedes obtenerlo desde detalleOrden
         var orden = ordenService.buscarOrden(id);
         detalleOrden.setOrden(orden);
+        
         //Se llama a la logica guardar definida en IDetalleOrdenService, pero en realidad es DetalleOrdenImplementacion
         detalleOrdenService.guardar(detalleOrden);
 

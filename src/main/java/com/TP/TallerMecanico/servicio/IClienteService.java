@@ -13,5 +13,6 @@ public interface IClienteService {
     public Cliente buscarCliente(Cliente cliente);
     public void activarCliente(Cliente cliente);
     public List<Cliente> buscarClienteNombre(String nombre);
+    public List<Cliente> buscarClienteDni(String dni);
     
 }

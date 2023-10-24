@@ -35,6 +35,12 @@ public class ClienteImplementacion implements IClienteService {
     }
 
     @Override
+    @Transactional
+    public List<Cliente> buscarClienteDni(String dni){
+        return clienteDao.findByDniStartingWithAndEstadoTrue(dni);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     //Metodo para listar todos los clientes activos
     public List<Cliente> listarClientes() { 

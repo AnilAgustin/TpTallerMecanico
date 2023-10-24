@@ -47,17 +47,37 @@ public class GestorCliente {
     @GetMapping("/buscarClientes")
         public String buscarNombreFechaCliente(@RequestParam(name = "nombre", required = false) String nombre,
                                             @RequestParam(name = "fechaUltimaVisita", required = false) LocalDate fechaUltimaVisita,
+                                            @RequestParam(name = "dni", required = false) Long dniNumero,
                                             Model model) {
         
             if (nombre != null) {
                 nombre = nombre.toUpperCase();
             }
-        
+
             Set<Cliente> clientesSet = new HashSet<>();  // Usar un Set para clientes únicos
+
+            //Casteo para poder trabajar con dni como String
+            String dni = null;
+            if (dniNumero != null) {
+                // Si se proporciona un DNI numérico, conviértelo a una cadena
+                dni = Long.toString(dniNumero);
+            }
         
-            if (nombre != null && !nombre.isEmpty() && fechaUltimaVisita != null) {
+            if (nombre != null && !nombre.isEmpty() && dni != null && fechaUltimaVisita != null) {
                 // Si se proporciona tanto un nombre como una fecha, puedes buscar los clientes
                 // con ese nombre que tengan órdenes en la fecha especificada.
+                List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        
+                for (Orden orden : ordenes) {
+                    if (orden.getVehiculo().getCliente().getNombre().startsWith(nombre)) {
+                        if (orden.getVehiculo().getCliente().getDni().startsWith(dni)) {
+                            clientesSet.add(orden.getVehiculo().getCliente());
+                        }
+                        
+                    }
+                }
+        
+            }else if (nombre != null && !nombre.isEmpty() && dni == null && fechaUltimaVisita != null) {
                 List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
         
                 for (Orden orden : ordenes) {
@@ -65,8 +85,16 @@ public class GestorCliente {
                         clientesSet.add(orden.getVehiculo().getCliente());
                     }
                 }
-        
-            } else if (fechaUltimaVisita != null) {
+                
+            }else if (nombre.isEmpty()  && dni != null && fechaUltimaVisita != null) {
+                List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+
+                for (Orden orden : ordenes) {
+                    if (orden.getVehiculo().getCliente().getDni().startsWith(dni)) {
+                        clientesSet.add(orden.getVehiculo().getCliente());
+                    }
+                }
+            }else if (fechaUltimaVisita != null) {
                 // Si solo se proporciona una fecha, puedes buscar los clientes que tienen órdenes
                 // en la fecha especificada.
                 List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
@@ -78,7 +106,9 @@ public class GestorCliente {
             } else if (nombre != null && !nombre.isEmpty()) {
                 // Si solo se proporciona un nombre, puedes buscar los clientes por ese nombre.
                 clientesSet.addAll(clienteService.buscarClienteNombre(nombre));
-            } else {
+            } else if (dni != null) {
+                clientesSet.addAll(clienteService.buscarClienteDni(dni));
+            }else {
                 // Si no se proporciona ni un nombre ni una fecha, puedes listar todos los clientes.
                 clientesSet.addAll(clienteService.listarClientes());
             }
@@ -87,6 +117,7 @@ public class GestorCliente {
         
             model.addAttribute("cliente", clientes);
             model.addAttribute("nombre", nombre);
+            model.addAttribute("dni", dni);
             model.addAttribute("fechaUltimaVisita", fechaUltimaVisita);
             return "clientes";
         }

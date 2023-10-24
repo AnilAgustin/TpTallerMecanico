@@ -28,6 +28,10 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
     @Query("SELECT c FROM Cliente c WHERE c.nombre LIKE :nombre% AND c.estado = true")
     List<Cliente> findByNombreStartingWithAndEstadoTrue(@Param("nombre") String nombre);
+
+
+    @Query("SELECT c FROM Cliente c WHERE c.dni LIKE :dni% AND c.estado = true")
+    List<Cliente> findByDniStartingWithAndEstadoTrue(@Param("dni") String dni);
     //List<Cliente> findByNombre(String nombre);
 
 }
