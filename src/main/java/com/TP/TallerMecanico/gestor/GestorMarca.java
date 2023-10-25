@@ -1,7 +1,16 @@
 package com.TP.TallerMecanico.gestor;
 
+import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Marca;
+import com.TP.TallerMecanico.entidad.Orden;
+
 import jakarta.validation.Valid;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +18,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import com.TP.TallerMecanico.servicio.IMarcaService;
 
 @Controller
@@ -42,6 +53,29 @@ public class GestorMarca {
         model.addAttribute("modo", "nuevo");
         return "agregarModificarMarca";
     }
+
+    @GetMapping("/buscarMarcas")
+    public String buscarMarca(@RequestParam(name = "nombre", required = false) String nombre, Model model){
+
+        if (nombre != null) {
+            nombre = nombre.toUpperCase();
+        }
+        //Set<Marca> marcasSet = new HashSet<>();  // Usar un Set para clientes únicos
+
+        List<Marca> marcas;
+
+        if (nombre != null) {
+            marcas = marcaService.buscarMarcaPorNombre(nombre);
+        }else{
+            marcas = marcaService.listarMarcas();
+        }
+        
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("marca", marcas);
+        
+        return "marcas";
+    }
+
 
 
     //Permite guardar una marca cuando la solicitud POST sea guardarMarca

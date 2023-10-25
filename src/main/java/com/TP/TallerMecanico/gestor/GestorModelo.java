@@ -16,6 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GestorModelo {
@@ -29,9 +30,26 @@ public class GestorModelo {
 
     //Listar todos los modelos cuando la URL sea /modelos
     @GetMapping("/modelos")
-    public String listarModelos(Model model) {
-        var modelo = modeloService.listarModelos();
-        model.addAttribute("modelo", modelo);
+    public String listarModelos(@RequestParam(name = "marca", required = false) Long marcaId, @RequestParam(name = "nombre", required = false) String nombre, Model model) {
+        //var modelo = modeloService.listarModelos();
+
+        List<Modelo> modelos;
+        var marca = marcaService.listarMarcas();
+
+        if (nombre != null) {
+            nombre = nombre.toUpperCase();
+        }
+
+        if ((marcaId!=null) || (nombre!=null)) {
+            modelos = modeloService.filtrarModelos(marcaId, nombre);
+        }else{
+            modelos= modeloService.listarModelos(); 
+        }
+
+        model.addAttribute("modelo", modelos);
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("marca", marca);
+        model.addAttribute("idMarca", marcaId);
         return "modelos";
     }
 

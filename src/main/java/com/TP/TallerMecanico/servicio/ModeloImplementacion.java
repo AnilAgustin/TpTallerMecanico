@@ -5,6 +5,8 @@ import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IModeloDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
+
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,20 @@ public class ModeloImplementacion implements IModeloService {
     @Autowired
     private IVehiculoService vehiculoService;
 
+
+    @Override
+    @Transactional
+    public List<Modelo> filtrarModelos(Long marcaId, String nombre){
+        if (marcaId != -1 && nombre!= null) {
+            return modeloDao.filtrarModeloPorMarcaYNombre(marcaId, nombre);
+        }else if (nombre == null) {
+            return modeloDao.filtrarModeloPorMarca(marcaId);
+        }else if (marcaId == -1) {
+            return modeloDao.filtrarModeloPorNombre(nombre);
+        }
+
+        return new ArrayList<>();
+    }
 
     @Override
     @Transactional(readOnly = true)
