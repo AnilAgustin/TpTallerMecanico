@@ -24,5 +24,7 @@ public interface IServicioDao extends CrudRepository<Servicio, Long>{
     Servicio findByNombreAndEstadoTrue(String nombreServicio);
     Servicio findByNombreAndEstadoFalse(String nuevoNombre);
 
+    @Query("SELECT s FROM Servicio s WHERE s.nombre LIKE :nombre% AND s.estado = true")
+    List<Servicio> filtrarPorNombreYEstadoTrue(@Param("nombre") String nombre);
 
 }

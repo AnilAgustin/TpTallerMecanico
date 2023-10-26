@@ -12,4 +12,6 @@ public interface IServicioService {
     public Servicio buscarServicio(Servicio servicio);
     public void activarServicio(Servicio servicio);
 
+    public List<Servicio> filtrarServicios(String nombre);
+
 }

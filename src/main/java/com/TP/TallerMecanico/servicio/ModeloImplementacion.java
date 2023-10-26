@@ -28,11 +28,13 @@ public class ModeloImplementacion implements IModeloService {
     @Override
     @Transactional
     public List<Modelo> filtrarModelos(Long marcaId, String nombre){
-        if (marcaId != -1 && nombre!= null) {
+        if (marcaId != -1 && nombre != null) {
             return modeloDao.filtrarModeloPorMarcaYNombre(marcaId, nombre);
-        }else if (nombre == null) {
+        }else if (nombre == null && marcaId != -1) {
             return modeloDao.filtrarModeloPorMarca(marcaId);
-        }else if (marcaId == -1) {
+        }else if (marcaId == -1 && nombre != null) {
+           // System.out.println("ENTRO");
+            //System.out.println(nombre);
             return modeloDao.filtrarModeloPorNombre(nombre);
         }
 

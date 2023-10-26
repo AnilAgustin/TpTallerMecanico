@@ -3,6 +3,9 @@ package com.TP.TallerMecanico.gestor;
 import com.TP.TallerMecanico.entidad.Servicio;
 import com.TP.TallerMecanico.servicio.IServicioService;
 import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GestorServicio {
@@ -20,9 +24,24 @@ public class GestorServicio {
 
     //Listar todos los servicios cuando la URL sea /servicios
     @GetMapping("/servicios")
-    public String listarServicios(Model model) {
-        var servicio = servicioService.listarServicios();
-        model.addAttribute("servicio", servicio);
+    public String listarServicios(@RequestParam(name="nombre", required=false) String nombre,  Model model) {
+
+        //var servicio = servicioService.listarServicios();
+        List<Servicio> servicios;
+
+        if (nombre != null) {
+            nombre = nombre.toUpperCase();
+        }
+        
+        //Busqueda
+        if (nombre != null) {
+            servicios = servicioService.filtrarServicios(nombre);
+        }else{
+            servicios = servicioService.listarServicios();
+        }
+
+        
+        model.addAttribute("servicio", servicios);
         return "servicios";
     }
 

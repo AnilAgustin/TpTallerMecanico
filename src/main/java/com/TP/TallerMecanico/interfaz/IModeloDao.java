@@ -41,4 +41,8 @@ public interface IModeloDao extends CrudRepository<Modelo, Long>{
 
     @Query("SELECT m FROM Modelo m WHERE m.nombre LIKE :nombre% AND m.estado = true")
     List<Modelo> filtrarModeloPorNombre(@Param("nombre") String nombre);
+
+    
+    
+
 }

@@ -32,6 +32,15 @@
         <div class="container mt-4">
             <h3>Listado Servicios</h3>
             <br>
+            <div>
+                <form class="d-flex me-4" method="get">
+                    <input class="form-control me-2 mb-3" type="search" name="nombre" placeholder="Ingrese el nombre del servicio que desea buscar"
+                        aria-label="Search" th:value="${nombre}">
+                        
+                    <input type="submit" class="btn btn-success mb-3" value="Buscar">
+                </form>
+            </div>
+
             <a th:href="@{/agregarServicio}" class="btn btn-primary">Agregar</a>
             <br>
             <div th:if="${servicio != null and !servicio.empty}">

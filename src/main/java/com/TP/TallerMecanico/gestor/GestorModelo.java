@@ -40,6 +40,8 @@ public class GestorModelo {
             nombre = nombre.toUpperCase();
         }
 
+        //System.out.println(nombre);
+
         if ((marcaId!=null) || (nombre!=null)) {
             modelos = modeloService.filtrarModelos(marcaId, nombre);
         }else{
