@@ -1,14 +1,6 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
-
-import com.TP.TallerMecanico.servicio.IDetalleOrdenService;
-import com.TP.TallerMecanico.servicio.IMarcaService;
-import com.TP.TallerMecanico.servicio.IModeloService;
-import com.TP.TallerMecanico.servicio.IOrdenService;
-import com.TP.TallerMecanico.servicio.ITecnicoService;
-import com.TP.TallerMecanico.servicio.IVehiculoService;
-
 import com.TP.TallerMecanico.servicio.*;
 
 import jakarta.validation.Valid;
@@ -18,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
@@ -98,17 +91,56 @@ public class GestorOrden {
     }
 
     //Permite guardar un orden cuando la solicitud POST sea guardarOrden 
+    // @PostMapping("/guardarOrden")
+    // public String guardarOrden(@Valid Orden orden, BindingResult error, Model model){
+    //     if(error.hasErrors()){
+    //         model.addAttribute("modo","nuevo");
+    //         return "agregarModificarOrden";
+    //     }
+
+    //     //Se llama a la logica guardar definida en IOrdenService, pero en realidad es OrdenImplementacion
+    //     ordenService.guardar(orden);
+    //     return "redirect:/ordenes";
+    // }
     @PostMapping("/guardarOrden")
-    public String guardarOrden(@Valid Orden orden, BindingResult error, Model model){
-        if(error.hasErrors()){
-            model.addAttribute("modo","nuevo");
+    public String guardarOrden(@Valid Orden orden, BindingResult error, Model model, @RequestParam("agregarDetalles") String agregarDetalles) {
+        if (error.hasErrors()) {
+            model.addAttribute("modo", "nuevo");
             return "agregarModificarOrden";
         }
-
-        //Se llama a la logica guardar definida en IOrdenService, pero en realidad es OrdenImplementacion
+    
+        // Se llama a la lógica para guardar la orden
         ordenService.guardar(orden);
-        return "redirect:/ordenes";
+    
+        if ("si".equals(agregarDetalles)) {
+            // Si el usuario eligió "Sí" para agregar detalles, redirige a la página de detalles de la orden
+            Long nuevaOrdenId = orden.getIdOrden(); // Asume que hay un método para obtener el ID
+            return "redirect:/ordenes/detallesOrden/" + nuevaOrdenId;
+        } else {
+            // Si el usuario eligió "No" para agregar detalles, redirige a la página de todas las ordenes
+            return "redirect:/ordenes";
+        }
     }
+    
+
+    // @PostMapping("/guardarOrden")
+    // public String guardarOrden(@Valid Orden orden, BindingResult error, Model model) {
+    //     if (error.hasErrors()) {
+    //         model.addAttribute("modo", "nuevo");
+    //         return "agregarModificarOrden";
+    //     }
+
+    //     // Se llama a la lógica guardar definida en IOrdenService, pero en realidad es OrdenImplementación
+    //     ordenService.guardar(orden);
+
+    //     // Redirige a la página de detalles de orden con el ID de la orden recién creada
+    //     Long nuevaOrdenId = orden.getIdOrden(); // Asume que hay un método para obtener el ID
+
+    //     System.out.println(nuevaOrdenId);
+        
+    //     return "redirect:/ordenes/detallesOrden/" + nuevaOrdenId;
+    // }
+
 
     //Permite actualizar un cliente cuando la solicitud POST sea actualizarOrden
     @PostMapping("/actualizarOrden")
