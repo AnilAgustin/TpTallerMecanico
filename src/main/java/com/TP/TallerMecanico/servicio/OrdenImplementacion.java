@@ -24,7 +24,7 @@ public class OrdenImplementacion implements IOrdenService {
     @Override
     @Transactional(readOnly = true)
     public List<Orden> listarOrdenesFecha(LocalDate fechaOrden){
-        return ordenDao.findByFecha(fechaOrden);
+        return ordenDao.findByFechaRegistro(fechaOrden);
     }
 
     @Override
@@ -37,14 +37,14 @@ public class OrdenImplementacion implements IOrdenService {
     @Override
     @Transactional
     public void guardar(Orden orden) {
-        orden.setFecha(LocalDate.now());
+        orden.setFechaRegistro(LocalDate.now());
         ordenDao.save(orden);
     }
 
     @Override
     @Transactional
     public void actualizar(Orden orden){
-        orden.setFecha(LocalDate.now());
+        orden.setFechaRegistro(LocalDate.now());
         ordenDao.save(orden);
     }
 

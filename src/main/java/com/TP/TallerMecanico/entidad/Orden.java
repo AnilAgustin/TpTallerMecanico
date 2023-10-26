@@ -26,7 +26,9 @@ public class Orden implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrden;
 
-    private LocalDate fecha;
+    private LocalDate fechaRegistro;
+
+    private LocalDate fechaDocumento;
 
     @OneToMany(mappedBy = "orden")
     private List<DetalleOrden> detallesOrden;

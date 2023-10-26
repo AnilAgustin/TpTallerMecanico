@@ -77,7 +77,7 @@
             </thead>
             <tr th:each="orden :${orden}">
                 <td th:text="${orden.idOrden}">Mostrar Numero</td>
-                <td th:text="${orden.fecha}">Mostrar Fecha</td>
+                <td th:text="${orden.fechaDocumento}">Mostrar Fecha</td>
                 <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
                 <td th:text="${orden.vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                 <td th:text="${orden.vehiculo.modelo.nombre}">Mostrar Modelo</td>

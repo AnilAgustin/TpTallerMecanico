@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -91,56 +92,42 @@ public class GestorOrden {
     }
 
     //Permite guardar un orden cuando la solicitud POST sea guardarOrden 
-    // @PostMapping("/guardarOrden")
-    // public String guardarOrden(@Valid Orden orden, BindingResult error, Model model){
-    //     if(error.hasErrors()){
-    //         model.addAttribute("modo","nuevo");
-    //         return "agregarModificarOrden";
-    //     }
-
-    //     //Se llama a la logica guardar definida en IOrdenService, pero en realidad es OrdenImplementacion
-    //     ordenService.guardar(orden);
-    //     return "redirect:/ordenes";
-    // }
     @PostMapping("/guardarOrden")
     public String guardarOrden(@Valid Orden orden, BindingResult error, Model model, @RequestParam("agregarDetalles") String agregarDetalles) {
         if (error.hasErrors()) {
             model.addAttribute("modo", "nuevo");
             return "agregarModificarOrden";
         }
-    
+
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaDocumento = orden.getFechaDocumento();
+
+        //Sentencia de control para verificar si la fechaDocumento ingresada por el cliente es posterior a la fecha actual
+        if (fechaDocumento != null && fechaDocumento.isAfter(fechaActual)) {
+            model.addAttribute("errorFecha", "La Fecha del Documento no puede ser mayor que la fecha actual.");
+
+            model.addAttribute("modo", "nuevo");
+            List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
+            model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+            List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
+            model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
+            return "agregarModificarOrden";
+        }
+        
+        // Continúa con el proceso de guardar la orden si la fecha es válida.
         // Se llama a la lógica para guardar la orden
         ordenService.guardar(orden);
-    
+
+        //Verificacion para saber a donde redirigir
         if ("si".equals(agregarDetalles)) {
             // Si el usuario eligió "Sí" para agregar detalles, redirige a la página de detalles de la orden
-            Long nuevaOrdenId = orden.getIdOrden(); // Asume que hay un método para obtener el ID
+            Long nuevaOrdenId = orden.getIdOrden();
             return "redirect:/ordenes/detallesOrden/" + nuevaOrdenId;
         } else {
             // Si el usuario eligió "No" para agregar detalles, redirige a la página de todas las ordenes
             return "redirect:/ordenes";
         }
     }
-    
-
-    // @PostMapping("/guardarOrden")
-    // public String guardarOrden(@Valid Orden orden, BindingResult error, Model model) {
-    //     if (error.hasErrors()) {
-    //         model.addAttribute("modo", "nuevo");
-    //         return "agregarModificarOrden";
-    //     }
-
-    //     // Se llama a la lógica guardar definida en IOrdenService, pero en realidad es OrdenImplementación
-    //     ordenService.guardar(orden);
-
-    //     // Redirige a la página de detalles de orden con el ID de la orden recién creada
-    //     Long nuevaOrdenId = orden.getIdOrden(); // Asume que hay un método para obtener el ID
-
-    //     System.out.println(nuevaOrdenId);
-        
-    //     return "redirect:/ordenes/detallesOrden/" + nuevaOrdenId;
-    // }
-
 
     //Permite actualizar un cliente cuando la solicitud POST sea actualizarOrden
     @PostMapping("/actualizarOrden")
