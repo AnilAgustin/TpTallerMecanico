@@ -132,26 +132,33 @@
         guardarOrdenButton.addEventListener('click', function (event) {
             event.preventDefault(); // Evita que se envíe el formulario de inmediato
 
-            Swal.fire({
-                title: '¿Desea agregar detalles a la orden?',
-                showCancelButton: true,
-                confirmButtonText: 'Agregar Detalles',
-                cancelButtonText: 'No Agregar Detalles'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Si el usuario confirmó, establece el valor del campo "agregarDetalles" en "si"
-                    document.getElementById('agregarDetalles').value = 'si';
-                } else {
-                    // Si el usuario no confirmó, establece el valor del campo "agregarDetalles" en "no"
-                    document.getElementById('agregarDetalles').value = 'no';
-                }
+            // Realiza la validación en el lado del servidor antes de mostrar el cuadro de diálogo
+            const formulario = guardarOrdenButton.closest('form');
+            if (formulario.checkValidity()) {
+                Swal.fire({
+                    title: '¿Desea agregar detalles a la orden?',
+                    showCancelButton: true,
+                    confirmButtonText: 'Agregar Detalles',
+                    cancelButtonText: 'No Agregar Detalles'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Si el usuario confirmó, establece el valor del campo "agregarDetalles" en "si"
+                        document.getElementById('agregarDetalles').value = 'si';
+                    } else {
+                        // Si el usuario no confirmó, establece el valor del campo "agregarDetalles" en "no"
+                        document.getElementById('agregarDetalles').value = 'no';
+                    }
 
-                // Envía el formulario
-                const formulario = guardarOrdenButton.closest('form');
-                formulario.submit();
-            });
+                    // Envía el formulario
+                    formulario.submit();
+                });
+            } else {
+                // Si la validación en el lado del servidor falla, muestra los errores
+                Swal.fire('Errores de validación', 'Por favor, complete correctamente los campos requeridos.', 'error');
+            }
         });
     });
 </script>
+
 </body>
 </html>
