@@ -94,6 +94,15 @@
                         </div>
 
                         <div class="form-group">
+                            <label style="font-weight: bold;">Fecha documento</label>
+                            <input class="form-control" type="date" name="fechaDocumento" th:value="${fechaDocumento}" placeholder="Fecha Orden"/>
+                            
+                            <div th:if="${errorFecha}">
+                                <p class="alert alert-danger" th:text="${errorFecha}"></p>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label style="font-weight: bold;">Vehiculo</label>
 
                             <select class="form-control" id="vehiculo" name="vehiculo" required>

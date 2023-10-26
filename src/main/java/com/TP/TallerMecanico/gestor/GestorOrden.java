@@ -136,6 +136,27 @@ public class GestorOrden {
             model.addAttribute("modo","editar");
             return "agregarModificarOrden";
         }
+
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaDocumento = orden.getFechaDocumento();
+
+        //Sentencia de control para verificar si la fechaDocumento ingresada por el cliente es posterior a la fecha actual
+        if (fechaDocumento != null && fechaDocumento.isAfter(fechaActual)) {
+            model.addAttribute("errorFecha", "La Fecha del Documento no puede ser mayor que la fecha actual.");
+
+            var fechaDocumentoGuardada = orden.getFechaDocumento();                        //Buscar la fechaDocumento de la base de datos
+            model.addAttribute("fechaDocumento", fechaDocumentoGuardada);    // Setear esta fecha en el model para que cuando salte el error no se pierda la fecha que estaba
+
+            model.addAttribute("modo", "editar");             //Setear de nuevo el form en modo editar
+
+            List<Vehiculo> vehiculos = vehiculoService.listarVehiculos();                  // Obtener vehiculops activas
+            model.addAttribute("vehiculos", vehiculos);                      // Agregar la lista de vehiculos a la orden
+            List<Tecnico> tecnicos = tecnicoService.listarTecnicos();                      // Obtener tecnicos
+            model.addAttribute("tecnicos", tecnicos);                        // Agregar la lista de tecnicos a la orden
+            return "agregarModificarOrden";
+        }
+
+
         ordenService.actualizar(orden);
         return "redirect:/ordenes";
     }
@@ -144,10 +165,16 @@ public class GestorOrden {
     @GetMapping("/modificarOrden/{idOrden}")
     public String modificarOrden(@PathVariable Long idOrden, Model model){
         var orden = ordenService.buscarOrden(idOrden);
+
+        var fechaDocumento = orden.getFechaDocumento();
+        model.addAttribute("fechaDocumento", fechaDocumento);
+
         List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
         model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
         List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
         model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
+
         model.addAttribute("orden", orden);
         model.addAttribute("modo", "editar");
         return "agregarModificarOrden";
