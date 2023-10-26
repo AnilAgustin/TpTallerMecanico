@@ -5,6 +5,7 @@ import com.TP.TallerMecanico.servicio.*;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -49,14 +50,15 @@ public class GestorOrden {
     @GetMapping("/ordenes")
     public String listarOrdenes( @RequestParam(name = "marca", required = false) Long marcaId, 
                                  @RequestParam(name = "modelo", required = false) Long modeloId,
-                                 @RequestParam(name="numero", required = false) Long numero, 
+                                 @RequestParam(name="numero", required = false) Long numero,
+                                 @RequestParam(name="fechaDocumento", required = false) LocalDate fechaDocumento, 
                                  Model model) {
 
         List<Orden> ordenes;
         //var orden = ordenService.listarOrdenes();
         
-        if ((marcaId != null) || (modeloId != null || numero!=null)) {
-            ordenes = ordenService.filtrarOrdenes(marcaId,modeloId, numero);
+        if ((marcaId != null) || (modeloId != null || numero!=null || fechaDocumento!=null)) {
+            ordenes = ordenService.filtrarOrdenes(marcaId,modeloId, numero, fechaDocumento);
         }else {
             // Si no se enviaron parámetros de búsqueda, lista todos los vehículos
             ordenes= ordenService.listarOrdenes();
@@ -74,6 +76,7 @@ public class GestorOrden {
         model.addAttribute("idModelo", modeloId);
         model.addAttribute("idMarca", marcaId);
         model.addAttribute("numero", numero);
+        model.addAttribute("fechaDocumento", fechaDocumento);
         
         return "ordenes";
     }

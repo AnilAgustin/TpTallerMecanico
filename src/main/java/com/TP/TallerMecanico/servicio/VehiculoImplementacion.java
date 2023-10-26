@@ -84,7 +84,6 @@ public class VehiculoImplementacion implements IVehiculoService {
         String kilometrajeNuevo = vehiculo.getKilometros();
         String kilometrajeViejo = vehiculoViejo.getKilometros();
 
-        
         if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
             vehiculoViejo.setKilometros(kilometrajeNuevo);
         }
