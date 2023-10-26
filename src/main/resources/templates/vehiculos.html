@@ -31,29 +31,32 @@
     </header>
     <div class="container mt-4">
         <h3>Listado Vehiculos</h3>
-        <br>
         <div>
             <form class="d-flex" method="get">
-                <input class="form-control me-2 mb-3" type="search" name="patente" placeholder="Ingrese una patente"
+                <div>
+                    <a th:href="@{/agregarVehiculo}" class="btn btn-primary me-5 mt-3">Agregar</a>
+                </div>
+
+                <input class="form-control me-2 mt-3" type="search" name="patente" placeholder="Ingrese una patente"
                     aria-label="Search" th:value="${patente}">
 
-                <select class="form-select me-3 mb-3" name="marca" aria-label="Default select example">
+                <select class="form-select me-2 mt-3" name="marca" aria-label="Default select example">
                     <option selected value="-1">Seleccione una marca</option>
                     <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}"
                         th:selected="${marca.idMarca == idMarca}"></option>
                 </select>
 
-                <select class="form-select me-3 mb-3" name="modelo" aria-label="Default select example">
+                <select class="form-select me-2 mt-3" name="modelo" aria-label="Default select example">
                     <option selected value="-1">Seleccione un modelo</option>
                     <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}"
                         th:selected="${modelo.idModelo == idModelo}"></option>
                 </select>
-                <input type="submit" class="btn btn-success mb-3" value="Buscar">
+                <input type="submit" class="btn btn-success me-2 mt-3" value="Buscar">
             </form>
             
         </div>
 
-        <a th:href="@{/agregarVehiculo}" class="btn btn-primary mt-4">Agregar</a>
+        
         <br>
         <div th:if="${vehiculo != null and !vehiculo.empty}">
             <table class="table">

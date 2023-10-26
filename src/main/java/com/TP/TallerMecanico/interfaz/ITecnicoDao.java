@@ -21,4 +21,25 @@ public interface ITecnicoDao extends CrudRepository<Tecnico, Long> {
     Tecnico findByLegajo(String legajo);
 
     Tecnico findByLegajoAndEstadoTrue(String legajo);
+
+    @Query("SELECT t FROM Tecnico t WHERE t.nombre LIKE :nombre% AND t.apellido LIKE :apellido% AND t.legajo = :legajo AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorNombreYApellidoYLegajo(@Param("nombre") String nombre, @Param("apellido") String apellido, @Param("legajo") String legajo);
+
+    @Query("SELECT t FROM Tecnico t WHERE t.nombre LIKE :nombre% AND t.apellido LIKE :apellido% AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorNombreYApellido(@Param("nombre") String nombre, @Param("apellido") String apellido);
+
+    @Query("SELECT t FROM Tecnico t WHERE t.nombre LIKE :nombre%  AND t.legajo = :legajo AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorNombreYLegajo(@Param("nombre") String nombre, @Param("legajo") String legajo);
+    
+    @Query("SELECT t FROM Tecnico t WHERE t.apellido LIKE :apellido%  AND t.legajo = :legajo AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorApellidoYLegajo(@Param("apellido") String apellido, @Param("legajo") String legajo);
+
+    @Query("SELECT t FROM Tecnico t WHERE t.nombre LIKE :nombre%  AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorNombre(@Param("nombre") String nombre);
+    
+    @Query("SELECT t FROM Tecnico t WHERE t.apellido LIKE :apellido%  AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorApellido(@Param("apellido") String apellido);
+
+    @Query("SELECT t FROM Tecnico t WHERE t.legajo = :legajo AND t.estado = true")
+    List<Tecnico> filtrarTecnicoPorLegajo(@Param("legajo") String legajo);
 }

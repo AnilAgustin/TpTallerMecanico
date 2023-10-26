@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GestorTecnico {
@@ -32,9 +33,34 @@ public class GestorTecnico {
 
     //Listar todos los tecnicos cuando la URL sea /tecnicos
     @GetMapping("/tecnicos")
-    public String listarTecnicos(Model model) {
-        var tecnico = tecnicoService.listarTecnicos();
-        model.addAttribute("tecnico", tecnico);
+    public String listarTecnicos(@RequestParam(name = "nombre", required = false) String nombre, @RequestParam(name = "apellido", required = false) String apellido,@RequestParam(name="legajo", required = false) Long legajoCliente, Model model) {
+        //var tecnico = tecnicoService.listarTecnicos();
+        List<Tecnico> tecnicos;
+
+        if (nombre!= null) {
+            nombre = nombre.toUpperCase();
+        }
+
+        if (apellido != null) {
+            apellido = apellido.toUpperCase();
+        }
+        
+        String legajo = null;
+        if (legajoCliente!=null) {
+            legajo = Long.toString(legajoCliente);
+        }
+
+
+        if (nombre !=null || apellido != null || legajo != null) {
+            tecnicos = tecnicoService.filtrarTecnicos(nombre, apellido, legajo);
+        }else{
+            tecnicos = tecnicoService.listarTecnicos();
+        }
+
+        model.addAttribute("tecnico", tecnicos);
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("apellido", apellido);
+        model.addAttribute("legajo", legajoCliente);
         return "tecnicos";
     }
 
