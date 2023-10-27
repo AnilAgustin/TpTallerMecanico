@@ -33,6 +33,7 @@
                             <input class="form-control" type="text" name="cantidadDetalleOrden" th:field="*{cantidad}" />
                             <span th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></span>
                         </div>
+                        
 
                         <div class="form-group">
                             <input type="hidden" name="estadoDetalleOrden" th:field="*{estado}"/>

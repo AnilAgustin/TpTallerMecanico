@@ -40,16 +40,24 @@
                 <th>Kilometros</th>
                 <th>Modelo</th>
                 <th>Marca</th>
+                <th>Ordenes</th>
                 <th>Acciones</th>
             </tr>
             </thead>
 
-            <tr th:each="vehiculo :${vehiculos}">
+            <tr th:each="vehiculo : ${vehiculos}">
                 <td th:text="${vehiculo.patente}">Mostrar Patente</td>
                 <td th:text="${vehiculo.year}">Mostrar Year</td>
                 <td th:text="${vehiculo.kilometros}">Mostrar Kilometros</td>
                 <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
                 <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
+                <td>
+                    <span th:each="orden, iterStat : ${vehiculo.ordenes}">  <!-- el iterStat se usa para acceder a la información del estado de la iteración, como si es el primer elemento, el último elemento, etc., en relación con el bucle th:each. -->
+                        <span th:text="${orden.idOrden}"></span>
+                        <span th:if="${!iterStat.last}">,</span> <!--Agregar la coma solo cuando hay más de un elemento.-->
+                    </span>
+                    
+                </td>
                 <td> 
                     <a class="btn btn-warning" th:href="@{/tecnico/modificarVehiculoPorTecnico/} + ${vehiculo.idVehiculo} + '/' + ${tecnico.idTecnico}" th:text="Editar"/>
                 </td>

@@ -4,6 +4,7 @@ import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
+import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
 import com.TP.TallerMecanico.servicio.IVehiculoService;
 
@@ -30,6 +31,9 @@ public class GestorTecnico {
 
     @Autowired
     private IVehiculoService vehiculoService;
+
+    @Autowired
+    private IOrdenService ordenService;
 
     //Listar todos los tecnicos cuando la URL sea /tecnicos
     @GetMapping("/tecnicos")
@@ -116,11 +120,15 @@ public class GestorTecnico {
     @GetMapping("/tecnico/vehiculos/{idTecnico}")
     public String detallesOrden(@PathVariable ("idTecnico") Long id, Model model) {
         Tecnico tecnico = tecnicoService.buscarTecnico(id);
+
+        List<Orden> ordenes = ordenService.listarOrdenesTecnico(tecnico)
+        ;
         List<Vehiculo> vehiculos = vehiculoService.listarVehiculosPorTecnico(tecnico);
 
         //List<DetalleOrden> detalles = detallesService.listarDetallesPorOrden(orden);
         model.addAttribute("tecnico", tecnico );
         model.addAttribute("vehiculos", vehiculos);
+        model.addAttribute("ordenes", ordenes);
 
         return "vehiculoPorTecnico";
     }

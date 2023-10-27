@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,14 @@ public class OrdenImplementacion implements IOrdenService {
     public List<Orden> listarOrdenesFecha(LocalDate fechaOrden){
         return ordenDao.findByFechaRegistro(fechaOrden);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Orden> listarOrdenesTecnico(Tecnico tecnico){
+        return ordenDao.findByTecnicoAndEstadoTrue(tecnico);
+    }
+
+
 
     @Override
     @Transactional(readOnly = true)
@@ -69,7 +78,6 @@ public class OrdenImplementacion implements IOrdenService {
         ordenDao.marcarComoActivo(orden.getIdOrden());
     }
 
-    //REVISTA MARCA MODELO Y NUMERO (ESE FILTRO)
     @Override
     @Transactional
     public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero, LocalDate fechaDocumento) {
