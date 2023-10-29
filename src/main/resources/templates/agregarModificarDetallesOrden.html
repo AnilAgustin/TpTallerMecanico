@@ -81,20 +81,38 @@
                         <div class="form-group">
                             <input type="hidden" name="idDetalleOrden" th:field="*{idDetalleOrden}"/>
                         </div>
+                        
                         <div class="form-group">
                             <label style="font-weight: bold;">Servicio</label>
 
                             <select class="form-control" id="servicio" name="servicio" required>
                                 <option value="" disabled selected>Selecciona un Servicio</option>
-                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}"></option>
+                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}" th:data-precio="${servicio.precio}"></option>
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Precio unitario del servicio</label>
+                            <input class="form-control" type="number" name="precioServicio" id="precioServicio" th:value="${precioServicioElegido}" disabled />
+                            <!--<span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>-->
+                        </div>
+                        
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Precio final del servicio</label>
+                            <input class="form-control" type="number" name="precioFinalServicio" id="precioFinalServicio" th:field="*{precioFinalServicio}"/>
+                            <!--<span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>-->
                         </div>
 
 
                         <div class="form-group">
                             <label style="font-weight: bold;">Cantidad</label>
-                            <input class="form-control" type="text" name="cantidadDetalle" th:field="*{cantidad}" />
+                            <input class="form-control" type="text" name="cantidadDetalleOrden" th:field="*{cantidad}" />
                             <span th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Subtotal</label>
+                            <input class="form-control" type="number" id="subtotal" disabled />
                         </div>
 
 
@@ -124,31 +142,30 @@
         const servicioElegido = document.getElementById('servicio');
         const precioServicioInput = document.getElementById('precioServicio');
         const precioFinal = document.getElementById('precioFinalServicio');
+        const cantidadInput = document.getElementById('cantidad');
 
         //console.log(precioServicioInput.value);
 
         if (precioServicioInput.value !== "") {
             precioServicioInput.classList.add("bg-dark-subtle");                       //Con esta sentencia le vuelvo a poner la clase para el estilo en caso de que se recargue la pagina pero siga habiendo un servicio seleccionado
+        } 
+
+        if (servicioElegido.options[servicioElegido.selectedIndex] != -1) {            //Aquí verifico si ya hay un serivicio seleccionado (para el caso del editar)
+            calcularPrecioUnitarioServicio();                                          //Vuelvo a calcular el subtotal para poder mostrarlo
         }
 
-        servicioElegido.addEventListener('change', function () {                            //Funcion para detectar/escuchar si cambia el servicioElegido en el html
-            const selectedOption = servicioElegido.options[servicioElegido.selectedIndex];  //Sacar cual opcion eligió el usuario
-            const precioStr = selectedOption.getAttribute('data-precio');                   //Guardar el precio del servicio elegido
+        //console.log(precioFinal.value);
+        if (precioFinal.value != "") {                                                 //Verifico si ya hay un precioFinal (para el editar) y si es así calculo el subTotal para mostrarlo
+            calcularSubTotal();
+        }
 
-            if (precioStr !== null) {                                                       //Verificacion de que el precio no sea null
-                const precioNum = parseFloat(precioStr);
-                precioServicioInput.classList.add("bg-dark-subtle");                        // Convierte el precio a floar
-                precioServicioInput.value = precioNum;                                      //Le setea al value del input del precio unitario del ser vicio, con el precio del servicio
-                precioFinal.value = precioNum;
-            } else {
-                precioServicioInput.classList.remove("bg-dark-subtle");
-                precioServicioInput.value = "";                                             //Si es null no setea nada
-            }
+
+        servicioElegido.addEventListener('change', function () {                            //Funcion para detectar/escuchar si cambia el servicioElegido en el html
+            calcularPrecioUnitarioServicio();
         });
 
+
         // Calcular el subtotal cuando se cambia la cantidad
-        const cantidadInput = document.getElementById('cantidad');
-        
         cantidadInput.addEventListener('change', function () {
             calcularSubTotal();
         });
@@ -160,6 +177,8 @@
             }
         })
 
+        //DEFINICION DE FUNCIONES
+        
         //Funcion para calcular el subTotal
         function calcularSubTotal() {
             const subtotalInput = document.getElementById('subtotal');
@@ -176,6 +195,22 @@
             } else {
                 subtotalInput.value = "";
             }   
+        }
+
+        //Funcion para calcular el precio unitario del servicio (el de la clase servicio)
+        function calcularPrecioUnitarioServicio() {
+            const selectedOption = servicioElegido.options[servicioElegido.selectedIndex];  //Sacar cual opcion eligió el usuario
+            const precioStr = selectedOption.getAttribute('data-precio');                   //Guardar el precio del servicio elegido
+
+            if (precioStr !== null) {                                                       //Verificacion de que el precio no sea null
+                const precioNum = parseFloat(precioStr);
+                precioServicioInput.classList.add("bg-dark-subtle");                        // Convierte el precio a floar
+                precioServicioInput.value = precioNum;                                      //Le setea al value del input del precio unitario del ser vicio, con el precio del servicio
+                precioFinal.value = precioNum;
+            } else {
+                precioServicioInput.classList.remove("bg-dark-subtle");
+                precioServicioInput.value = "";                                             //Si es null no setea nada
+            }
         }
 
 
