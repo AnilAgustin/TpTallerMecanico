@@ -118,13 +118,13 @@
             precioServicioInput.classList.add("bg-dark-subtle");                       //Con esta sentencia le vuelvo a poner la clase para el estilo en caso de que se recargue la pagina pero siga habiendo un servicio seleccionado
         }
 
-        servicioElegido.addEventListener('change', function () {                            //Funcion para detectar si cambia el servicioElegido en el html
+        servicioElegido.addEventListener('change', function () {                            //Funcion para detectar/escuchar si cambia el servicioElegido en el html
             const selectedOption = servicioElegido.options[servicioElegido.selectedIndex];  //Sacar cual opcion eligió el usuario
             const precioStr = selectedOption.getAttribute('data-precio');                   //Guardar el precio del servicio elegido
 
             if (precioStr !== null) {                                                       //Verificacion de que el precio no sea null
                 const precioNum = parseFloat(precioStr);
-                precioServicioInput.classList.add("bg-dark-subtle");                   // Convierte el precio a floar
+                precioServicioInput.classList.add("bg-dark-subtle");                        // Convierte el precio a floar
                 precioServicioInput.value = precioNum;                                      //Le setea al value del input del precio unitario del ser vicio, con el precio del servicio
             } else {
                 precioServicioInput.classList.remove("bg-dark-subtle");
