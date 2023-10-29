@@ -79,7 +79,7 @@ public class GestorDetalleOrden {
         // Obtén el id de la orden después de guardar el detalle, asumiendo que puedes obtenerlo desde detalleOrden
         var orden = ordenService.buscarOrden(id);
         detalleOrden.setOrden(orden);
-        
+
         //Se llama a la logica guardar definida en IDetalleOrdenService, pero en realidad es DetalleOrdenImplementacion
         detalleOrdenService.guardar(detalleOrden);
 

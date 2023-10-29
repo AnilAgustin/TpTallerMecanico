@@ -38,7 +38,8 @@
             <thead>
             <tr>
                 <th>Servicio</th>
-                <th>Precio</th>
+                <th>Precio unitario del servicio</th>
+                <th>Precio final del servicio</th>
                 <th>Cantidad</th>
                 <th>Subtotal</th>
                 <th>Acciones</th>
@@ -48,6 +49,7 @@
             <tr th:each="detalleOrden :${detalleOrden}">
                 <td th:text="${detalleOrden.servicio.nombre}">Mostrar Servicio</td>
                 <td th:text="${detalleOrden.servicio.precio}">Mostrar Precio</td>
+                <td th:text="${detalleOrden.precioFinalServicio}">Mostrar Precio</td>
                 <td th:text="${detalleOrden.cantidad}">Mostrar Cantidad</td>
                 <td th:text="${detalleOrden.subtotal}">Mostrar Subtotal</td>
                 <td> <a class="btn btn-warning" th:href="@{/ordenes/modificarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden} " th:text="Editar"/>

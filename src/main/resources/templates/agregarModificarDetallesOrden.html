@@ -33,13 +33,25 @@
                             <input class="form-control" type="number" name="precioServicio" id="precioServicio" th:value="${precioServicioElegido}" disabled />
                             <!--<span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>-->
                         </div>
+                        
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Precio final del servicio</label>
+                            <input class="form-control" type="number" name="precioFinalServicio" id="precioFinalServicio" th:field="*{precioFinalServicio}"/>
+                            <!--<span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>-->
+                        </div>
 
                         <div class="form-group">
                             <label style="font-weight: bold;">Cantidad</label>
                             <input class="form-control" type="text" name="cantidadDetalleOrden" th:field="*{cantidad}" />
                             <span th:if="${#fields.hasErrors('cantidad')}" th:errors="*{cantidad}"></span>
                         </div>
+
+
                         
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Subtotal</label>
+                            <input class="form-control" type="number" id="subtotal" disabled />
+                        </div>
 
                         <div class="form-group">
                             <input type="hidden" name="estadoDetalleOrden" th:field="*{estado}"/>
@@ -111,6 +123,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         const servicioElegido = document.getElementById('servicio');
         const precioServicioInput = document.getElementById('precioServicio');
+        const precioFinal = document.getElementById('precioFinalServicio');
 
         //console.log(precioServicioInput.value);
 
@@ -126,11 +139,47 @@
                 const precioNum = parseFloat(precioStr);
                 precioServicioInput.classList.add("bg-dark-subtle");                        // Convierte el precio a floar
                 precioServicioInput.value = precioNum;                                      //Le setea al value del input del precio unitario del ser vicio, con el precio del servicio
+                precioFinal.value = precioNum;
             } else {
                 precioServicioInput.classList.remove("bg-dark-subtle");
                 precioServicioInput.value = "";                                             //Si es null no setea nada
             }
         });
+
+        // Calcular el subtotal cuando se cambia la cantidad
+        const cantidadInput = document.getElementById('cantidad');
+        
+        cantidadInput.addEventListener('change', function () {
+            calcularSubTotal();
+        });
+
+        //Calcular subTotal cuando se agrega un precioFinal distinto al que tiene el servicio
+        precioFinal.addEventListener('change', function () {
+            if (precioFinal !== precioServicioInput.value ) {
+                calcularSubTotal();
+            }
+        })
+
+        //Funcion para calcular el subTotal
+        function calcularSubTotal() {
+            const subtotalInput = document.getElementById('subtotal');
+            const cantidad = parseFloat(cantidadInput.value);
+            const precioUnitario = precioFinal.value;
+
+            //console.log(subtotalInput);
+            //console.log(cantidad);
+            //console.log(precioUnitario);
+                            
+            if (!isNaN(cantidad) && !isNaN(precioUnitario)) { // Con !isNaN verificamos si es un numero valido o no (is not a number)
+                const subtotal = cantidad * precioUnitario;
+                subtotalInput.value = subtotal.toFixed(2); // Mostrar el subtotal con 2 decimales
+            } else {
+                subtotalInput.value = "";
+            }   
+        }
+
+
+
     });
 </script>
 
