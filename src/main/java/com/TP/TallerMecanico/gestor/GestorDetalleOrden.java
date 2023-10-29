@@ -58,6 +58,21 @@ public class GestorDetalleOrden {
 
             List<Servicio> servicios = servicioService.listarServicios(); // Obtener marcas activas
             model.addAttribute("servicios", servicios);
+
+            var servicioElegido = detalleOrden.getServicio();
+
+            String precioStr = servicioElegido.getPrecio();
+            float precio = Float.parseFloat(precioStr);
+
+            if (precio % 1 == 0) {
+                // La parte decimal es igual a cero, por lo que convertir a int
+                int precioEntero = (int) precio;
+                model.addAttribute("precioServicioElegido", precioEntero);
+            } else {
+                // La parte decimal no es cero, mantenerlo como float
+                model.addAttribute("precioServicioElegido", precio);
+            }
+
             model.addAttribute("modo", "nuevo");
             return "agregarModificarDetallesOrden";
         }

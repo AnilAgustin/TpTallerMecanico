@@ -24,8 +24,14 @@
 
                             <select class="form-control" id="servicio" name="servicio" required>
                                 <option value="" disabled selected>Selecciona un Servicio</option>
-                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}"></option>
+                                <option th:each="servicio : ${servicios}" th:value="${servicio.idServicio}" th:text="${servicio.nombre}" th:selected="${detalleOrden.servicio != null and servicio.idServicio == detalleOrden.servicio.idServicio}" th:data-precio="${servicio.precio}"></option>
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Precio unitario del servicio</label>
+                            <input class="form-control" type="number" name="precioServicio" id="precioServicio" th:value="${precioServicioElegido}" disabled />
+                            <!--<span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>-->
                         </div>
 
                         <div class="form-group">
@@ -98,5 +104,35 @@
         </div>
     </div>
 </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const servicioElegido = document.getElementById('servicio');
+        const precioServicioInput = document.getElementById('precioServicio');
+
+        //console.log(precioServicioInput.value);
+
+        if (precioServicioInput.value !== "") {
+            precioServicioInput.classList.add("bg-dark-subtle");                       //Con esta sentencia le vuelvo a poner la clase para el estilo en caso de que se recargue la pagina pero siga habiendo un servicio seleccionado
+        }
+
+        servicioElegido.addEventListener('change', function () {                            //Funcion para detectar si cambia el servicioElegido en el html
+            const selectedOption = servicioElegido.options[servicioElegido.selectedIndex];  //Sacar cual opcion eligió el usuario
+            const precioStr = selectedOption.getAttribute('data-precio');                   //Guardar el precio del servicio elegido
+
+            if (precioStr !== null) {                                                       //Verificacion de que el precio no sea null
+                const precioNum = parseFloat(precioStr);
+                precioServicioInput.classList.add("bg-dark-subtle");                   // Convierte el precio a floar
+                precioServicioInput.value = precioNum;                                      //Le setea al value del input del precio unitario del ser vicio, con el precio del servicio
+            } else {
+                precioServicioInput.classList.remove("bg-dark-subtle");
+                precioServicioInput.value = "";                                             //Si es null no setea nada
+            }
+        });
+    });
+</script>
+
 </body>
 </html>
