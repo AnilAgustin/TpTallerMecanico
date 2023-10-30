@@ -102,6 +102,11 @@ public class GestorOrden {
     public String guardarOrden(@Valid Orden orden, BindingResult error, Model model, @RequestParam("agregarDetalles") String agregarDetalles) {
         if (error.hasErrors()) {
             model.addAttribute("modo", "nuevo");
+            List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
+            model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+            List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
+            model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
             return "agregarModificarOrden";
         }
 
@@ -110,11 +115,12 @@ public class GestorOrden {
 
         //Sentencia de control para verificar si la fechaDocumento ingresada por el cliente es posterior a la fecha actual
         if (fechaDocumento != null && fechaDocumento.isAfter(fechaActual)) {
-            model.addAttribute("errorFecha", "La Fecha del Documento no puede ser mayor que la fecha actual.");
+            model.addAttribute("errorFecha", "La fecha del documento no puede ser mayor que la fecha actual.");
 
             model.addAttribute("modo", "nuevo");
             List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
             model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
             List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
             model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
             return "agregarModificarOrden";
