@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaft.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Vehiculo</title>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
     <div class="col-sm-6">
         <!--Actualizar-->
         <div th:if="${modo eq 'editar'}">
-            <form th:action="@{/tecnico/actualizarKilometrosPorTecnico/} + ${orden.tecnico.idTecnico} + '/' + ${orden.idOrden}" th:object="${orden}" method="POST">
+            <form th:action="@{/tecnico/actualizarKilometrosPorTecnico/}+ ${ordenDb.idOrden}" th:object="${orden}" method="POST">
                 <div class="card">
                     <div class="card-header">
                         <h3>Orden</h3>
@@ -35,7 +35,7 @@
 
                     <div class="card-footer">
                         <button type="submit" class="btn btn-success">Actualizar</button>
-                        <a  class="btn btn-danger" th:href="@{/tecnico/vehiculos/} + ${orden.tecnico.idTecnico}">Regresar</a>
+                        <a  class="btn btn-danger" th:href="@{/tecnico/vehiculos/} + ${ordenDb.tecnico.idTecnico}">Regresar</a>
                         
                     </div>
                 </div>

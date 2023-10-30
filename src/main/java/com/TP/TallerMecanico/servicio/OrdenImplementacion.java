@@ -143,7 +143,7 @@ public class OrdenImplementacion implements IOrdenService {
         String kilometrajeNuevo = orden.getKilometros();
         String kilometrajeViejo = ordenViejo.getKilometros();
 
-        if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
+        if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo )) {
             ordenViejo.setKilometros(kilometrajeNuevo);
         }
     }

@@ -140,6 +140,15 @@ public class GestorOrden {
     public String actualizarVehiculo(@Valid @ModelAttribute Orden orden, BindingResult error, Model model) {
         if (error.hasErrors()) {
             model.addAttribute("modo","editar");
+
+            var fechaDocumento = orden.getFechaDocumento();
+            model.addAttribute("fechaDocumento", fechaDocumento);
+
+            List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
+            model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+            List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
+            model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
             return "agregarModificarOrden";
         }
 
@@ -212,38 +221,40 @@ public class GestorOrden {
     }
 
 
-        //Cuando se presiona el boton editar en "vehiculoPorTecnico" se retorna el html con todos los datos del kilometraje de la orden seleccionada para modificar 
-        @GetMapping("/tecnico/modificarKilometrosPorTecnico/{idVehiculo}/{idTecnico}/{idOrden}")
-        public String mostrarFormularioEditarTecnico(@PathVariable ("idVehiculo") Long idVehiculo, @PathVariable ("idTecnico") Long idTecnico, @PathVariable ("idOrden") Long idOrden, Model model) {
-            var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
-            Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
-            Orden orden = ordenService.buscarOrden(idOrden);
-    
-    
-            model.addAttribute("tecnico", tecnico);
-            model.addAttribute("vehiculo", vehiculo);
-            model.addAttribute("orden", orden);
+    //Cuando se presiona el boton editar en "vehiculoPorTecnico" se retorna el html con todos los datos del kilometraje de la orden seleccionada para modificar 
+    @GetMapping("/tecnico/modificarKilometrosPorTecnico/{idVehiculo}/{idTecnico}/{idOrden}")
+    public String mostrarFormularioEditarTecnico(@PathVariable ("idVehiculo") Long idVehiculo, @PathVariable ("idTecnico") Long idTecnico, @PathVariable ("idOrden") Long idOrden, Model model) {
+        var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
+        Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
+        Orden orden = ordenService.buscarOrden(idOrden);
+        Orden ordenDb = ordenService.buscarOrden(idOrden);
 
-            model.addAttribute("modo", "editar");
-            
-            return "modificarKilometrosPorTecnico";
-        }
+        model.addAttribute("tecnico", tecnico);
+        model.addAttribute("vehiculo", vehiculo);
+        model.addAttribute("orden", orden);
+        model.addAttribute("ordenDb", ordenDb);
+
+        model.addAttribute("modo", "editar");
+        
+        return "modificarKilometrosPorTecnico";
+    }
 
 
     //Permite actualizar los kilometros de la orden, cuando la solicitud POST venga desde el formulario del modificarKilometrosPorTecnico
-    @PostMapping("/tecnico/actualizarKilometrosPorTecnico/{idTecnico}/{idOrden}")
-    public String actualizarVehiculoPorTecnico(@PathVariable ("idTecnico") Long idTecnico ,@PathVariable ("idOrden") Long idOrden, @Valid @ModelAttribute Orden orden, BindingResult error, Model model){
+    @PostMapping("/tecnico/actualizarKilometrosPorTecnico/{idOrden}")
+    public String actualizarVehiculoPorTecnico(@Valid @ModelAttribute Orden orden, BindingResult error ,@PathVariable ("idOrden") Long idOrden, Model model){
+        Orden ordenDb = ordenService.buscarOrden(idOrden);
         if (error.hasErrors()) {
             model.addAttribute("modo","editar");
-            Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
-
-            model.addAttribute("tecnico", tecnico);
+            model.addAttribute("orden", orden);
+            model.addAttribute("ordenDb", ordenDb);
+            
             return "modificarKilometrosPorTecnico";
         }
         
         ordenService.actualizarKilometraje(orden);
         
-        String redirectUrl = "redirect:/tecnico/vehiculos/" + idTecnico;
+        String redirectUrl = "redirect:/tecnico/vehiculos/" + ordenDb.getTecnico().getIdTecnico();
 
         // Redirige a la URL construida
         return redirectUrl;
