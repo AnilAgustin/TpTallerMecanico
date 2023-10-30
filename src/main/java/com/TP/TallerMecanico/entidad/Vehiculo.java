@@ -32,10 +32,6 @@ public class Vehiculo implements Serializable {
     @Pattern(regexp = "^[0-9]{1,4}$", message = "Debe ser un número de 1 a 4 dígitos.")
     private String year;
 
-    @NotEmpty(message = "El kilometraje no debe estar vacio")
-    @Pattern(regexp = "^[0-9]{1,8}$", message = "Debe ser un número de 1 a 8 dígitos.")
-    private String kilometros;
-
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;

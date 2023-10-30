@@ -73,21 +73,22 @@ public class VehiculoImplementacion implements IVehiculoService {
                 }
             }
         }
-    } 
-    @Override
-    @Transactional   
-    public void actualizarKilometraje(Vehiculo vehiculo){
-        Long vehiculoId = vehiculo.getIdVehiculo();
-
-        Vehiculo vehiculoViejo = vehiculoDao.findByIdVehiculo(vehiculoId);
-
-        String kilometrajeNuevo = vehiculo.getKilometros();
-        String kilometrajeViejo = vehiculoViejo.getKilometros();
-
-        if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
-            vehiculoViejo.setKilometros(kilometrajeNuevo);
-        }
     }
+
+    // @Override
+    // @Transactional   
+    // public void actualizarKilometraje(Vehiculo vehiculo){
+    //     Long vehiculoId = vehiculo.getIdVehiculo();
+
+    //     Vehiculo vehiculoViejo = vehiculoDao.findByIdVehiculo(vehiculoId);
+
+    //     String kilometrajeNuevo = vehiculo.getKilometros();
+    //     String kilometrajeViejo = vehiculoViejo.getKilometros();
+
+    //     if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
+    //         vehiculoViejo.setKilometros(kilometrajeNuevo);
+    //     }
+    // }
 
 
     @Override

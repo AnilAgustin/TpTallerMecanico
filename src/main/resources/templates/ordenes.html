@@ -72,6 +72,7 @@
                 <th>Vehiculo</th>
                 <th>Marca</th>
                 <th>Modelo</th>
+                <th>Kilometraje</th>
                 <th>Tecnico</th>
                 <th>Total</th>
                 <th>Acciones</th>
@@ -80,9 +81,10 @@
             <tr th:each="orden :${orden}">
                 <td th:text="${orden.idOrden}">Mostrar Numero</td>
                 <td th:text="${orden.fechaDocumento}">Mostrar Fecha</td>
-                <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
+                <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td> 
                 <td th:text="${orden.vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                 <td th:text="${orden.vehiculo.modelo.nombre}">Mostrar Modelo</td>
+                <td th:text="${orden.kilometros}">Mostrar Kilometraje/td>
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
                 <td th:text="${orden.calcularTotal()}">Calcular Total</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>

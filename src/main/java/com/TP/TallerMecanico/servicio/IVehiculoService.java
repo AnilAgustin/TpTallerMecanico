@@ -9,7 +9,7 @@ public interface IVehiculoService {
     public List<Vehiculo> listarVehiculos();
     public void guardar(Vehiculo vehiculo);
     public void actualizar(Vehiculo vehiculo);
-    public void actualizarKilometraje(Vehiculo vehiculo);
+    // public void actualizarKilometraje(Vehiculo vehiculo);
     public void eliminar(Vehiculo vehiculo);
     public Vehiculo buscarVehiculo(Long idVehiculo);
     public void activarVehiculo(Vehiculo vehiculo) ;

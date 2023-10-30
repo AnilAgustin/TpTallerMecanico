@@ -121,8 +121,8 @@ public class GestorTecnico {
     public String detallesOrden(@PathVariable ("idTecnico") Long id, Model model) {
         Tecnico tecnico = tecnicoService.buscarTecnico(id);
 
-        List<Orden> ordenes = ordenService.listarOrdenesTecnico(tecnico)
-        ;
+        List<Orden> ordenes = ordenService.listarOrdenesTecnico(tecnico);
+
         List<Vehiculo> vehiculos = vehiculoService.listarVehiculosPorTecnico(tecnico);
 
         //List<DetalleOrden> detalles = detallesService.listarDetallesPorOrden(orden);

@@ -41,6 +41,9 @@ public class GestorOrden {
     private ITecnicoService tecnicoService;
 
     @Autowired
+    private IClienteService clienteService;
+
+    @Autowired
     private IMarcaService marcaService;
 
     @Autowired
@@ -206,5 +209,43 @@ public class GestorOrden {
     public String eliminarOrden(Orden orden){
         ordenService.eliminar(orden);
         return "redirect:/ordenes";
+    }
+
+
+        //Cuando se presiona el boton editar en "vehiculoPorTecnico" se retorna el html con todos los datos del kilometraje de la orden seleccionada para modificar 
+        @GetMapping("/tecnico/modificarKilometrosPorTecnico/{idVehiculo}/{idTecnico}/{idOrden}")
+        public String mostrarFormularioEditarTecnico(@PathVariable ("idVehiculo") Long idVehiculo, @PathVariable ("idTecnico") Long idTecnico, @PathVariable ("idOrden") Long idOrden, Model model) {
+            var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
+            Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
+            Orden orden = ordenService.buscarOrden(idOrden);
+    
+    
+            model.addAttribute("tecnico", tecnico);
+            model.addAttribute("vehiculo", vehiculo);
+            model.addAttribute("orden", orden);
+
+            model.addAttribute("modo", "editar");
+            
+            return "modificarKilometrosPorTecnico";
+        }
+
+
+    //Permite actualizar los kilometros de la orden, cuando la solicitud POST venga desde el formulario del modificarKilometrosPorTecnico
+    @PostMapping("/tecnico/actualizarKilometrosPorTecnico/{idTecnico}/{idOrden}")
+    public String actualizarVehiculoPorTecnico(@PathVariable ("idTecnico") Long idTecnico ,@PathVariable ("idOrden") Long idOrden, @Valid @ModelAttribute Orden orden, BindingResult error, Model model){
+        if (error.hasErrors()) {
+            model.addAttribute("modo","editar");
+            Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
+
+            model.addAttribute("tecnico", tecnico);
+            return "modificarKilometrosPorTecnico";
+        }
+        
+        ordenService.actualizarKilometraje(orden);
+        
+        String redirectUrl = "redirect:/tecnico/vehiculos/" + idTecnico;
+
+        // Redirige a la URL construida
+        return redirectUrl;
     }
 }

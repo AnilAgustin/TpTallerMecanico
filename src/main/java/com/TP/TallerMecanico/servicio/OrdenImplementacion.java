@@ -35,7 +35,6 @@ public class OrdenImplementacion implements IOrdenService {
     }
 
 
-
     @Override
     @Transactional(readOnly = true)
     //Metodo para listar todos los ordenes activos
@@ -132,5 +131,20 @@ public class OrdenImplementacion implements IOrdenService {
         }
 
         return new ArrayList<>();
+    }
+
+    @Override
+    @Transactional   
+    public void actualizarKilometraje(Orden orden){
+        Long ordenId = orden.getIdOrden();
+
+        Orden ordenViejo = ordenDao.findByIdOrdenAndEstadoTrue(ordenId);
+
+        String kilometrajeNuevo = orden.getKilometros();
+        String kilometrajeViejo = ordenViejo.getKilometros();
+
+        if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
+            ordenViejo.setKilometros(kilometrajeNuevo);
+        }
     }
 }

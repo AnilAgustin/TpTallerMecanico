@@ -30,6 +30,10 @@ public class Orden implements Serializable {
 
     private LocalDate fechaDocumento;
 
+    @NotEmpty(message = "El kilometraje no debe estar vacio")
+    @Pattern(regexp = "^[0-9]{1,8}$", message = "Debe ser un número de 1 a 8 dígitos.")
+    private String kilometros;
+
     @OneToMany(mappedBy = "orden")
     private List<DetalleOrden> detallesOrden;
 
@@ -55,7 +59,9 @@ public class Orden implements Serializable {
     public int calcularTotal(){
         int total = 0;
         for (DetalleOrden detalleOrden : detallesOrden) {
-            total+=detalleOrden.getSubtotal();
+            if (detalleOrden.getEstado()) {
+                total+=detalleOrden.getSubtotal();
+            }
         }
         return total;
     }
