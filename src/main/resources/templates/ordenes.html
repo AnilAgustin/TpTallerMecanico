@@ -52,7 +52,16 @@
                     th:selected="${modelo.idModelo == idModelo}"></option>
             </select>
 
-            <input class="form-control me-2 mt-3" type="date" name="fechaDocumento" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaDocumento}" />
+            <div class="date-input-container">
+                <input class="form-control me-2 mt-3" type="date" name="fechaDesdeDocumento" aria-label="Search" th:value="${fechaDesdeDocumento}" />
+                <span class="date-input-label fw-bold">Desde</span>
+            </div>
+            
+            <div class="date-input-container">
+                <input class="form-control me-2 mt-3" type="date" name="fechaHastaDocumento" aria-label="Search" th:value="${fechaHastaDocumento}" />
+                <span class="date-input-label fw-bold">Hasta</span>
+            </div>
+            
             <input type="submit" class="btn btn-success me-2 mt-3" value="Buscar">
         </form>
         

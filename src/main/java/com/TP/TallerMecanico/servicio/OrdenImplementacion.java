@@ -77,61 +77,12 @@ public class OrdenImplementacion implements IOrdenService {
         ordenDao.marcarComoActivo(orden.getIdOrden());
     }
 
-    @Override
-    @Transactional
-    public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero, LocalDate fechaDocumento) {
-        if (marcaId != -1 && modeloId != -1 && numero != null && fechaDocumento != null) {
-            // Búsqueda para marca, modelo, número y fecha
-            return ordenDao.filtrarOrdenPorMarcaYModeloYNumeroYFechaDocumento(marcaId, modeloId, numero, fechaDocumento);
-        } else if (marcaId != -1 && modeloId != -1 && numero != null && fechaDocumento == null) {
-            // Búsqueda para marca, modelo y número
-            return ordenDao.filtrarOrdenPorMarcaYModeloYNumero(marcaId, modeloId, numero);
-        } else if (marcaId != -1 && modeloId != -1 && numero == null && fechaDocumento != null) {
-            // Búsqueda para marca, modelo y fecha
-            return ordenDao.filtrarOrdenPorMarcaYModeloYFechaDocumento(marcaId, modeloId, fechaDocumento);
-        } else if (marcaId != -1 && modeloId == -1 && numero != null && fechaDocumento != null) {
-            // Búsqueda para marca, número y fecha
-            return ordenDao.filtrarOrdenPorMarcaYNumeroYFechaDocumento(marcaId, numero, fechaDocumento);
-        } else if (marcaId == -1 && modeloId != -1 && numero != null && fechaDocumento != null) {
-            // Búsqueda para modelo, número y fecha
-            return ordenDao.filtrarOrdenPorModeloYNumeroYFechaDocumento(modeloId, numero, fechaDocumento);
-        } else if (marcaId != -1 && modeloId != -1 && numero == null && fechaDocumento == null) {
-            // Búsqueda para marca y modelo
-            return ordenDao.filtrarOrdenPorMarcaYModelo(marcaId, modeloId);
-        } else if (marcaId != -1 && modeloId == -1 && numero != null && fechaDocumento == null) {
-            // Búsqueda para marca y número
-            return ordenDao.filtrarOrdenPorMarcaYNumero(marcaId, numero);
-        } else if (marcaId == -1 && modeloId != -1 && numero != null && fechaDocumento == null) {
-            // Búsqueda para modelo y número
-            return ordenDao.filtrarOrdenPorModeloYNumero(modeloId, numero);
-        } else if (marcaId != -1 && modeloId == -1 && numero == null && fechaDocumento != null) {
-            // Búsqueda para marca y fecha
-            return ordenDao.filtrarOrdenPorMarcaYFechaDocumento(marcaId, fechaDocumento);
-        } else if (modeloId != -1 && numero == null && fechaDocumento != null) {
-            // Búsqueda para modelo y fecha
-            return ordenDao.filtrarOrdenPorModeloYFechaDocumento(modeloId, fechaDocumento);
-        } else if (numero != null && fechaDocumento != null) {
-            // Búsqueda por número y fecha
-            return ordenDao.filtrarOrdenPorNumeroYFechaDocumento(numero, fechaDocumento);
-        } else if (numero != null) {
-            // Búsqueda por número
-            return ordenDao.filtrarOrdenPorNumero(numero);
-        } else if (marcaId != -1) {
-            // Filtrar solo por marca
-            return ordenDao.filtrarOrdenPorMarca(marcaId);
-        } else if (modeloId != -1) {
-            // Filtrar solo por modelo
-            return ordenDao.filtrarOrdenPorModelo(modeloId);
-        } else if (fechaDocumento != null) {
-            // Filtrar por fecha
-            return ordenDao.filtrarOrdenPorFecha(fechaDocumento);
-        } else if (marcaId == -1 && modeloId == -1 && numero == null && fechaDocumento == null) {
-            // Listar todas las órdenes
-            return listarOrdenes();
-        }
-
-        return new ArrayList<>();
-    }
+    // @Override
+    // @Transactional
+    // public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero, LocalDate fechaDocumento) {
+    //     OrdenFiltrador ordenFiltrador = new OrdenFiltrador(ordenDao);
+    //     return ordenFiltrador.filtrarOrdenes(marcaId, modeloId, numero, fechaDocumento);
+    // }
 
     @Override
     @Transactional   

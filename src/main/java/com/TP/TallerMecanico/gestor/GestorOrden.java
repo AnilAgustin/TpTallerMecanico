@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
+import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import com.TP.TallerMecanico.servicio.*;
 
 import jakarta.validation.Valid;
@@ -48,20 +49,25 @@ public class GestorOrden {
 
     @Autowired
     private IModeloService modeloService;
+
+    @Autowired
+    private IOrdenDao ordenDao;
     
     //Listar todos los ordenes cuando la URL sea /ordenes
     @GetMapping("/ordenes")
     public String listarOrdenes( @RequestParam(name = "marca", required = false) Long marcaId, 
                                  @RequestParam(name = "modelo", required = false) Long modeloId,
                                  @RequestParam(name="numero", required = false) Long numero,
-                                 @RequestParam(name="fechaDocumento", required = false) LocalDate fechaDocumento, 
+                                 @RequestParam(name="fechaDesdeDocumento", required = false) LocalDate fechaDesdeDocumento,
+                                 @RequestParam(name="fechaHastaDocumento", required = false) LocalDate fechaHastaDocumento, 
                                  Model model) {
 
         List<Orden> ordenes;
         //var orden = ordenService.listarOrdenes();
         
-        if ((marcaId != null) || (modeloId != null || numero!=null || fechaDocumento!=null)) {
-            ordenes = ordenService.filtrarOrdenes(marcaId,modeloId, numero, fechaDocumento);
+        if ((marcaId != null) || (modeloId != null || numero!=null || fechaDesdeDocumento !=null || fechaHastaDocumento != null)) {
+            OrdenFiltrador ordenFiltrador = new OrdenFiltrador(ordenDao, ordenService);
+            ordenes = ordenFiltrador.filtrarOrdenes(marcaId, modeloId, numero, fechaDesdeDocumento, fechaHastaDocumento);
         }else {
             // Si no se enviaron parámetros de búsqueda, lista todos los vehículos
             ordenes= ordenService.listarOrdenes();
@@ -79,7 +85,8 @@ public class GestorOrden {
         model.addAttribute("idModelo", modeloId);
         model.addAttribute("idMarca", marcaId);
         model.addAttribute("numero", numero);
-        model.addAttribute("fechaDocumento", fechaDocumento);
+        model.addAttribute("fechaDesdeDocumento", fechaDesdeDocumento);
+        model.addAttribute("fechaHastaDocumento", fechaHastaDocumento);
         
         return "ordenes";
     }
