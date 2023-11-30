@@ -1,5 +1,7 @@
 package com.TP.TallerMecanico.interfaz;
 import com.TP.TallerMecanico.entidad.Cliente;
+
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.CrudRepository;
@@ -24,5 +26,12 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
     Cliente findByDniAndEstadoTrue(String dni);
 
+    @Query("SELECT c FROM Cliente c WHERE c.nombre LIKE :nombre% AND c.estado = true")
+    List<Cliente> findByNombreStartingWithAndEstadoTrue(@Param("nombre") String nombre);
+
+
+    @Query("SELECT c FROM Cliente c WHERE c.dni LIKE :dni% AND c.estado = true")
+    List<Cliente> findByDniStartingWithAndEstadoTrue(@Param("dni") String dni);
+    //List<Cliente> findByNombre(String nombre);
 
 }

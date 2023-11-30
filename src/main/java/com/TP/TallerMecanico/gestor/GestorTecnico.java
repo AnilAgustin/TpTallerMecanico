@@ -1,8 +1,17 @@
 package com.TP.TallerMecanico.gestor;
 
+import com.TP.TallerMecanico.entidad.DetalleOrden;
+import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
+import com.TP.TallerMecanico.entidad.Vehiculo;
+import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
+import com.TP.TallerMecanico.servicio.IVehiculoService;
+
 import jakarta.validation.Valid;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GestorTecnico {
@@ -19,11 +29,42 @@ public class GestorTecnico {
     @Autowired
     private ITecnicoService tecnicoService;
 
+    @Autowired
+    private IVehiculoService vehiculoService;
+
+    @Autowired
+    private IOrdenService ordenService;
+
     //Listar todos los tecnicos cuando la URL sea /tecnicos
     @GetMapping("/tecnicos")
-    public String listarTecnicos(Model model) {
-        var tecnico = tecnicoService.listarTecnicos();
-        model.addAttribute("tecnico", tecnico);
+    public String listarTecnicos(@RequestParam(name = "nombre", required = false) String nombre, @RequestParam(name = "apellido", required = false) String apellido,@RequestParam(name="legajo", required = false) Long legajoCliente, Model model) {
+        //var tecnico = tecnicoService.listarTecnicos();
+        List<Tecnico> tecnicos;
+
+        if (nombre!= null) {
+            nombre = nombre.toUpperCase();
+        }
+
+        if (apellido != null) {
+            apellido = apellido.toUpperCase();
+        }
+        
+        String legajo = null;
+        if (legajoCliente!=null) {
+            legajo = Long.toString(legajoCliente);
+        }
+
+
+        if (nombre !=null || apellido != null || legajo != null) {
+            tecnicos = tecnicoService.filtrarTecnicos(nombre, apellido, legajo);
+        }else{
+            tecnicos = tecnicoService.listarTecnicos();
+        }
+
+        model.addAttribute("tecnico", tecnicos);
+        model.addAttribute("nombre", nombre);
+        model.addAttribute("apellido", apellido);
+        model.addAttribute("legajo", legajoCliente);
         return "tecnicos";
     }
 
@@ -74,5 +115,21 @@ public class GestorTecnico {
     public String eliminarTecnico(Tecnico tecnico){
         tecnicoService.eliminar(tecnico);
         return "redirect:/tecnicos";
+    }
+
+    @GetMapping("/tecnico/vehiculos/{idTecnico}")
+    public String detallesOrden(@PathVariable ("idTecnico") Long id, Model model) {
+        Tecnico tecnico = tecnicoService.buscarTecnico(id);
+
+        List<Orden> ordenes = ordenService.listarOrdenesTecnico(tecnico);
+
+        List<Vehiculo> vehiculos = vehiculoService.listarVehiculosPorTecnico(tecnico);
+
+        //List<DetalleOrden> detalles = detallesService.listarDetallesPorOrden(orden);
+        model.addAttribute("tecnico", tecnico );
+        model.addAttribute("vehiculos", vehiculos);
+        model.addAttribute("ordenes", ordenes);
+
+        return "vehiculoPorTecnico";
     }
 }

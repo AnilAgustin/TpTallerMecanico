@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Vehiculo</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+<div class="container mt-4">
+    <div class="col-sm-6">
+        <!--Actualizar-->
+        <div th:if="${modo eq 'editar'}">
+            <form th:action="@{/tecnico/actualizarKilometrosPorTecnico/}+ ${ordenDb.idOrden}" th:object="${orden}" method="POST">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Orden</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="hidden" name="idOrden" th:field="*{idOrden}"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Kilometros</label>
+                            <input class="form-control" type="text" name="kilometrosVehiculo" placeholder="Ingrese el kilometraje del vehiculo" th:field="*{kilometros}" />
+                            <span th:if="${#fields.hasErrors('kilometros')}" th:errors="*{kilometros}"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="hidden" name="estadoOrden" th:field="*{estado}"/>
+                        </div>
+
+                    </div>
+
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success">Actualizar</button>
+                        <a  class="btn btn-danger" th:href="@{/tecnico/vehiculos/} + ${ordenDb.tecnico.idTecnico}">Regresar</a>
+                        
+                    </div>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

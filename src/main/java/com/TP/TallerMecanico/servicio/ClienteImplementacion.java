@@ -3,6 +3,8 @@ package com.TP.TallerMecanico.servicio;
 import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
+
+import java.time.LocalDate;
 import java.util.List;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +30,22 @@ public class ClienteImplementacion implements IClienteService {
 
 
     @Override
+    public List<Cliente> buscarClienteNombre(String nombre){
+        return clienteDao.findByNombreStartingWithAndEstadoTrue(nombre);
+    }
+
+    @Override
+    @Transactional
+    public List<Cliente> buscarClienteDni(String dni){
+        return clienteDao.findByDniStartingWithAndEstadoTrue(dni);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     //Metodo para listar todos los clientes activos
     public List<Cliente> listarClientes() { 
         return clienteDao.findByEstadoTrue();  //Devuelve una lista de clientes en estadoTrue
     }
-
 
     @Override
     @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta 

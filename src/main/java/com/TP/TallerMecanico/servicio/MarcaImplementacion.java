@@ -34,6 +34,11 @@ public class MarcaImplementacion implements IMarcaService {
         return marcaDao.findByEstadoTrue(); //Devuelve una lista de marcas
     }
 
+    @Override
+    @Transactional
+    public List<Marca> buscarMarcaPorNombre(String nombre){
+        return marcaDao.findMarcaByNombreAndEstadoTrue(nombre);
+    }
 
     @Override
     @Transactional  //Anotacion para controlar que las operaciones se ejecuten de manera correcta
@@ -152,5 +157,12 @@ public class MarcaImplementacion implements IMarcaService {
         for (Modelo modelo : marca.getModelos()) {
             modeloService.activarModelo(modelo);
         }
+    }
+
+    @Override
+    @Transactional
+    public Marca obtenerMarcaPorId(Long idMarca){
+        Marca marca = marcaDao.findById(idMarca).orElse(null);
+        return marca;
     }
 }

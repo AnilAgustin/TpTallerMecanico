@@ -36,7 +36,8 @@ public class DetalleOrdenImplementacion implements IDetalleOrdenService {
     @Override
     @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta
     public void guardar(DetalleOrden detalleOrden) {    //Metodo para guardar un nuevo tecnico
-
+        
+        detalleOrden.setSubtotal(detalleOrden.calcularSubtotal());
         Servicio nuevoServicio = detalleOrden.getServicio();
         Orden ordenDetalleOrden = detalleOrden.getOrden();
         DetalleOrden detalleByServicioAndOrden = detalleOrdenDao.findByServicioAndOrden(nuevoServicio, ordenDetalleOrden);

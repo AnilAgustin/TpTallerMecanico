@@ -26,7 +26,13 @@ public class Orden implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrden;
 
-    private LocalDate fecha;
+    private LocalDate fechaRegistro;
+
+    private LocalDate fechaDocumento;
+
+    @NotEmpty(message = "El kilometraje no debe estar vacio")
+    @Pattern(regexp = "^[0-9]{1,8}$", message = "Debe ser un número de 1 a 8 dígitos.")
+    private String kilometros;
 
     @OneToMany(mappedBy = "orden")
     private List<DetalleOrden> detallesOrden;
@@ -48,5 +54,15 @@ public class Orden implements Serializable {
 
     public List<DetalleOrden> getDetallesOrden(){
         return detallesOrden;
+    }
+
+    public int calcularTotal(){
+        int total = 0;
+        for (DetalleOrden detalleOrden : detallesOrden) {
+            if (detalleOrden.getEstado()) {
+                total+=detalleOrden.getSubtotal();
+            }
+        }
+        return total;
     }
 }

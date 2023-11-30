@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Ordens</title>
+    <title>Ordenes</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -31,8 +31,46 @@
 
 <div class="container mt-4">
     <h3>Listado Ordenes</h3>
-    <br>
-    <a th:href="@{/agregarOrden}" class="btn btn-primary">Agregar</a>
+    <div>
+        <form class="d-flex" method="get">
+            <div>
+                <a th:href="@{/agregarOrden}" class="btn btn-primary me-5 mt-3">Agregar</a>
+            </div>
+
+            <input class="form-select me-2 mt-3" type="number" name="numero" placeholder="Ingrese el numero de la orden"
+             aria-label="Search" th:value="${numero}">
+
+            <select class="form-select me-2 mt-3" name="marca" aria-label="Default select example">
+                <option selected value="-1">Seleccione una marca</option>
+                <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}"
+                    th:selected="${marca.idMarca == idMarca}"></option>
+            </select>
+
+            <select class="form-select me-2 mt-3" name="modelo" aria-label="Default select example">
+                <option selected value="-1">Seleccione un modelo</option>
+                <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}"
+                    th:selected="${modelo.idModelo == idModelo}"></option>
+            </select>
+
+            <div class="date-input-container">
+                <input class="form-control me-2 mt-3" type="date" name="fechaDesdeDocumento" aria-label="Search" th:value="${fechaDesdeDocumento}" />
+                <span class="date-input-label fw-bold">Desde</span>
+            </div>
+            
+            <div class="date-input-container">
+                <input class="form-control me-2 mt-3" type="date" name="fechaHastaDocumento" aria-label="Search" th:value="${fechaHastaDocumento}" />
+                <span class="date-input-label fw-bold">Hasta</span>
+            </div>
+            
+            <input type="submit" class="btn btn-success me-2 mt-3" value="Buscar">
+        </form>
+        
+    </div>
+
+
+
+
+
     <br>
     <div th:if="${orden != null and !orden.empty}">
         <table class="table">
@@ -41,14 +79,23 @@
                 <th>Numero</th>
                 <th>Fecha</th>
                 <th>Vehiculo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Kilometraje</th>
                 <th>Tecnico</th>
+                <th>Total</th>
+                <th>Acciones</th>
             </tr>
             </thead>
             <tr th:each="orden :${orden}">
                 <td th:text="${orden.idOrden}">Mostrar Numero</td>
-                <td th:text="${orden.fecha}">Mostrar Fecha</td>
-                <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td>
+                <td th:text="${orden.fechaDocumento}">Mostrar Fecha</td>
+                <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td> 
+                <td th:text="${orden.vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
+                <td th:text="${orden.vehiculo.modelo.nombre}">Mostrar Modelo</td>
+                <td th:text="${orden.kilometros}">Mostrar Kilometraje/td>
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
+                <td th:text="${orden.calcularTotal()}">Calcular Total</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
                     <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
                     <a class="btn btn-success" th:href="@{/ordenes/imagenesOrden/} + ${orden.idOrden}" th:text="Imagenes"/>
@@ -59,7 +106,7 @@
     </div>
     <br/>
     <div th:if="${orden == null or orden.empty}">
-        La lista de ordens esta vacia
+        La lista de ordenes esta vacia
     </div>
 </div>
 </body>

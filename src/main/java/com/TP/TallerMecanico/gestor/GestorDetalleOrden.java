@@ -28,6 +28,7 @@ public class GestorDetalleOrden {
 
     @Autowired
     private IOrdenService ordenService;
+    
     @Autowired
     private IDetalleOrdenService detalleOrdenService; // Inyeccion de la clase (detalleOrdenImplementacion) a la interfaz detalleOrdenService
 
@@ -51,14 +52,34 @@ public class GestorDetalleOrden {
     @PostMapping("/ordenes/guardarDetalleOrden/{idOrden}")
     public String guardarDetalleOrden(@PathVariable ("idOrden") Long id, @Valid DetalleOrden detalleOrden, BindingResult error, Model model) {
         if (error.hasErrors()) {
+            //Esto es para pode trabajar con la orden dentro del form del detallesOrden
+            Orden orden = ordenService.buscarOrden(id);
+            model.addAttribute("orden", orden);
+
             List<Servicio> servicios = servicioService.listarServicios(); // Obtener marcas activas
             model.addAttribute("servicios", servicios);
+
+            var servicioElegido = detalleOrden.getServicio();
+
+            String precioStr = servicioElegido.getPrecio();
+            float precio = Float.parseFloat(precioStr);
+
+            if (precio % 1 == 0) {
+                // La parte decimal es igual a cero, por lo que convertir a int
+                int precioEntero = (int) precio;
+                model.addAttribute("precioServicioElegido", precioEntero);
+            } else {
+                // La parte decimal no es cero, mantenerlo como float
+                model.addAttribute("precioServicioElegido", precio);
+            }
+
             model.addAttribute("modo", "nuevo");
             return "agregarModificarDetallesOrden";
         }
         // Obtén el id de la orden después de guardar el detalle, asumiendo que puedes obtenerlo desde detalleOrden
         var orden = ordenService.buscarOrden(id);
         detalleOrden.setOrden(orden);
+
         //Se llama a la logica guardar definida en IDetalleOrdenService, pero en realidad es DetalleOrdenImplementacion
         detalleOrdenService.guardar(detalleOrden);
 

@@ -12,4 +12,8 @@ public interface IModeloService {
     public Modelo buscarModelo(Modelo modelo);
     public void activarModelo(Modelo modelo);
 
+    public List<Modelo> filtrarModelos(Long marcaId, String nombre);
+
+    public Modelo obtenerModeloPorId(Long modeloId);
+
 }

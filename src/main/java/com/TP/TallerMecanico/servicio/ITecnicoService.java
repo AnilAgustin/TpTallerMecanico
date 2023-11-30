@@ -10,4 +10,6 @@ public interface ITecnicoService {
     public void eliminar(Tecnico tecnico);
     public Tecnico buscarTecnico(Long idTecnico);
     public void activarTecnico(Tecnico tecnico);
+
+    public List<Tecnico> filtrarTecnicos(String nombre, String apellido, String legajo);
 }

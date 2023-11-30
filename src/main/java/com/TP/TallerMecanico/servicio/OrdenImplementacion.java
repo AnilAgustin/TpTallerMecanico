@@ -1,9 +1,13 @@
 package com.TP.TallerMecanico.servicio;
 
 import java.time.LocalDate;
-import com.TP.TallerMecanico.entidad.Orden;
-import com.TP.TallerMecanico.interfaz.IOrdenDao;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.entidad.Tecnico;
+import com.TP.TallerMecanico.interfaz.IOrdenDao;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +22,17 @@ public class OrdenImplementacion implements IOrdenService {
     private IOrdenDao ordenDao;
 
     //A continuacion todos los metodos de la clase
+    @Override
+    @Transactional(readOnly = true)
+    public List<Orden> listarOrdenesFecha(LocalDate fechaOrden){
+        return ordenDao.findByFechaRegistro(fechaOrden);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Orden> listarOrdenesTecnico(Tecnico tecnico){
+        return ordenDao.findByTecnicoAndEstadoTrue(tecnico);
+    }
 
 
     @Override
@@ -30,19 +45,16 @@ public class OrdenImplementacion implements IOrdenService {
     @Override
     @Transactional
     public void guardar(Orden orden) {
-        orden.setFecha(LocalDate.now());
+        orden.setFechaRegistro(LocalDate.now());
         ordenDao.save(orden);
     }
 
     @Override
     @Transactional
     public void actualizar(Orden orden){
-        orden.setFecha(LocalDate.now());
+        orden.setFechaRegistro(LocalDate.now());
         ordenDao.save(orden);
     }
-
-
-
 
     @Override
     @Transactional
@@ -63,5 +75,27 @@ public class OrdenImplementacion implements IOrdenService {
 
         //Llamamos al metodo marcarComoActivo del ordenDao para cambiar el estado del orden a true
         ordenDao.marcarComoActivo(orden.getIdOrden());
+    }
+
+    // @Override
+    // @Transactional
+    // public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero, LocalDate fechaDocumento) {
+    //     OrdenFiltrador ordenFiltrador = new OrdenFiltrador(ordenDao);
+    //     return ordenFiltrador.filtrarOrdenes(marcaId, modeloId, numero, fechaDocumento);
+    // }
+
+    @Override
+    @Transactional   
+    public void actualizarKilometraje(Orden orden){
+        Long ordenId = orden.getIdOrden();
+
+        Orden ordenViejo = ordenDao.findByIdOrdenAndEstadoTrue(ordenId);
+
+        String kilometrajeNuevo = orden.getKilometros();
+        String kilometrajeViejo = ordenViejo.getKilometros();
+
+        if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo )) {
+            ordenViejo.setKilometros(kilometrajeNuevo);
+        }
     }
 }

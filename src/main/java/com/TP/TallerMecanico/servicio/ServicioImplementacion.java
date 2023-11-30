@@ -16,7 +16,11 @@ public class ServicioImplementacion implements IServicioService {
     @Autowired
     private IServicioDao servicioDao;
 
-
+    @Override
+    @Transactional
+    public List<Servicio> filtrarServicios(String nombre){
+        return servicioDao.filtrarPorNombreYEstadoTrue(nombre);
+    }
 
 
     @Override

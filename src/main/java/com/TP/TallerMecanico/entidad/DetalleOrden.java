@@ -27,6 +27,8 @@ public class DetalleOrden implements Serializable {
     private String cantidad;
 
     private int subtotal;
+
+    private int precioFinalServicio;
     
     @ManyToOne
     @JoinColumn(name = "servicio_id")
@@ -38,7 +40,7 @@ public class DetalleOrden implements Serializable {
 
     public int calcularSubtotal(){
         int cantidad = Integer.parseInt(this.cantidad);
-        return (cantidad * servicio.getPrecioEntero());
+        return (cantidad * precioFinalServicio);
     }
 
 

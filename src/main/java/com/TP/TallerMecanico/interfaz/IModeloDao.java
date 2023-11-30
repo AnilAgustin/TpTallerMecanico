@@ -33,4 +33,16 @@ public interface IModeloDao extends CrudRepository<Modelo, Long>{
 
     List<Modelo> findByMarcaAndEstadoTrue(Marca marca);
 
+    @Query("SELECT m FROM Modelo m WHERE m.marca.id = :marcaId AND m.nombre LIKE :nombre% AND m.estado = true")
+    List<Modelo> filtrarModeloPorMarcaYNombre(@Param("marcaId") Long marcaId, @Param("nombre") String nombre);
+
+    @Query("SELECT m FROM Modelo m WHERE m.marca.id = :marcaId AND m.estado = true")
+    List<Modelo> filtrarModeloPorMarca(@Param("marcaId") Long marcaId);
+
+    @Query("SELECT m FROM Modelo m WHERE m.nombre LIKE :nombre% AND m.estado = true")
+    List<Modelo> filtrarModeloPorNombre(@Param("nombre") String nombre);
+
+    
+    
+
 }

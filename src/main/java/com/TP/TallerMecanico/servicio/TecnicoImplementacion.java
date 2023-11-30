@@ -2,6 +2,8 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.interfaz.ITecnicoDao;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,36 @@ public class TecnicoImplementacion implements ITecnicoService {
         return tecnicoDao.findByEstadoTrue(); //Devuelve una lista de tecnicos 
     }
 
+
+    @Override
+    @Transactional
+    public List<Tecnico> filtrarTecnicos(String nombre, String apellido, String legajo){
+
+        if (nombre != null && apellido != null && legajo != null) {
+            // Búsqueda por nombre, apellido y legajo
+            return tecnicoDao.filtrarTecnicoPorNombreYApellidoYLegajo(nombre, apellido, legajo);
+        } else if (nombre != null && apellido != null) {
+            // Búsqueda por nombre y apellido
+            return tecnicoDao.filtrarTecnicoPorNombreYApellido(nombre, apellido);
+        } else if (nombre != null && legajo != null) {
+            // Búsqueda por nombre y legajo
+            return tecnicoDao.filtrarTecnicoPorNombreYLegajo(nombre, legajo);
+        } else if (apellido != null && legajo != null) {
+            // Búsqueda por apellido y legajo
+            return tecnicoDao.filtrarTecnicoPorApellidoYLegajo(apellido, legajo);
+        } else if (nombre != null) {
+            // Búsqueda por nombre
+            return tecnicoDao.filtrarTecnicoPorNombre(nombre);
+        } else if (apellido != null) {
+            // Búsqueda por apellido
+            return tecnicoDao.filtrarTecnicoPorApellido(apellido);
+        } else if (legajo != null) {
+            // Búsqueda por legajo
+            return tecnicoDao.filtrarTecnicoPorLegajo(legajo);
+        }
+
+        return new ArrayList<>(); 
+    }
 
     @Override
     @Transactional //Anotacion para controlar que las operaciones se ejecuten de manera correcta
