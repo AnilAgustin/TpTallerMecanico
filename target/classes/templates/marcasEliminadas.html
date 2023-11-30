@@ -38,7 +38,7 @@
                     </div>
                 </form>
 
-                <form class="d-flex me-4" role="search" th:action="@{/buscarMarcas}" th:object="${marca}" method="get">
+                <form class="d-flex me-4" role="search" th:object="${marca}" method="get">
                     <input class="form-control me-2 mt-3" type="search" name="nombre" placeholder="Ingrese el nombre de la marca que desea buscar"
                         aria-label="Search" th:value="${nombre}">
                         

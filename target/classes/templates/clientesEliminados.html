@@ -29,29 +29,16 @@
 </header>
 
 <div class="container mt-4">
-    <h3>Listado Clientes</h3>
+    <h3>Listado clientes eliminados</h3>
 
         <form class="d-flex" method="get">
             <div>
-                <a th:href="@{/agregarCliente}" class="btn btn-primary me-5 mt-3">Agregar</a>
-                <a th:href="@{/clientesEliminados}" class="btn btn-warning me-5 mt-3">Ver eliminados</a>
+                <a th:href="@{/clientes}" class="btn btn-warning me-5 mt-3">Volver</a>
             </div>
         </form>
 
-        <form class="d-flex me-4" role="search" th:action="@{/buscarClientes}" th:object="${cliente}" method="get">
+        <form class="d-flex me-4" role="search"  th:object="${cliente}" method="get">
             <input class="form-control me-2 mt-3" type="number" name="dni" placeholder="Ingrese el dni del cliente" aria-label="Search" th:value="${dni}">
-            <input class="form-control me-2 mt-3" type="text" name="nombre" placeholder="Ingrese el nombre del cliente" aria-label="Search" th:value="${nombre}">
-            
-            <div class="date-input-container">
-                <input class="form-control me-2 mt-3" type="date" name="fechaDesde" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaDesde}" />
-                <span class="date-input-label fw-bold">Desde</span>
-            </div>
-
-            <div class="date-input-container">
-                <input class="form-control me-2 mt-3" type="date" name="fechaHasta" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaHasta}" />
-                <span class="date-input-label fw-bold">Hasta</span>
-            </div>
-
 
             <button class="btn btn-success mt-3" type="submit">Buscar</button>
         </form>
@@ -90,8 +77,7 @@
                     <span th:if="${cliente.telefono != null and cliente.telefono != ''}" th:text="${cliente.telefono}">Mostrar Telefono</span>
                     <span th:unless="${cliente.telefono != null and cliente.telefono != ''}">(No Ingresado)</span>
                 </td>
-                <td> <a class="btn btn-warning" th:href="@{/modificarCliente/} + ${cliente.idCliente}" th:text="Editar"/>
-                    <a class="btn btn-danger" th:href="@{/eliminarCliente/} + ${cliente.idCliente}" th:text="Eliminar"/></td>
+                <td> <a class="btn btn-warning" th:href="@{/recuperarCliente/} + ${cliente.idCliente}" th:text="Recuperar"/></td>
             </tr>
         </table>
     </div>

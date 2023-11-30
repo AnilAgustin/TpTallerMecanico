@@ -60,9 +60,17 @@ public class GestorMarca {
     }
 
     @GetMapping("/marcasEliminadas")
-    public String marcasEliminadas(Model model){
+    public String marcasEliminadas(@RequestParam(name = "nombre", required = false) String nombre, Model model){
         List<Marca> marcas;
-        marcas = marcaDao.findByEstadoFalse();
+
+        if (nombre != null) {
+            nombre = nombre.toUpperCase();
+            marcas = marcaDao.findMarcaByNombreAndEstadoFalse(nombre);
+        }else{
+            marcas = marcaDao.findByEstadoFalse();
+        }
+
+        
         model.addAttribute("marca", marcas);
         
         return "marcasEliminadas";

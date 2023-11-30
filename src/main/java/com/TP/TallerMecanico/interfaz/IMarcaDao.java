@@ -31,5 +31,8 @@ public interface IMarcaDao extends CrudRepository<Marca, Long>{
 
     @Query("SELECT c FROM Marca c WHERE c.nombre LIKE :nombre% AND c.estado = true")
     List<Marca> findMarcaByNombreAndEstadoTrue(@Param("nombre") String nombre);
+
+    @Query("SELECT c FROM Marca c WHERE c.nombre LIKE :nombre% AND c.estado = false")
+    List<Marca> findMarcaByNombreAndEstadoFalse(@Param("nombre") String nombre);
     
 }

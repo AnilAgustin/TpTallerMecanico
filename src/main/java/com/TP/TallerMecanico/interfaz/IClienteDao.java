@@ -15,6 +15,7 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
     void marcarComoEliminado(@Param("idCliente") Long idCliente);
 
     List<Cliente> findByEstadoTrue();
+    List<Cliente> findByEstadoFalse();
 
     @Modifying
     @Query("UPDATE Cliente m SET m.estado = true WHERE m.idCliente = :idCliente")
@@ -26,12 +27,18 @@ public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
     Cliente findByDniAndEstadoTrue(String dni);
 
+
     @Query("SELECT c FROM Cliente c WHERE c.nombre LIKE :nombre% AND c.estado = true")
     List<Cliente> findByNombreStartingWithAndEstadoTrue(@Param("nombre") String nombre);
 
 
     @Query("SELECT c FROM Cliente c WHERE c.dni LIKE :dni% AND c.estado = true")
     List<Cliente> findByDniStartingWithAndEstadoTrue(@Param("dni") String dni);
+
+    @Query("SELECT c FROM Cliente c WHERE c.dni LIKE :dni% AND c.estado = false")
+    List<Cliente> findByDniStartingWithAndEstadoFalse(@Param("dni") String dni);
+
+
     //List<Cliente> findByNombre(String nombre);
 
 }
