@@ -32,10 +32,14 @@
         <div class="container mt-4">
             <h3>Listado Marcas</h3>
             <div>
-                <form class="d-flex me-4" role="search" th:action="@{/buscarMarcas}" th:object="${marca}" method="get">
+                <form class="d-flex" method="get">
                     <div>
                         <a th:href="@{/agregarMarca}" class="btn btn-primary me-5 mt-3">Agregar</a>
+                        <a th:href="@{/marcasEliminadas}" class="btn btn-warning me-5 mt-3">Ver eliminadas</a>
                     </div>
+                </form>
+
+                <form class="d-flex me-4" role="search" th:action="@{/buscarMarcas}" th:object="${marca}" method="get">
                     <input class="form-control me-2 mt-3" type="search" name="nombre" placeholder="Ingrese el nombre de la marca que desea buscar"
                         aria-label="Search" th:value="${nombre}">
                         

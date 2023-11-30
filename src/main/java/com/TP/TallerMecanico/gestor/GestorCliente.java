@@ -46,7 +46,8 @@ public class GestorCliente {
 
     @GetMapping("/buscarClientes")
     public String buscarNombreFechaCliente(@RequestParam(name = "nombre", required = false) String nombre,
-                                        @RequestParam(name = "fechaUltimaVisita", required = false) LocalDate fechaUltimaVisita,
+                                        @RequestParam(name = "fechaDesde", required = false) LocalDate fechaDesde,
+                                         @RequestParam(name = "fechaHasta", required = false) LocalDate fechaHasta,
                                         @RequestParam(name = "dni", required = false) Long dniNumero,
                                         Model model) {
     
@@ -63,10 +64,10 @@ public class GestorCliente {
             dni = Long.toString(dniNumero);
         }
     
-        if (nombre != null && !nombre.isEmpty() && dni != null && fechaUltimaVisita != null) {
-            // Si se proporciona tanto un nombre como una fecha, puedes buscar los clientes
+        if (nombre != null && !nombre.isEmpty() && dni != null && (fechaDesde != null || fechaHasta != null)) {
+            // Si se proporciona tanto un nombre como una fechaDesde y una fechaHasta, se buscan los clientes
             // con ese nombre que tengan órdenes en la fecha especificada.
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
     
             for (Orden orden : ordenes) {
                 if (orden.getVehiculo().getCliente().getNombre().startsWith(nombre)) {
@@ -77,8 +78,8 @@ public class GestorCliente {
                 }
             }
     
-        }else if (nombre != null && !nombre.isEmpty() && dni == null && fechaUltimaVisita != null) {
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        }else if (nombre != null && !nombre.isEmpty() && dni == null && (fechaDesde != null || fechaHasta != null)) {
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
     
             for (Orden orden : ordenes) {
                 if (orden.getVehiculo().getCliente().getNombre().startsWith(nombre)) {
@@ -86,23 +87,22 @@ public class GestorCliente {
                 }
             }
             
-        }else if (nombre.isEmpty()  && dni != null && fechaUltimaVisita != null) {
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        }else if (nombre.isEmpty()  && dni != null && (fechaDesde != null || fechaHasta != null)) {
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
 
             for (Orden orden : ordenes) {
                 if (orden.getVehiculo().getCliente().getDni().startsWith(dni)) {
                     clientesSet.add(orden.getVehiculo().getCliente());
                 }
             }
-        }else if (fechaUltimaVisita != null) {
+        }else if ((fechaDesde != null || fechaHasta != null)) {
             // Si solo se proporciona una fecha, puedes buscar los clientes que tienen órdenes
             // en la fecha especificada.
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
     
             for (Orden orden : ordenes) {
                 clientesSet.add(orden.getVehiculo().getCliente());
             }
-    
         } else if (nombre != null && !nombre.isEmpty()) {
             // Si solo se proporciona un nombre, puedes buscar los clientes por ese nombre.
             clientesSet.addAll(clienteService.buscarClienteNombre(nombre));
@@ -118,7 +118,8 @@ public class GestorCliente {
         model.addAttribute("cliente", clientes);
         model.addAttribute("nombre", nombre);
         model.addAttribute("dni", dni);
-        model.addAttribute("fechaUltimaVisita", fechaUltimaVisita);
+        model.addAttribute("fechaDesde", fechaDesde);
+        model.addAttribute("fechaHasta", fechaHasta);
         return "clientes";
     }
 

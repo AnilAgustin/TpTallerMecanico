@@ -24,8 +24,14 @@ public class OrdenImplementacion implements IOrdenService {
     //A continuacion todos los metodos de la clase
     @Override
     @Transactional(readOnly = true)
-    public List<Orden> listarOrdenesFecha(LocalDate fechaOrden){
-        return ordenDao.findByFechaRegistro(fechaOrden);
+    public List<Orden> listarOrdenesFecha(LocalDate fechaDesde, LocalDate fechaHasta){
+        if (fechaDesde==null) {
+            return ordenDao.filtrarOrdenPorFechaHasta(fechaHasta);
+        }else if (fechaHasta == null) {
+            return ordenDao.filtrarOrdenPorFechaDesde(fechaDesde);
+        }else{
+            return ordenDao.filtrarOrdenPorFechaDesdeYFechaHasta(fechaDesde, fechaHasta);
+        }
     }
 
     @Override
