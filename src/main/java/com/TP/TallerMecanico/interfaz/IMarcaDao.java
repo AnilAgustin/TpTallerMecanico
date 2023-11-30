@@ -14,6 +14,8 @@ public interface IMarcaDao extends CrudRepository<Marca, Long>{
     
     List<Marca> findByEstadoTrue(); //arma una consulta SQL personalizada con estado
 
+    List<Marca> findByEstadoFalse(); 
+
     @Modifying
     @Query("UPDATE Marca m SET m.estado = true WHERE m.idMarca = :idMarca")  //Update a estado true
     void marcarComoActivo(@Param("idMarca") Long idMarca);
@@ -23,6 +25,8 @@ public interface IMarcaDao extends CrudRepository<Marca, Long>{
     Marca findByNombreAndEstadoTrue(String nombreMarca);
 
     Marca findByNombreAndEstadoFalse(String nuevoNombre);
+
+    Marca findByIdMarca(Long idMarca);
 
 
     @Query("SELECT c FROM Marca c WHERE c.nombre LIKE :nombre% AND c.estado = true")
