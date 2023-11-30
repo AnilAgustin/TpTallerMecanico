@@ -27,6 +27,10 @@
                                 <label style="font-weight: bold;">Nombre</label>
                                 <input class="form-control" type="text" name="nombreMarca" th:field="*{nombre}" />
                                 <span th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></span>
+
+                                <label style="font-weight: bold;">Impuesto</label>
+                                <input class="form-control" type="number" step="0.01" name="valorImpuesto" th:field="*{impuesto}" />
+                                <span th:if="${#fields.hasErrors('impuesto')}" th:errors="*{impuesto}"></span>
                             </div>
 
                             <div class="form-group">
@@ -40,7 +44,7 @@
                         </div>
                     </div>
                 </form>
-            </div> <!-- Nuevo form para guardar-->
+            </div> <!-- Nuevo form para editar-->
             <div th:if="${modo eq 'editar'}">
                 <form th:action="@{/actualizarMarca}" th:object=${marca} method="POST">
                     <div class="card">
@@ -60,6 +64,12 @@
                             </div>
 
                             <div class="form-group">
+                                <label style="font-weight: bold;">Impuesto</label>
+                                <input class="form-control" type="number" step="0.01" name="valorImpuesto" th:field="*{impuesto}" />
+                                <span th:if="${#fields.hasErrors('impuesto')}" th:errors="*{impuesto}"></span>
+                            </div>
+
+                            <div class="form-group">
                                 <input type="hidden" name="estadoMarca" th:field="*{estado}" />
                             </div>
                         </div>
@@ -70,7 +80,7 @@
                         </div>
                     </div>
                 </form>
-            </div> <!-- Nuevo form para actualizar-->
+            </div> 
         </div>
     </div>
 </body>

@@ -49,12 +49,14 @@
                     <thead>
                         <tr>
                             <th>Nombre</th>
+                            <th>Impuesto</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
 
                     <tr th:each="marca :${marca}">
                         <td th:text="${marca.nombre}">Mostrar Nombre</td>
+                        <td th:text="${marca.impuesto}">Mostrar Impuesto</td>
                         <td> <a class="btn btn-warning" th:href="@{/modificarMarca/} + ${marca.idMarca}" th:text="Editar"/>
                             <a class="btn btn-danger" th:href="@{/eliminarMarca/} + ${marca.idMarca}" th:text="Eliminar"/></td>
                     </tr>
