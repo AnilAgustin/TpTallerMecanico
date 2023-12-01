@@ -121,13 +121,22 @@
                             <input class="form-control" type="text" name="kilometrosVehiculo" placeholder="Ingrese el kilometraje del vehiculo" th:field="*{kilometros}" />
                             <span th:if="${#fields.hasErrors('kilometros')}" th:errors="*{kilometros}"></span>
                         </div>
-                        
+
                         <div class="form-group">
                             <label style="font-weight: bold;">Tecnico</label>
 
                             <select class="form-control" id="tecnico" name="tecnico" required>
                                 <option value="" disabled selected>Selecciona un Tecnico</option>
                                 <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}+' - Legajo: '+${tecnico.legajo}" th:selected="${orden.tecnico != null and tecnico.idTecnico == orden.tecnico.idTecnico}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label style="font-weight: bold;">Estado Actual</label>
+
+                            <select class="form-control" id="estadoActual" name="estadoActual" required>
+                                <option value="" disabled selected>Selecciona un Estado</option>
+                                <option th:each="estadoActual : ${estadosActuales}" th:value="${estadoActual.idEstado}" th:text="${estadoActual.nombre}" th:selected="${orden.estadoActual != null and estadoActual.idEstado == orden.estadoActual.idEstado}"></option>
                             </select>
                         </div>
 

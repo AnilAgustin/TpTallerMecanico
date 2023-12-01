@@ -42,6 +42,9 @@ public class GestorOrden {
     private ITecnicoService tecnicoService;
 
     @Autowired
+    private IEstadoService estadoService;
+
+    @Autowired
     private IClienteService clienteService;
 
     @Autowired
@@ -58,6 +61,7 @@ public class GestorOrden {
     public String listarOrdenes( @RequestParam(name = "marca", required = false) Long marcaId, 
                                  @RequestParam(name = "modelo", required = false) Long modeloId,
                                  @RequestParam(name="numero", required = false) Long numero,
+                                 @RequestParam(name="estado", required = false) Long estado,
                                  @RequestParam(name="fechaDesdeDocumento", required = false) LocalDate fechaDesdeDocumento,
                                  @RequestParam(name="fechaHastaDocumento", required = false) LocalDate fechaHastaDocumento, 
                                  Model model) {
@@ -69,17 +73,19 @@ public class GestorOrden {
             OrdenFiltrador ordenFiltrador = new OrdenFiltrador(ordenDao, ordenService);
             ordenes = ordenFiltrador.filtrarOrdenes(marcaId, modeloId, numero, fechaDesdeDocumento, fechaHastaDocumento);
         }else {
-            // Si no se enviaron parámetros de búsqueda, lista todos los vehículos
+            // Si no se enviaron parámetros de búsqueda, lista todas las ordenes
             ordenes= ordenService.listarOrdenes();
         }
 
         //Lógica para mostrar todos 
         List<Marca> marcas = marcaService.listarMarcas();
         List<Modelo> modelos = modeloService.listarModelos();
+        List<Estado> estadosActuales = estadoService.listarEstados();
 
         model.addAttribute("orden", ordenes);
         model.addAttribute("marcas", marcas);
         model.addAttribute("modelos", modelos);
+        model.addAttribute("estadosActuales", estadosActuales);
 
         //Lógica para mostrar los filtros seleccionados
         model.addAttribute("idModelo", modeloId);
@@ -95,8 +101,13 @@ public class GestorOrden {
     @GetMapping("/agregarOrden")
     public String agregarOrden(Model model){
         var orden = new Orden();
+
         List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
         model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+        List<Estado> estadosActuales = estadoService.listarEstados(); // Obtener estados disponibles
+        model.addAttribute("estadosActuales", estadosActuales); // Agregar la lista de estados a la orden
+
         List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
         model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
         model.addAttribute("orden", orden);
@@ -111,6 +122,9 @@ public class GestorOrden {
             model.addAttribute("modo", "nuevo");
             List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
             model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+            List<Estado> estadosActuales = estadoService.listarEstados(); // Obtener estados disponibles
+            model.addAttribute("estadosActuales", estadosActuales); // Agregar la lista de estados a la orden
 
             List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
             model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
@@ -127,6 +141,9 @@ public class GestorOrden {
             model.addAttribute("modo", "nuevo");
             List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
             model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+            List<Estado> estadosActuales = estadoService.listarEstados(); // Obtener estados disponibles
+            model.addAttribute("estadosActuales", estadosActuales); // Agregar la lista de estados a la orden
 
             List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
             model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
@@ -150,7 +167,7 @@ public class GestorOrden {
 
     //Permite actualizar un cliente cuando la solicitud POST sea actualizarOrden
     @PostMapping("/actualizarOrden")
-    public String actualizarVehiculo(@Valid @ModelAttribute Orden orden, BindingResult error, Model model) {
+    public String actualizarOrden(@Valid @ModelAttribute Orden orden, BindingResult error, Model model) {
         if (error.hasErrors()) {
             model.addAttribute("modo","editar");
 
@@ -159,6 +176,9 @@ public class GestorOrden {
 
             List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
             model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+            List<Estado> estadosActuales = estadoService.listarEstados(); // Obtener estados disponibles
+            model.addAttribute("estadosActuales", estadosActuales); // Agregar la lista de estados a la orden
 
             List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
             model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
@@ -179,12 +199,16 @@ public class GestorOrden {
 
             List<Vehiculo> vehiculos = vehiculoService.listarVehiculos();                  // Obtener vehiculops activas
             model.addAttribute("vehiculos", vehiculos);                      // Agregar la lista de vehiculos a la orden
+
+            List<Estado> estadosActuales = estadoService.listarEstados(); // Obtener estados disponibles
+            model.addAttribute("estadosActuales", estadosActuales); // Agregar la lista de estados a la orden
+
             List<Tecnico> tecnicos = tecnicoService.listarTecnicos();                      // Obtener tecnicos
             model.addAttribute("tecnicos", tecnicos);                        // Agregar la lista de tecnicos a la orden
             return "agregarModificarOrden";
         }
 
-
+        System.out.println(orden.getEstadoActual());
         ordenService.actualizar(orden);
         return "redirect:/ordenes";
     }
@@ -199,6 +223,9 @@ public class GestorOrden {
 
         List<Vehiculo> vehiculos = vehiculoService.listarVehiculos(); // Obtener vehiculops activas
         model.addAttribute("vehiculos", vehiculos); // Agregar la lista de vehiculos a la orden
+
+        List<Estado> estadosActuales = estadoService.listarEstados(); // Obtener estados disponibles
+        model.addAttribute("estadosActuales", estadosActuales); // Agregar la lista de estados a la orden
 
         List<Tecnico> tecnicos = tecnicoService.listarTecnicos(); // Obtener tecnicos
         model.addAttribute("tecnicos", tecnicos); // Agregar la lista de tecnicos a la orden
@@ -239,6 +266,9 @@ public class GestorOrden {
     public String mostrarFormularioEditarTecnico(@PathVariable ("idVehiculo") Long idVehiculo, @PathVariable ("idTecnico") Long idTecnico, @PathVariable ("idOrden") Long idOrden, Model model) {
         var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
         Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
+
+
+
         Orden orden = ordenService.buscarOrden(idOrden);
         Orden ordenDb = ordenService.buscarOrden(idOrden);
 

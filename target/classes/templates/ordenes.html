@@ -77,6 +77,7 @@
             <thead>
             <tr>
                 <th>Numero</th>
+                <th>Estado</th>
                 <th>Fecha</th>
                 <th>Vehiculo</th>
                 <th>Marca</th>
@@ -89,6 +90,7 @@
             </thead>
             <tr th:each="orden :${orden}">
                 <td th:text="${orden.idOrden}">Mostrar Numero</td>
+                <td th:text="${orden.estadoActual?.nombre}">Mostrar Estado</td>
                 <td th:text="${orden.fechaDocumento}">Mostrar Fecha</td>
                 <td th:text="${orden.vehiculo.patente}">Mostrar Vehiculo</td> 
                 <td th:text="${orden.vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
@@ -99,7 +101,9 @@
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
                     <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
                     <a class="btn btn-success" th:href="@{/ordenes/imagenesOrden/} + ${orden.idOrden}" th:text="Imagenes"/>
-                    <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/></td>
+                    <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/>
+                    <a class="btn btn-dark" th:href="@{/facturarOrden/} + ${orden.idOrden}" th:text="Facturar"/></td></td>
+
 
             </tr>
         </table>

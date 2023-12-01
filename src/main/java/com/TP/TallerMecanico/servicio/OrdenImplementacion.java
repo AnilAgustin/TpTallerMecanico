@@ -4,9 +4,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.TP.TallerMecanico.entidad.Estado;
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
+import com.TP.TallerMecanico.interfaz.IEstadoDao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,11 @@ public class OrdenImplementacion implements IOrdenService {
 
     @Autowired
     private IOrdenDao ordenDao;
+
+    @Autowired
+    private IEstadoDao estadoDao;
+    @Autowired
+    private EstadoImplementacion estadoImplementacion;
 
     //A continuacion todos los metodos de la clase
     @Override
@@ -46,6 +53,17 @@ public class OrdenImplementacion implements IOrdenService {
     @Transactional
     public void guardar(Orden orden) {
         orden.setFechaRegistro(LocalDate.now());
+
+        Estado estadoEnProgreso = estadoDao.findByNombre("EN PROGRESO");
+
+        if (estadoEnProgreso == null){
+            Estado enProgreso = new Estado();
+            enProgreso.setNombre("EN PROGRESO");
+            estadoDao.save(enProgreso);
+            orden.setEstadoActual(enProgreso);
+        } else {
+            orden.setEstadoActual(estadoEnProgreso);
+        }
         ordenDao.save(orden);
     }
 
