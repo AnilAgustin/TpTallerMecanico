@@ -1,10 +1,12 @@
 package com.TP.TallerMecanico.gestor;
+import java.time.Year;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.TP.TallerMecanico.servicio.IEstadisticaService;
 
@@ -15,13 +17,21 @@ public class GestorEstadistica{
 
 
     @GetMapping("/estadisticas")
-    public String mostrarEstadisticas(Model model) {
-        int year = 2023; // Puedes obtener esto según tus necesidades
+    public String mostrarEstadisticas(@RequestParam(required = false) Integer year, Model model) {
 
-        Map<String, Double> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
-        model.addAttribute("estadisticas", estadisticas);
+        if (year == null) {
+            // Si el año no se proporciona en la solicitud, puedes establecer un valor predeterminado o manejarlo según tus necesidades.
+            year = Year.now().getValue(); // Obtener el año actual si no se proporciona
+        }
+         // Puedes obtener esto según tus necesidades
 
-        return "estadisticas"; // Este es el nombre de tu plantilla Thymeleaf (sin extensión)
+         Map<String, Double> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
+
+         
+         model.addAttribute("estadisticas", estadisticas);
+         model.addAttribute("year", year); // Agregar el año al modelo
+ 
+         return "estadisticas";
     }
 
 

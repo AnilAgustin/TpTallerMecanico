@@ -16,17 +16,25 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Override
     public Map<String, Double> obtenerEstadisticasIngresosMensuales(int year) {
-        
         List<Object[]> resultados = ordenDao.obtenerIngresosMensuales(year);
 
         // Convertir resultados a Map
         Map<String, Double> estadisticas = new HashMap<>();
+        double ingresoTotalAnual = 0.0;
+        
         for (Object[] resultado : resultados) {
             int mes = (int) resultado[0];
-            Number ingresos = (Number) resultado[1];
-            Double ingresosDouble = ingresos.doubleValue();
-            estadisticas.put(String.format("%02d", mes), ingresosDouble);
+            double recaudacionMensual = (double) resultado[1];
+            
+            // Agregar el recaudo mensual al mapa
+            estadisticas.put(String.format("%02d", mes), recaudacionMensual);
+            
+            // Acumular el recaudo mensual al total anual
+            ingresoTotalAnual += recaudacionMensual;
         }
+
+        // Agregar el total anual al mapa
+        estadisticas.put("IngresoTotalAnual", ingresoTotalAnual);
 
         return estadisticas;
     }
