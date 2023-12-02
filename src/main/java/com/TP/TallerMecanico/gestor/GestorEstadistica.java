@@ -1,8 +1,10 @@
 package com.TP.TallerMecanico.gestor;
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +34,40 @@ public class GestorEstadistica{
          model.addAttribute("year", year); // Agregar el año al modelo
  
          return "estadisticas";
+    }
+
+
+    @GetMapping("/estadisticas_por_servicio")
+    public String mostrarEstadisticasPorServicio(
+        @RequestParam(required = false) Integer year,
+        @RequestParam(required = false) Integer month,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+        @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+        Model model) {
+
+        if (year == null) {
+            year = LocalDate.now().getYear();
+        }
+
+        if (month == null) {
+            month = LocalDate.now().getMonthValue();
+        }
+
+        if (fechaInicio == null || fechaFin == null) {
+            // Lógica para manejar fechas de inicio y fin predeterminadas
+            fechaInicio = LocalDate.of(year, month, 1);
+            fechaFin = fechaInicio.withDayOfMonth(fechaInicio.lengthOfMonth());
+        }
+
+        Map<String, Map<String, Double>> estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodo(fechaInicio, fechaFin);
+
+        model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
+        model.addAttribute("year", year);
+        model.addAttribute("month", month);
+        model.addAttribute("fechaInicio", fechaInicio);
+        model.addAttribute("fechaFin", fechaFin);
+
+        return "estadisticas_por_servicio";
     }
 
 

@@ -31,39 +31,37 @@
 
 <div class="container mt-4">
 
+
     <div>
         <a class="btn btn-primary" th:href="@{/estadisticas}">Estadisticas Ingresos Mensuales</a> 
         <a class="btn btn-primary" th:href="@{/estadisticas_por_servicio}">Estadisticas por Servicios</a>
     </div>
 
-    
+
+    <h3>Estadisticas Por Servicios</h3>
 
 
-    <h3>Estadisticas Ingresos Mensuales</h3>
-
-
-    <form class="d-flex me-4" action="/estadisticas" method="get">
-        <input class="form-control me-2 mt-3" placeholder="Ingrese el año" aria-label="Search" type="number" id="year" name="year" th:value="${year}" />
+    <form class="d-flex me-4" action="/estadisticas_por_servicio" method="get">
+        <input class="form-control me-2 mt-3" type="date" id = "fechaInicio" name="fechaInicio" aria-label="Search" placeholder="Fecha Inicio" th:value="${fechaInicio}" required/>
+        <input class="form-control me-2 mt-3" type="date" id = "fechaFin" name="fechaFin" aria-label="Search" placeholder="Fecha Fin" th:value="${fechaFin}" required/>
         <button class="btn btn-success mt-3" type="submit">Obtener Estadísticas</button>
     </form>
 
-    <p th:if="${estadisticas.IngresoTotalAnual != 0}">El total anual es de: <span th:text="' $' + ${estadisticas.IngresoTotalAnual}"></span></p>
-    <p th:if="${estadisticas.IngresoTotalAnual == 0}">No hay ingresos para el año ingresado.</p>
 
     <div>
         <table class="table">
             <thead>
             <tr>
                 <th>Mes</th>
-                <th>Ingresos</th>
-                <th>Porcentaje del ingreso anual</th>
+                <th>Cantidad Utilizada</th>
+                <th>Ingresos del Servicio</th>
             </tr>
             </thead>
 
-            <tr th:each="entry : ${estadisticas}">
-                <td th:if="${estadisticas != null && entry.key != 'IngresoTotalAnual'}" th:text="${entry.key}"></td>
-                <td th:if="${estadisticas != null && entry.key != 'IngresoTotalAnual'}" th:text="${entry.value}"></td>
-                <td th:if="${estadisticas != null && entry.key != 'IngresoTotalAnual'}" th:text="${#strings.length((entry.value / estadisticas.IngresoTotalAnual * 100) + '%') > 5 ? #strings.substring(((entry.value / estadisticas.IngresoTotalAnual * 100) + '%'), 0, 5) + '%' : (entry.value / estadisticas.IngresoTotalAnual * 100) + '%'}"></td>
+            <tr th:each="entry : ${estadisticasPorServicio}">
+                <td th:text="${entry.key}"></td>
+                <td th:text="${entry.value.cantidadUtilizada}"></td>
+                <td th:text="${entry.value.recaudacionServicio}"></td>
             </tr>
         </table>
     </div>

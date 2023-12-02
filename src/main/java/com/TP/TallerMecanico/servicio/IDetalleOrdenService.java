@@ -13,7 +13,6 @@ public interface IDetalleOrdenService {
     public void eliminar(DetalleOrden detalleOrden);
     public DetalleOrden buscarDetalleOrden(Long idDetalleOrden);
     public void activarDetalleOrden(DetalleOrden detalleOrden);
-
     public List<DetalleOrden> listarDetallesPorOrden(Orden orden);
 
 }
