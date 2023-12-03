@@ -61,7 +61,15 @@ public class GestorEstadistica{
 
         Map<String, Map<String, Double>> estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodo(fechaInicio, fechaFin);
 
+        double sumaTotal = estadisticasPorServicio.values().stream()
+        .flatMap(innerMap -> innerMap.values().stream())
+        .mapToDouble(Double::doubleValue)
+        .sum();
+
+
+
         model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
+        model.addAttribute("sumaTotal", sumaTotal);
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("fechaInicio", fechaInicio);

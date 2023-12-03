@@ -55,6 +55,7 @@
                 <th>Mes</th>
                 <th>Cantidad Utilizada</th>
                 <th>Ingresos del Servicio</th>
+                <th>Porcentaje del ingreso sobre el total</th>
             </tr>
             </thead>
 
@@ -62,6 +63,7 @@
                 <td th:text="${entry.key}"></td>
                 <td th:text="${entry.value.cantidadUtilizada}"></td>
                 <td th:text="${entry.value.recaudacionServicio}"></td>
+                <td th:text="${#strings.length((entry.value.recaudacionServicio * 100.0 / sumaTotal) + '%') > 5 ? #strings.substring(((entry.value.recaudacionServicio * 100.0 / sumaTotal) + '%'), 0, 5) + '%' : (entry.value.recaudacionServicio * 100.0 / sumaTotal) + '%'}"></td>
             </tr>
         </table>
     </div>
