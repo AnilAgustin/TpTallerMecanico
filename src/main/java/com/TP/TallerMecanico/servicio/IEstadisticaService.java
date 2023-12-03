@@ -9,5 +9,9 @@ public interface IEstadisticaService {
 
     Double calcularMontoTotalEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin);
 
+    Map<String, Double> findServicioMasRecaudo(LocalDate fechaInicio, LocalDate fechaFin);
+    Map<String, Double> findServicioMasUtilizado(LocalDate fechaInicio, LocalDate fechaFin);
+    Map<String, Double> findMesMasRecaudado(int year);
+
     
 }

@@ -27,13 +27,16 @@ public class GestorEstadistica{
         }
          // Puedes obtener esto según tus necesidades
 
-         Map<String, Double> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
+        Map<String, Double> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
 
          
-         model.addAttribute("estadisticas", estadisticas);
-         model.addAttribute("year", year); // Agregar el año al modelo
- 
-         return "estadisticas";
+        model.addAttribute("estadisticas", estadisticas);
+        model.addAttribute("year", year); // Agregar el año al modelo
+
+
+        Map<String, Double> mesMasRecaudado = estadisticaService.findMesMasRecaudado(year);
+        model.addAttribute("mesMasRecaudado", mesMasRecaudado);
+        return "estadisticas";
     }
 
 
@@ -61,11 +64,27 @@ public class GestorEstadistica{
 
         Map<String, Map<String, Double>> estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodo(fechaInicio, fechaFin);
 
+        double sumaTotal = estadisticasPorServicio.values().stream()
+        .flatMap(innerMap -> innerMap.values().stream())
+        .mapToDouble(Double::doubleValue)
+        .sum();
+
+
+
         model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
+        model.addAttribute("sumaTotal", sumaTotal);
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
+
+        Map<String,Double> servicioMasRecaudo = estadisticaService.findServicioMasRecaudo(fechaInicio, fechaFin);
+        Map<String,Double> servicioMasUtilizado = estadisticaService.findServicioMasUtilizado(fechaInicio, fechaFin);
+
+
+
+        model.addAttribute("masRecaudo", servicioMasRecaudo);
+        model.addAttribute("masUtilizado", servicioMasUtilizado);
 
         return "estadisticas_por_servicio";
     }

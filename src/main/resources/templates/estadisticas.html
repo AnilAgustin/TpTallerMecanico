@@ -50,6 +50,23 @@
     <p th:if="${estadisticas.IngresoTotalAnual != 0}">El total anual es de: <span th:text="' $' + ${estadisticas.IngresoTotalAnual}"></span></p>
     <p th:if="${estadisticas.IngresoTotalAnual == 0}">No hay ingresos para el año ingresado.</p>
 
+
+    <br>
+
+    <h4>Mes con más recaudación:</h4>
+    <div>
+        <ul>
+            <li th:each="entry : ${mesMasRecaudado}">
+                <span th:text="${entry.key}"></span> - <span th:text="' $' + ${entry.value}"></span>
+            </li>
+        </ul>
+
+
+    </div>
+
+    <br>
+
+
     <div>
         <table class="table">
             <thead>

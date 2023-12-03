@@ -51,5 +51,24 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
         "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin")
     Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 
+    @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal) AS montoTotal " +
+    "FROM DetalleOrden d " +
+    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "GROUP BY d.servicio.nombre " +
+    "ORDER BY montoTotal DESC " +
+    "LIMIT 1")
+    List<Object[]> findServicioMasRecaudo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin); 
+
+    @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
+    "FROM DetalleOrden d " +
+    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "GROUP BY d.servicio.nombre " +
+    "ORDER BY cantidadTotal DESC " +
+    "LIMIT 1")
+    List<Object[]> findServicioMasUtilizado(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+
+
+
+
 
 }

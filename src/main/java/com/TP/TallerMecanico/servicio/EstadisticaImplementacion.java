@@ -73,4 +73,67 @@ public class EstadisticaImplementacion implements IEstadisticaService {
         Double ingresosTotales = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin);
         return ingresosTotales;
     }
+
+    @Override
+    public Map<String, Double> findServicioMasRecaudo(LocalDate fechaInicio, LocalDate fechaFin) {
+        List<Object[]> resultados = detalleOrdenDao.findServicioMasRecaudo(fechaInicio,fechaFin);
+
+        // Convertir resultados a Map
+        Map<String, Double> masRecaudado = new HashMap<>();
+
+        for (Object[] resultado : resultados) {
+            String nombreServicio = (String) resultado[0];
+            Double recaudacionServicio =((Number) resultado[1]).doubleValue();
+
+            masRecaudado.put(nombreServicio,recaudacionServicio);
+
+
+        }
+
+        return masRecaudado;
+    }
+
+    @Override
+    public Map<String, Double> findServicioMasUtilizado(LocalDate fechaInicio, LocalDate fechaFin) {
+        List<Object[]> resultados = detalleOrdenDao.findServicioMasUtilizado(fechaInicio,fechaFin);
+
+        // Convertir resultados a Map
+        Map<String, Double> masUtilizado = new HashMap<>();
+
+        for (Object[] resultado : resultados) {
+            String nombreServicio = (String) resultado[0];
+            Double recaudacionServicio =((Number) resultado[1]).doubleValue();
+
+            masUtilizado.put(nombreServicio,recaudacionServicio);
+
+
+        }
+
+        return masUtilizado;
+
+
+    }
+
+    @Override
+    public Map<String, Double> findMesMasRecaudado(int year) {
+        List<Object[]> resultados = ordenDao.findMesMasRecaudado(year);
+
+        
+        // Convertir resultados a Map
+        Map<String, Double> masRecaudado = new HashMap<>();
+
+        for (Object[] resultado : resultados) {
+            int mes = (int) resultado[0];
+            Double recaudacionMes =((Number) resultado[1]).doubleValue();
+
+            masRecaudado.put(String.format("%02d", mes),recaudacionMes);
+
+
+        }
+
+        return masRecaudado;
+
+
+    }
+    
 }
