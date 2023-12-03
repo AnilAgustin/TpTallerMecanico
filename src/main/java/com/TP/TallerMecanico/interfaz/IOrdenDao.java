@@ -134,5 +134,7 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(CAST(d.subtotal AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")    
     List<Object[]> obtenerIngresosMensuales(@Param("year") int year);
 
+
+
     List<Orden> findByFechaRegistro(LocalDate fechaOrden);
 }

@@ -47,21 +47,30 @@ public class EstadisticaImplementacion implements IEstadisticaService {
     @Override
     public Map<String, Map<String, Double>> obtenerEstadisticasPorServicioEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin) {
         Map<String, Map<String, Double>> estadisticasPorServicio = new HashMap<>();
-
+        Double montoTotal = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin);
         List<Object[]> resultados = detalleOrdenDao.obtenerIngresosPorServicio(fechaInicio, fechaFin);
-
         for (Object[] resultado : resultados) {
             String nombreServicio = (String) resultado[0];
             Double cantidadUtilizada = ((Number) resultado[1]).doubleValue();
             Double recaudacionServicio =((Number) resultado[2]).doubleValue();
 
+            Double porcentaje = (recaudacionServicio / montoTotal) * 100;
+
             Map<String, Double> estadisticasServicio = new HashMap<>();
             estadisticasServicio.put("cantidadUtilizada", cantidadUtilizada);
             estadisticasServicio.put("recaudacionServicio", recaudacionServicio);
+            estadisticasServicio.put("porcentaje", porcentaje);
+
 
             estadisticasPorServicio.put(nombreServicio, estadisticasServicio);
         }
 
         return estadisticasPorServicio;
+    }
+
+    @Override
+    public Double calcularMontoTotalEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin){
+        Double ingresosTotales = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin);
+        return ingresosTotales;
     }
 }

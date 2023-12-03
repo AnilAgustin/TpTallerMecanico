@@ -47,6 +47,9 @@
         <button class="btn btn-success mt-3" type="submit">Obtener Estadísticas</button>
     </form>
 
+    
+
+
 
     <div>
         <table class="table">
@@ -55,13 +58,15 @@
                 <th>Mes</th>
                 <th>Cantidad Utilizada</th>
                 <th>Ingresos del Servicio</th>
+                <th>Porcentaje</th>
             </tr>
             </thead>
 
             <tr th:each="entry : ${estadisticasPorServicio}">
-                <td th:text="${entry.key}"></td>
-                <td th:text="${entry.value.cantidadUtilizada}"></td>
-                <td th:text="${entry.value.recaudacionServicio}"></td>
+                <td  th:text="${entry.key}"></td>
+                <td  th:text="${entry.value.cantidadUtilizada}"></td>
+                <td  th:text="${entry.value.recaudacionServicio}"></td>
+                <td th:text="${#strings.length(entry.value.porcentaje + '%') > 5 ? #strings.substring((entry.value.porcentaje + '%'), 0, 5) + '%' : entry.value.porcentaje + '%'}"></td>
             </tr>
         </table>
     </div>

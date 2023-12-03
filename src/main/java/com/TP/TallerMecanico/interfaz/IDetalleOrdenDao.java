@@ -5,6 +5,7 @@ import com.TP.TallerMecanico.entidad.Orden;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import com.TP.TallerMecanico.entidad.Servicio;
 import com.TP.TallerMecanico.entidad.Tecnico;
@@ -44,4 +45,11 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
     "GROUP BY s.nombre ")
     List<Object[]> obtenerIngresosPorServicio(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin );
+
+    @Query("SELECT SUM(d.subtotal) FROM DetalleOrden d " +
+        "JOIN d.orden o " +
+        "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin")
+    Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+
+
 }
