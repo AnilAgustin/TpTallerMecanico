@@ -33,8 +33,7 @@
         <h3>Listado Vehiculos</h3>
         <form class="d-flex" method="get">
             <div>
-                <a th:href="@{/agregarVehiculo}" class="btn btn-primary me-5 mt-3">Agregar</a>
-                <a th:href="@{/vehiculosEliminados}" class="btn btn-warning me-5 mt-3">Ver eliminados</a>
+                <a th:href="@{/vehiculos}" class="btn btn-danger me-5 mt-3">Volver</a>
             </div>
         </form>
         <div>
@@ -42,17 +41,6 @@
                 <input class="form-control me-2 mt-3" type="search" name="patente" placeholder="Ingrese una patente"
                     aria-label="Search" th:value="${patente}">
 
-                <select class="form-select me-2 mt-3" name="marca" aria-label="Default select example">
-                    <option selected value="-1">Seleccione una marca</option>
-                    <option th:each="marca : ${marcas}" th:value="${marca.idMarca}" th:text="${marca.nombre}"
-                        th:selected="${marca.idMarca == idMarca}"></option>
-                </select>
-
-                <select class="form-select me-2 mt-3" name="modelo" aria-label="Default select example">
-                    <option selected value="-1">Seleccione un modelo</option>
-                    <option th:each="modelo : ${modelos}" th:value="${modelo.idModelo}" th:text="${modelo.nombre}"
-                        th:selected="${modelo.idModelo == idModelo}"></option>
-                </select>
                 <input type="submit" class="btn btn-success me-2 mt-3" value="Buscar">
             </form>
             
@@ -79,10 +67,8 @@
                     <td th:text="${vehiculo.modelo.nombre}">Mostrar Modelo</td>
                     <td th:text="${vehiculo.modelo.marca.nombre}">Mostrar Marca</td>
                     <td th:text="${vehiculo.cliente.nombre}">Mostrar Nombre Cliente</td>
-                    <td> <a class="btn btn-warning" th:href="@{/modificarVehiculo/} + ${vehiculo.idVehiculo}"
-                            th:text="Editar" />
-                        <a class="btn btn-danger" th:href="@{/eliminarVehiculo/} + ${vehiculo.idVehiculo}"
-                            th:text="Eliminar" />
+                    <td> <a class="btn btn-warning" th:href="@{/recuperarVehiculo/} + ${vehiculo.idVehiculo}"
+                            th:text="recuperar" />
                     </td>
                 </tr>
             </table>
@@ -91,6 +77,11 @@
         <div th:if="${vehiculo == null or vehiculo.empty}">
             La lista de vehiculos esta vacia
         </div>
+
+        <div th:if="${error != null}" class="alert alert-danger" role="alert">
+            <p th:text="${error}"></p>
+        </div>
+        
     </div>
 </body>
 </html>

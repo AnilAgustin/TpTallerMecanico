@@ -77,7 +77,7 @@ public class GestorServicio {
     @GetMapping("/recuperarServicio/{idServicio}")
     public String recuperarServicio(@PathVariable Long idServicio, Model model) {
         Servicio servicio= servicioDao.findByIdServicioAndEstadoFalse(idServicio);
-        servicioService.activarServicio(servicio);;
+        servicioService.activarServicio(servicio);
         return "redirect:/servicios";
     }
 

@@ -16,6 +16,7 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
     void marcarComoEliminado(@Param("idVehiculo") Long idVehiculo);
 
     List<Vehiculo> findByEstadoTrue();
+    List<Vehiculo> findByEstadoFalse();
 
     @Modifying
     @Query("UPDATE Vehiculo m SET m.estado = true WHERE m.idVehiculo = :idVehiculo")
@@ -29,7 +30,11 @@ public interface IVehiculoDao extends CrudRepository<Vehiculo, Long> {
 
     Vehiculo findByPatenteAndEstadoTrue(String patente);
 
+    List<Vehiculo> findByPatenteAndEstadoFalse(String patente);
+
     Vehiculo findByIdVehiculo(Long idVehiculo);
+
+    Vehiculo findByIdVehiculoAndEstadoFalse(Long idVehiculo);
 
     List<Vehiculo> findByModeloAndEstadoTrue(Modelo modelo);
 

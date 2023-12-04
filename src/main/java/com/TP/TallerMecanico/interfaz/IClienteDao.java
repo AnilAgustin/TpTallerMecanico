@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface IClienteDao extends CrudRepository<Cliente, Long> {
 
+    boolean existsByIdClienteAndEstadoTrue(Long id);
 
     @Modifying
     @Query("UPDATE Cliente m SET m.estado = false WHERE m.idCliente = :idCliente") //Query para el Soft Delete

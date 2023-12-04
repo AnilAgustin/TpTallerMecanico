@@ -176,6 +176,7 @@ public class VehiculoImplementacion implements IVehiculoService {
     }
 
     @Override
+    @Transactional
     //Método para activar un vehiculo
     public void activarVehiculo(Vehiculo vehiculo) {
 
