@@ -15,7 +15,7 @@
             <div class="container-fluid">
                 <a class="navbar-brand" th:href="@{/}">TALLER MECANICO</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                {% comment %} Controles de grafico {% endcomment %}
+                    <!-- Controles de grafico -->
                     data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
                     aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -54,22 +54,35 @@
 
         <br>
 
-        <h4>Servicio con más recaudo:</h4>
-        <div>
-            <ul>
-                <li th:each="entry : ${masRecaudo}">
-                    <span th:text="${entry.key}"></span> - <span th:text="' $' + ${entry.value}"></span>
-                </li>
-            </ul>
-        </div>
-
-        <div>
-            <h4>Servicio más utilizado:</h4>
-            <ul>
-                <li th:each="entry : ${masUtilizado}">
-                    <span th:text="${entry.key}"></span> - <span th:text="${entry.value}"></span>
-                </li>
-            </ul>
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Elementos "Servicio con más recaudo" y "Servicio más utilizado" -->
+                <h4>Servicio con más recaudo:</h4>
+                <div>
+                    <ul>
+                        <li th:each="entry : ${masRecaudo}">
+                            <span th:text="${entry.key}"></span> - <span th:text="' $' + ${entry.value}"></span>
+                        </li>
+                    </ul>
+                </div>
+    
+                <div>
+                    <h4 style="margin-top:50px;">Servicio más utilizado:</h4>
+                    <ul>
+                        <li th:each="entry : ${masUtilizado}">
+                            <span th:text="${entry.key}"></span> - <span th:text="${entry.value}"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+    
+            <div class="col-md-6">
+                <!-- Gráfico -->
+                <div style="width: 400px; height: 400px;">
+                    <!-- Agregar el canvas para el gráfico (con el id= podemos agregar todo tipo de Gráfico)-->
+                    <canvas id="tortaChart" width="100" height="100"></canvas>
+                </div>
+            </div>
         </div>
 
         <br>
@@ -97,7 +110,8 @@
         <br>
 
         <!-- Agregar el canvas para e lgrafico (con el id= podemos agregar todo tipo de Grafico)-->
-        <canvas id="tortaChart" width="50" height="50"></canvas>
+
+        
 
     </div>
 
