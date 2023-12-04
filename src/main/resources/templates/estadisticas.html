@@ -89,11 +89,11 @@
         <div>
             <table class="table">
                 <thead>
-                <tr>
-                    <th>Mes</th>
-                    <th>Ingresos</th>
-                    <th>Porcentaje del ingreso anual</th>
-                </tr>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Ingresos</th>
+                        <th>Porcentaje del ingreso anual</th>
+                    </tr>
                 </thead>
 
                 <tr th:each="entry : ${estadisticas}">
@@ -120,12 +120,14 @@
             var data = []; // varialbe que toma un arreglo de los datos
             var labels = []; // variable que toma un arreglo de etiquetas 
             var rows = document.querySelectorAll('table tr'); // Variable que toma todos los elementos de la Eqtiqueta Table de HTML 
-
+            console.log(rows);
             for (var i = 1; i < rows.length; i++) {  // Recorremos todos las filas de la variable rows 
                 var columns = rows[i].querySelectorAll('td'); // Para cada fila, se seleccionan todas las celdas (td) y se almacenan en la variable columns.
                 //Se agrega a cada columna que se crea un Label y el Valor que corresponde 
-                labels.push(columns[0].innerText);
-                data.push(Number(columns[1].innerText));
+                if (columns.length >= 2) {
+                    labels.push(columns[0].innerText);
+                    data.push(Number(columns[1].innerText));
+                }
             }
 
             // Configura los colores para el Grafico 
