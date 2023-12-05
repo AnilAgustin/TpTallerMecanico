@@ -131,12 +131,12 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     List<Orden> filtrarOrdenPorFechaHasta(@Param("fechaHastaDocumento") LocalDate fechaHastaDocumento );
 
     //Estadisticas 
-    @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(CAST(d.subtotal AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")    
+    @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(CAST(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100) AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")    
     List<Object[]> obtenerIngresosMensuales(@Param("year") int year);
 
 
 
-    @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(d.subtotal) AS montoTotal " +
+    @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
        "FROM Orden o " +
        "JOIN DetalleOrden d ON o.idOrden = d.orden.idOrden " +
        "WHERE YEAR(o.fechaDocumento) = :year " +
