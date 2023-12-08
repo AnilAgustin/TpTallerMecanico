@@ -112,10 +112,27 @@
                     <h4 style="margin-top:10px;">Servicio más utilizado:</h4>
                     <ul>
                         <li th:each="entry : ${masUtilizado}">
-                            <span th:text="${entry.key}"></span> - <span th:text="${entry.value}"></span>
+                            <!-- Mostrar entry.key -->
+                            <span th:text="${entry.key}"></span>
+                
+                            <!-- Separador entre key y value -->
+                            <span> - </span>
+                
+                            <!-- Convertir entry.value a entero en JavaScript -->
+                            <span th:if="${entry.value != null}">
+                                <script th:inline="javascript">
+                                    var valor = /*[[${entry.value}]]*/;
+                                    var valorEntero = parseInt(valor);
+                                    document.write(valorEntero);
+                                </script>
+                            </span>
+                            <span th:unless="${entry.value != null}" th:text="${entry.value}"></span>
                         </li>
                     </ul>
                 </div>
+                
+                
+
             </div>
     
             <div class="col-md-6">
@@ -142,7 +159,14 @@
 
                 <tr th:each="entry : ${estadisticasPorServicio}">
                     <td th:text="${entry.key}"></td>
-                    <td th:text="${entry.value.cantidadUtilizada}"></td>
+                        <!-- Convertir double a int en JavaScript para cantidadUtilizada -->
+                    <td th:if="${entry.value.cantidadUtilizada != null}">
+                        <script th:inline="javascript">
+                            var cantidadUtilizada = /*[[${entry.value.cantidadUtilizada}]]*/;
+                            var cantidadUtilizadaEntero = parseInt(cantidadUtilizada);
+                            document.write(cantidadUtilizadaEntero);
+                        </script>
+                    </td>
                     <td th:text="${entry.value.recaudacionServicio}"></td>
                     <td th:text="${#strings.length(entry.value.porcentaje + '%') > 5 ? #strings.substring((entry.value.porcentaje + '%'), 0, 5) + '%' : entry.value.porcentaje + '%'}"></td>
                 </tr>

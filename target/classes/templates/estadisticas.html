@@ -100,7 +100,15 @@
                 <tr th:each="entry : ${estadisticas}">
                     <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.key}"></td>
                     <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.value.RecaudacionMensual}"></td>
-                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.value.CantidadOrdenes}"></td>
+                    <!-- Agrega este bloque para convertir CantidadOrdenes a entero en JavaScript -->
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual' && entry.value.CantidadOrdenes != null}">
+                        <script th:inline="javascript">
+                            /* Convertir double a int en JavaScript */
+                            var cantidadOrdenes = /*[[${entry.value.CantidadOrdenes}]]*/;
+                            var cantidadOrdenesEntero = parseInt(cantidadOrdenes);
+                            document.write(cantidadOrdenesEntero);
+                        </script>
+                    </td>
                     <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${#strings.length((entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%') > 5 ? #strings.substring(((entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%'), 0, 5) + '%' : (entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%'}"></td>
                 </tr>
             </table>
