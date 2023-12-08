@@ -1,9 +1,13 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
+import com.TP.TallerMecanico.interfaz.IDetalleOrdenDao;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import com.TP.TallerMecanico.servicio.*;
+import com.TP.TallerMecanico.util.FacturaExporterPDF;
+import com.lowagie.text.DocumentException;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.Local;
@@ -16,10 +20,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -52,6 +60,9 @@ public class GestorOrden {
 
     @Autowired
     private IOrdenDao ordenDao;
+
+    @Autowired
+    private IDetalleOrdenDao detallesOrdenDao;
     
     //Listar todos los ordenes cuando la URL sea /ordenes
     @GetMapping("/ordenes")
@@ -272,4 +283,36 @@ public class GestorOrden {
         // Redirige a la URL construida
         return redirectUrl;
     }
+
+    //Metodo para facturar una orden y de esta manera obtener un pdf impreso
+    @GetMapping("/facturarOrden/{idOrden}")
+    public String exportarListadoDetallesOrdenesPDF(HttpServletResponse response, @PathVariable ("idOrden") Long idOrden) throws DocumentException, IOException{
+        response.setContentType("application/pdf");
+
+        //Se formatea la fecha para rotular el archivo
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd:HH:mm:ss");
+        String fechaActual = dateFormatter.format(new Date());
+
+        //Se agregan los datos al nombre del documento
+        String cabecera = "Content-Disposition";
+        String valor = "attachment; filename=Factura_"+ fechaActual+ ".pdf";
+        response.setHeader(cabecera, valor);
+
+        //Se obtienen los detalles de orden, nombre, apellido del cliente y el impuesto asociado a una marca para mandar al exportador de pdf
+        List<DetalleOrden> listaDetallesOrdenes = detallesService.findByIdOrden(idOrden);
+        String nombreCliente = detallesOrdenDao.findNombreClienteByIdOrden(idOrden);
+        String apellidoCliente = detallesOrdenDao.findApellidoClienteByIdOrden(idOrden);
+        Double impuestoMarca = detallesOrdenDao.findImpuestoMarcaByIdOrden(idOrden);
+
+        //Se crea una instancia de exportador de pdf y se le pasan los datos obtenidos
+        FacturaExporterPDF exporter = new FacturaExporterPDF(listaDetallesOrdenes);
+        exporter.obtenerDatosCliente(nombreCliente, apellidoCliente, impuestoMarca);
+        
+        //Se imprime el pdf y se redirecciona al apartado de ordenes
+        exporter.exportarPDF(response);
+        return "redirect:/ordenes";
+    }
+    
 }
+
+
