@@ -42,14 +42,43 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     
     @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
     "FROM DetalleOrden d JOIN d.orden o JOIN d.servicio s " +
-    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
     "GROUP BY s.nombre ")
-    List<Object[]> obtenerIngresosPorServicio(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin );
+    List<Object[]> obtenerIngresosPorServicio(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
 
     @Query("SELECT SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) FROM DetalleOrden d " +
-        "JOIN d.orden o " +
-        "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin")
-    Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+    "JOIN d.orden o " +
+    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId")
+    Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
+
+    @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
+    "FROM DetalleOrden d " +
+    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "GROUP BY d.servicio.nombre " +
+    "ORDER BY montoTotal DESC " +
+    "LIMIT 1")
+    List<Object[]> findServicioMasRecaudo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId); 
+
+    @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
+    "FROM DetalleOrden d " +
+    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "GROUP BY d.servicio.nombre " +
+    "ORDER BY cantidadTotal DESC " +
+    "LIMIT 1")
+    List<Object[]> findServicioMasUtilizado(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
+
+
+    //Estadisticas sin filtrado
+    @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
+    "FROM DetalleOrden d JOIN d.orden o JOIN d.servicio s " +
+    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "GROUP BY s.nombre ")
+    List<Object[]> obtenerIngresosPorServicioSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+
+    @Query("SELECT SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) FROM DetalleOrden d " +
+    "JOIN d.orden o " +
+    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin ")
+    Double calcularMontoTotalEnPeriodoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
     "FROM DetalleOrden d " +
@@ -57,7 +86,7 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     "GROUP BY d.servicio.nombre " +
     "ORDER BY montoTotal DESC " +
     "LIMIT 1")
-    List<Object[]> findServicioMasRecaudo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin); 
+    List<Object[]> findServicioMasRecaudoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin); 
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
     "FROM DetalleOrden d " +
@@ -65,9 +94,7 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     "GROUP BY d.servicio.nombre " +
     "ORDER BY cantidadTotal DESC " +
     "LIMIT 1")
-    List<Object[]> findServicioMasUtilizado(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
-
-
+    List<Object[]> findServicioMasUtilizadoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 
 
 

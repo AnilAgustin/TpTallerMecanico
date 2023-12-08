@@ -37,6 +37,8 @@
     </header>
 
     <div class="container mt-4">
+        
+        
         <div>
             <a class="btn btn-primary" th:href="@{/estadisticas}">Estadisticas Ingresos Mensuales</a> <a
                 class="btn btn-primary" th:href="@{/estadisticas_por_servicio}">Estadisticas por Servicios</a>
@@ -44,19 +46,59 @@
 
         <h3>Estadisticas Por Servicios</h3>
 
-        <form class="d-flex me-4" action="/estadisticas_por_servicio" method="get">
-            <input class="form-control me-2 mt-3" type="date" id="fechaInicio" name="fechaInicio"
-                aria-label="Search" placeholder="Fecha Inicio" th:value="${fechaInicio}" required />
-            <input class="form-control me-2 mt-3" type="date" id="fechaFin" name="fechaFin" aria-label="Search"
-                placeholder="Fecha Fin" th:value="${fechaFin}" required />
-            <button class="btn btn-success mt-3" type="submit">Obtener Estadísticas</button>
-        </form>
+        <div class="container-fluid">
+            <form class="row d-flex justify-content-end me-4" action="/estadisticas_por_servicio" method="get">
+                <div class="col-md-4">
+                    <div class="input-container">
+                        <input class="form-control me-2 mt-3" type="date" id="fechaInicio" name="fechaInicio"
+                            aria-label="Search" placeholder="Fecha Inicio" th:value="${fechaInicio}" required />
+                        <span class="date-input-label fw-bold">Desde</span>
+                    </div>
+                </div>
+        
+                <div class="col-md-4">
+                    <div class="input-container">
+                        <input class="form-control me-2 mt-3" type="date" id="fechaFin" name="fechaFin" aria-label="Search"
+                            placeholder="Fecha Fin" th:value="${fechaFin}" required />
+                        <span class="date-input-label fw-bold">Hasta</span>
+                    </div>
+                </div>
+        
+                <div class="col-md-4">
+                    <div class="input-container">
+                        <select class="form-select me-2 mt-3" name="tecnico" aria-label="Default select example">
+                            <option selected value="-1">Todos los técnicos</option>
+                            <option th:each="tecnico : ${tecnicos}" th:value="${tecnico.idTecnico}" th:text="${tecnico.nombre}"
+                                    th:selected="${tecnico.idTecnico == idTecnico}"></option>
+                        </select>
+                        <span class="date-input-label fw-bold">Seleccione un Técnico</span>
+                    </div>
+                </div>
+        
+                <div class="col-md-12 mt-3">
+                    <button class="btn btn-success" type="submit">Obtener Estadísticas</button>
+                </div>
+            </form>
+        </div>
+        
 
         <br>
 
         <div class="row">
             <div class="col-md-6">
-                <!-- Elementos "Servicio con más recaudo" y "Servicio más utilizado" -->
+
+                <h4>Periodo seleccionado:</h4>
+                <div>
+                    <ul>
+                        <li>
+                            <span th:text=" 'Fecha de Inicio seleccionada: ' + ${fechaInicio}"></span>
+                        </li>
+                        <li>
+                            <span th:text=" 'Fecha Fin seleccionada: ' + ${fechaFin}"></span>
+                        </li>
+                    </ul> 
+                </div>  
+
                 <h4>Servicio con más recaudo:</h4>
                 <div>
                     <ul>
@@ -67,7 +109,7 @@
                 </div>
     
                 <div>
-                    <h4 style="margin-top:50px;">Servicio más utilizado:</h4>
+                    <h4 style="margin-top:10px;">Servicio más utilizado:</h4>
                     <ul>
                         <li th:each="entry : ${masUtilizado}">
                             <span th:text="${entry.key}"></span> - <span th:text="${entry.value}"></span>

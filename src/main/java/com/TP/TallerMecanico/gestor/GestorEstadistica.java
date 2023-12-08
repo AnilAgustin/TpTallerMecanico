@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.gestor;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.servicio.IEstadisticaService;
+import com.TP.TallerMecanico.servicio.ITecnicoService;
 
 @Controller
 public class GestorEstadistica{
     @Autowired
     private IEstadisticaService estadisticaService;
 
+    @Autowired 
+    private ITecnicoService tecnicoService;
 
     @GetMapping("/estadisticas")
     public String mostrarEstadisticas(@RequestParam(required = false) Integer year, Model model) {
@@ -46,6 +51,7 @@ public class GestorEstadistica{
         @RequestParam(required = false) Integer month,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
         @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin,
+        @RequestParam(name = "tecnico", required = false) Long tecnicoId,
         Model model) {
 
         if (year == null) {
@@ -62,29 +68,68 @@ public class GestorEstadistica{
             fechaFin = fechaInicio.withDayOfMonth(fechaInicio.lengthOfMonth());
         }
 
-        Map<String, Map<String, Double>> estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodo(fechaInicio, fechaFin);
 
-        double sumaTotal = estadisticasPorServicio.values().stream()
-        .flatMap(innerMap -> innerMap.values().stream())
-        .mapToDouble(Double::doubleValue)
-        .sum();
+        List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
 
 
+       
 
-        model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
-        model.addAttribute("sumaTotal", sumaTotal);
+        if (tecnicoId != null && tecnicoId > 0) {
+            // Si se seleccionó un técnico específico, filtrar por ese técnico
+
+            Map<String, Map<String, Double>> estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodo(fechaInicio, fechaFin, tecnicoId);
+
+            estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodo(fechaInicio, fechaFin, tecnicoId);
+
+            Map<String,Double> servicioMasRecaudo = estadisticaService.findServicioMasRecaudo(fechaInicio, fechaFin, tecnicoId);
+            Map<String,Double> servicioMasUtilizado = estadisticaService.findServicioMasUtilizado(fechaInicio, fechaFin, tecnicoId);
+
+            model.addAttribute("masRecaudo", servicioMasRecaudo);
+            model.addAttribute("masUtilizado", servicioMasUtilizado);
+
+            double sumaTotal = estadisticasPorServicio.values().stream()
+            .flatMap(innerMap -> innerMap.values().stream())
+            .mapToDouble(Double::doubleValue)
+            .sum();
+
+            model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
+            model.addAttribute("sumaTotal", sumaTotal);
+
+        } else {
+            // Si no se seleccionó ningún técnico, obtener estadísticas sin filtrar por técnico
+
+            Map<String, Map<String, Double>> estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodoSinFiltro(fechaInicio, fechaFin);
+
+            estadisticasPorServicio = estadisticaService.obtenerEstadisticasPorServicioEnPeriodoSinFiltro(fechaInicio, fechaFin);
+
+            Map<String,Double> servicioMasRecaudo = estadisticaService.findServicioMasRecaudoSinFiltro(fechaInicio, fechaFin);
+            Map<String,Double> servicioMasUtilizado = estadisticaService.findServicioMasUtilizadoSinFiltro(fechaInicio, fechaFin);
+
+            model.addAttribute("masRecaudo", servicioMasRecaudo);
+            model.addAttribute("masUtilizado", servicioMasUtilizado);
+            
+            double sumaTotal = estadisticasPorServicio.values().stream()
+            .flatMap(innerMap -> innerMap.values().stream())
+            .mapToDouble(Double::doubleValue)
+            .sum();
+
+            model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
+            model.addAttribute("sumaTotal", sumaTotal);
+        }
+        
+       
+
+
+        model.addAttribute("tecnicos", tecnicos);
+        model.addAttribute("idTecnico", tecnicoId);
         model.addAttribute("year", year);
         model.addAttribute("month", month);
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
 
-        Map<String,Double> servicioMasRecaudo = estadisticaService.findServicioMasRecaudo(fechaInicio, fechaFin);
-        Map<String,Double> servicioMasUtilizado = estadisticaService.findServicioMasUtilizado(fechaInicio, fechaFin);
 
 
-
-        model.addAttribute("masRecaudo", servicioMasRecaudo);
-        model.addAttribute("masUtilizado", servicioMasUtilizado);
+       
 
         return "estadisticas_por_servicio";
     }
