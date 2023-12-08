@@ -131,6 +131,21 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     @Query("SELECT o FROM Orden o WHERE o.fechaDocumento <= :fechaHastaDocumento AND o.estado = true")
     List<Orden> filtrarOrdenPorFechaHasta(@Param("fechaHastaDocumento") LocalDate fechaHastaDocumento );
 
+    //Estadisticas 
+    @Query("SELECT MONTH(o.fechaDocumento) AS mes, COUNT(DISTINCT o.id) AS cantidadOrdenes, SUM(CAST(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100) AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")
+    List<Object[]> obtenerIngresosYOrdenesMensuales(@Param("year") int year);
+
+
+
+
+    @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
+       "FROM Orden o " +
+       "JOIN DetalleOrden d ON o.idOrden = d.orden.idOrden " +
+       "WHERE YEAR(o.fechaDocumento) = :year " +
+       "GROUP BY mes " +
+       "ORDER BY montoTotal DESC " +
+       "LIMIT 1")
+    List<Object[]> findMesMasRecaudado(@Param("year") int year);
 
 
     List<Orden> findByFechaRegistro(LocalDate fechaOrden);

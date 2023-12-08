@@ -1,0 +1,160 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Estadisticas</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand" th:href="@{/}">TALLER MECANICO</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"                    
+                    <!-- Controles de grafico -->
+                    data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" th:href="@{/marcas}">Marcas</a>
+                        <a class="nav-link" th:href="@{/modelos}">Modelos</a>
+                        <a class="nav-link" th:href="@{/clientes}">Clientes</a>
+                        <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
+                        <a class="nav-link" th:href="@{/ordenes}">Ordenes</a>
+                        <a class="nav-link" th:href="@{/servicios}">Servicios</a>
+                        <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
+                        <a class="nav-link active" aria-current="page" th:href="@{/estadisticas}">Estadisticas</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container mt-4">
+
+        <div>
+            <a class="btn btn-primary" th:href="@{/estadisticas}">Estadisticas Ingresos Mensuales</a> 
+            <a class="btn btn-primary" th:href="@{/estadisticas_por_servicio}">Estadisticas por Servicios</a>
+        </div>
+
+        
+
+
+        <h3>Estadisticas Ingresos Mensuales</h3>
+
+
+        <form class="d-flex me-4" action="/estadisticas" method="get">
+            <input class="form-control me-2 mt-3" placeholder="Ingrese el año" aria-label="Search" type="number" id="year" name="year" th:value="${year}" />
+            <button class="btn btn-success mt-3" type="submit">Obtener Estadísticas</button>
+        </form>
+
+
+        <p th:if="${estadisticas.TotalAnual.IngresoTotalAnual != 0}">El total anual es de: <span th:text="' $' + ${estadisticas.TotalAnual.IngresoTotalAnual}"></span></p>
+        <p th:if="${estadisticas.TotalAnual.IngresoTotalAnual == 0}">No hay ingresos para el año ingresado.</p>
+
+        <br>
+
+
+
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Elementos "Servicio con más recaudo" y "Servicio más utilizado" -->
+                <h4>Mes con más recaudación:</h4>
+                <div>
+                    <ul>
+                        <li th:each="entry : ${mesMasRecaudado}">
+                            <span th:text="${entry.key}"></span> - <span th:text="' $' + ${entry.value}"></span>
+                        </li>
+                    </ul>
+            
+            
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <!-- Gráfico -->
+                <div style="width: 400px; height: 400px;">
+                    <!-- Agregar el canvas para el gráfico (con el id= podemos agregar todo tipo de Gráfico)-->
+                    <canvas id="tortaChart" width="100" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mes</th>
+                        <th>Ingresos</th>
+                        <th>Cantidad de Ordenes en el Mes</th>
+                        <th>Porcentaje del ingreso anual</th>
+                    </tr>
+                </thead>
+
+                <tr th:each="entry : ${estadisticas}">
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.key}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.value.RecaudacionMensual}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.value.CantidadOrdenes}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${#strings.length((entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%') > 5 ? #strings.substring(((entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%'), 0, 5) + '%' : (entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%'}"></td>
+                </tr>
+            </table>
+        </div>
+
+        <br>
+
+    </div>
+
+    <script>
+        // Cuando el DOM (document object Model) se completa y lo tomamos con la una funcion anonima, El codigo se empieza con el metodo addEventListener()
+        document.addEventListener('DOMContentLoaded', function () { 
+            
+            // Obtenemos el contexto 
+            var canvas = document.getElementById('tortaChart'); //  Se obtiene el elemento del DOM con el id 'tortaChart',
+            var ctx = canvas.getContext('2d'); // Se toma el tipo de Grafico, en este caso el 2d 
+
+            // Obtnemos los datos de la tabla
+            var data = []; // varialbe que toma un arreglo de los datos
+            var labels = []; // variable que toma un arreglo de etiquetas 
+            var rows = document.querySelectorAll('table tr'); // Variable que toma todos los elementos de la Eqtiqueta Table de HTML 
+            console.log(rows);
+            for (var i = 1; i < rows.length; i++) {  // Recorremos todos las filas de la variable rows 
+                var columns = rows[i].querySelectorAll('td'); // Para cada fila, se seleccionan todas las celdas (td) y se almacenan en la variable columns.
+                //Se agrega a cada columna que se crea un Label y el Valor que corresponde 
+                if (columns.length >= 2) {
+                    labels.push(columns[0].innerText);
+                    data.push(Number(columns[1].innerText));
+                }
+            }
+
+            // Configura los colores para el Grafico 
+            var colors = ['#FF6384','#36A2EB','#FFCE56','#4BC0C0','#9966FF','#FF8C00','#2E8B57','#8A2BE2','#DAA520','#A52A2A'];
+
+            // Fvariable que se encarga de Dibujar el grafico 
+            var myChart = new Chart(ctx, { //nueva instancia para el grafico 
+                type: 'doughnut', // el tipo de grafico, debo concordar con el que describio cuando se crea con Canvas 
+                data: { // Se agregan los datos de las variables a la nueva instnacia 
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors
+                    }]
+                },
+                options: {  // Opciones de Titulo 
+                    title: {
+                        display: true,
+                        text: 'Estadísticas Por Mes' 
+                    }
+                }
+            });
+        });
+    </script>
+
+
+</body>
+</html>
