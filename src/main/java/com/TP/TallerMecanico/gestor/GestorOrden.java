@@ -62,6 +62,9 @@ public class GestorOrden {
     private IModeloService modeloService;
 
     @Autowired
+    private OrdenImplementacion ordenImplementacion;
+
+    @Autowired
     private IOrdenDao ordenDao;
 
     @Autowired
@@ -333,6 +336,10 @@ public class GestorOrden {
         String nombreCliente = detallesOrdenDao.findNombreClienteByIdOrden(idOrden);
         String apellidoCliente = detallesOrdenDao.findApellidoClienteByIdOrden(idOrden);
         Double impuestoMarca = detallesOrdenDao.findImpuestoMarcaByIdOrden(idOrden);
+
+        Orden orden = ordenDao.findByIdOrden(idOrden);
+        ordenImplementacion.facturarOrden(orden);
+
 
         //Se crea una instancia de exportador de pdf y se le pasan los datos obtenidos
         FacturaExporterPDF exporter = new FacturaExporterPDF(listaDetallesOrdenes);

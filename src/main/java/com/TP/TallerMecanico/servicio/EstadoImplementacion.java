@@ -45,7 +45,7 @@ public class EstadoImplementacion implements IEstadoService {
             estadosPosibles.add(estadoCompletada);
         }
         if (estadoEnProgreso == null){
-            Estado enProgreso = new Estado("EN PROCESO");
+            Estado enProgreso = new Estado("EN PROGRESO");
             estadoDao.save(enProgreso);
             estadosPosibles.add(enProgreso);
         } else {

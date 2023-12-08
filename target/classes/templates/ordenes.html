@@ -99,10 +99,10 @@
                 <td th:text="${orden.tecnico.legajo}">Mostrar Tecnico</td>
                 <td th:text="${orden.calcularTotal()}">Calcular Total</td>
                 <td><a class="btn btn-info" th:href="@{/ordenes/detallesOrden/} + ${orden.idOrden}" th:text="Detalles"/>
-                    <a class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
+                    <a th:if="${orden.estadoActual?.nombre != 'FACTURADA'}" class="btn btn-warning" th:href="@{/modificarOrden/} + ${orden.idOrden}" th:text="Editar"/>
                     <a class="btn btn-success" th:href="@{/ordenes/imagenesOrden/} + ${orden.idOrden}" th:text="Imagenes"/>
-                    <a class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/>
-                    <a class="btn btn-dark" th:href="@{/facturarOrden/} + ${orden.idOrden}" th:text="Facturar"/></td></td>
+                    <a th:if="${orden.estadoActual?.nombre != 'FACTURADA'}" class="btn btn-danger" th:href="@{/eliminarOrden/} + ${orden.idOrden}" th:text="Eliminar"/>
+                    <a th:if="${orden.estadoActual?.nombre != 'FACTURADA' and orden.estadoActual?.nombre == 'COMPLETADA'} and ${orden.getDetallesOrdenesHTML != null}" class="btn btn-dark" th:href="@{/facturarOrden/} + ${orden.idOrden}" th:text="Facturar"/></td></td>
 
 
             </tr>

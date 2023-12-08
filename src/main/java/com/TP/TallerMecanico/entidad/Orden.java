@@ -15,9 +15,9 @@ import lombok.Data;
 @Entity
 @Table(name="orden")
 public class Orden implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idOrden;
@@ -37,33 +37,40 @@ public class Orden implements Serializable {
     private List<Imagen> imagenesOrden;
 
     @ManyToOne
-    @JoinColumn(name="vehiculo_id")
+    @JoinColumn(name = "vehiculo_id")
     private Vehiculo vehiculo;
 
     @ManyToOne
-    @JoinColumn(name="tecnico_id")
+    @JoinColumn(name = "tecnico_id")
     private Tecnico tecnico;
 
     @ManyToOne
-    @JoinColumn(name="estado_id")
+    @JoinColumn(name = "estado_id")
     private Estado estadoActual;
 
     @Transient
     private String modo;
     private Boolean estado = true;
 
-    public List<DetalleOrden> getDetallesOrden(){
+    public List<DetalleOrden> getDetallesOrden() {
         return detallesOrden;
     }
 
-    public int calcularTotal(){
+    public List<DetalleOrden> getDetallesOrdenesHTML(){
+        if (detallesOrden.isEmpty()){
+            return null;
+        } else {
+            return detallesOrden;
+        }
+    }
+
+    public int calcularTotal() {
         int total = 0;
         for (DetalleOrden detalleOrden : detallesOrden) {
             if (detalleOrden.getEstado()) {
-                total+=detalleOrden.getSubtotal();
+                total += detalleOrden.getSubtotal();
             }
         }
         return total;
     }
-
 }

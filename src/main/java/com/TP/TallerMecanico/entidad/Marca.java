@@ -21,7 +21,7 @@ public class Marca implements Serializable{
     @NotEmpty(message = "El campo no debe estar vacio")
     @Size(max=50, message = "El nombre de la marca no debe superar los 50 caracteres")
     @Size(max=50, message = "El nombre de la marca no debe superar los 50 caracteres")
-    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El nombre de la marca debe contener solo caracteres alfabeticos")
+    @Pattern(regexp = "^(?!\s*$)[a-zA-Z\s]+$",message = "El nombre de la marca debe contener solo caracteres alfabeticos\n")
     private String nombre;
     
     @NotNull(message = "El campo no debe estar vacio")

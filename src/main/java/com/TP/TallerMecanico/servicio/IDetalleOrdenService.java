@@ -16,7 +16,6 @@ public interface IDetalleOrdenService {
 
     public List<DetalleOrden> listarDetallesPorOrden(Orden orden);
     public List<DetalleOrden> findByIdOrden(Long idOrden);
-    public String findClienteByIdOrden(Long idOrden);
 
    
 }

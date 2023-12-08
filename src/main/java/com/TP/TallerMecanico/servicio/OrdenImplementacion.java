@@ -95,6 +95,20 @@ public class OrdenImplementacion implements IOrdenService {
         ordenDao.marcarComoActivo(orden.getIdOrden());
     }
 
+    public void facturarOrden(Orden orden){
+        Estado estadoFacturada = estadoDao.findByNombre("FACTURADA");
+        if (estadoFacturada == null){
+            Estado facturada = new Estado();
+            facturada.setNombre("FACTURADA");
+            estadoDao.save(facturada);
+            orden.setEstadoActual(facturada);
+        } else {
+            orden.setEstadoActual(estadoFacturada);
+        }
+        ordenDao.save(orden);
+    }
+
+
     // @Override
     // @Transactional
     // public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero, LocalDate fechaDocumento) {

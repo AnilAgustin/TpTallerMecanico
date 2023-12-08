@@ -71,7 +71,7 @@ public class FacturaExporterPDF {
     private Double impuestoMarca;
 
     //Metodo para obtener estos datos
-    public void obtenerDatosCliente(String nombreCliente, String apellidoCliente, Double impuestoMarca) {   
+    public void obtenerDatosCliente(String nombreCliente, String apellidoCliente, Double impuestoMarca) {
         this.nombreCliente = nombreCliente;
         this.apellidoCliente = apellidoCliente;
         this.impuestoMarca = impuestoMarca;
