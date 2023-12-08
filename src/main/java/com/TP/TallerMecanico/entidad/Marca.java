@@ -30,10 +30,10 @@ public class Marca implements Serializable{
     @DecimalMax(value = "100.0", inclusive = true, message = "El impuesto no puede ser mayor que 100%")
     private BigDecimal impuesto;
     
-    @NotNull(message = "El campo no debe estar vacio")
-    @DecimalMin(value = "0.0", inclusive = false, message = "El impuesto debe ser mayor que cero")
-    @DecimalMax(value = "100.0", inclusive = true, message = "El impuesto no puede ser mayor que 100%")
-    private Double impuesto;
+    // @NotNull(message = "El campo no debe estar vacio")
+    // @DecimalMin(value = "0.0", inclusive = false, message = "El impuesto debe ser mayor que cero")
+    // @DecimalMax(value = "100.0", inclusive = true, message = "El impuesto no puede ser mayor que 100%")
+    // private Double impuesto;
 
     @Transient
     private String modo;

@@ -94,9 +94,6 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     "ORDER BY cantidadTotal DESC " +
     "LIMIT 1")
     List<Object[]> findServicioMasUtilizadoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
-
-
-
     
     //Consulta para obtener el Id de una orden relacionada a un detalle de orden
     @Query("SELECT d FROM DetalleOrden d INNER JOIN d.orden o WHERE o.idOrden = :idOrden")
