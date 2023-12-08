@@ -32,7 +32,7 @@ public class GestorEstadistica{
         }
          // Puedes obtener esto según tus necesidades
 
-        Map<String, Double> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
+         Map<String, Map<String, Double>> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
 
          
         model.addAttribute("estadisticas", estadisticas);
@@ -66,6 +66,10 @@ public class GestorEstadistica{
             // Lógica para manejar fechas de inicio y fin predeterminadas
             fechaInicio = LocalDate.of(year, month, 1);
             fechaFin = fechaInicio.withDayOfMonth(fechaInicio.lengthOfMonth());
+        }
+
+        if (fechaInicio.compareTo(fechaFin) > 0){
+            return "redirect:/estadisticas_por_servicio";
         }
 
 

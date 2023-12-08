@@ -42,18 +42,18 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     
     @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
     "FROM DetalleOrden d JOIN d.orden o JOIN d.servicio s " +
-    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
     "GROUP BY s.nombre ")
     List<Object[]> obtenerIngresosPorServicio(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
 
     @Query("SELECT SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) FROM DetalleOrden d " +
     "JOIN d.orden o " +
-    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId")
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId")
     Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY montoTotal DESC " +
     "LIMIT 1")
@@ -61,7 +61,7 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY cantidadTotal DESC " +
     "LIMIT 1")
@@ -71,18 +71,18 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     //Estadisticas sin filtrado
     @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
     "FROM DetalleOrden d JOIN d.orden o JOIN d.servicio s " +
-    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
     "GROUP BY s.nombre ")
     List<Object[]> obtenerIngresosPorServicioSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 
     @Query("SELECT SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) FROM DetalleOrden d " +
     "JOIN d.orden o " +
-    "WHERE o.fechaRegistro BETWEEN :fechaInicio AND :fechaFin ")
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin ")
     Double calcularMontoTotalEnPeriodoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY montoTotal DESC " +
     "LIMIT 1")
@@ -90,7 +90,7 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaRegistro BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY cantidadTotal DESC " +
     "LIMIT 1")

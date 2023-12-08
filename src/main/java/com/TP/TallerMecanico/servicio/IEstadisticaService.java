@@ -5,7 +5,7 @@ import java.util.Map;
 import com.TP.TallerMecanico.entidad.Tecnico;
 
 public interface IEstadisticaService {
-    Map<String, Double> obtenerEstadisticasIngresosMensuales(int year);
+    Map<String, Map<String, Double>> obtenerEstadisticasIngresosMensuales(int year);
     
     Map<String, Map<String, Double>> obtenerEstadisticasPorServicioEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin, Long tecnicoId);
 

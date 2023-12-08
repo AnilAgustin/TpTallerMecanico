@@ -19,29 +19,34 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Autowired
     private IDetalleOrdenDao detalleOrdenDao;
-
     @Override
-    public Map<String, Double> obtenerEstadisticasIngresosMensuales(int year) {
-        List<Object[]> resultados = ordenDao.obtenerIngresosMensuales(year);
-
+    public Map<String, Map<String, Double>> obtenerEstadisticasIngresosMensuales(int year) {
+        List<Object[]> resultados = ordenDao.obtenerIngresosYOrdenesMensuales(year);
+    
         // Convertir resultados a Map
-        Map<String, Double> estadisticas = new HashMap<>();
+        Map<String, Map<String, Double>> estadisticas = new HashMap<>();
         double ingresoTotalAnual = 0.0;
         
         for (Object[] resultado : resultados) {
             int mes = (int) resultado[0];
-            double recaudacionMensual = (double) resultado[1];
+            long cantidadOrdenes = (long) resultado[1];
+            double recaudacionMensual = (double) resultado[2];
             
-            // Agregar el recaudo mensual al mapa
-            estadisticas.put(String.format("%02d", mes), recaudacionMensual);
+            // Agregar el recaudo mensual y la cantidad de órdenes al mapa
+            Map<String, Double> datosMensuales = new HashMap<>();
+            datosMensuales.put("RecaudacionMensual", recaudacionMensual);
+            datosMensuales.put("CantidadOrdenes", (double) cantidadOrdenes);
+            estadisticas.put(String.format("%02d", mes), datosMensuales);
             
             // Acumular el recaudo mensual al total anual
             ingresoTotalAnual += recaudacionMensual;
         }
-
+    
         // Agregar el total anual al mapa
-        estadisticas.put("IngresoTotalAnual", ingresoTotalAnual);
-
+        Map<String, Double> totalAnual = new HashMap<>();
+        totalAnual.put("IngresoTotalAnual", ingresoTotalAnual);
+        estadisticas.put("TotalAnual", totalAnual);
+    
         return estadisticas;
     }
 

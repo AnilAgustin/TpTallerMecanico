@@ -51,9 +51,9 @@
             <button class="btn btn-success mt-3" type="submit">Obtener Estadísticas</button>
         </form>
 
-        <p th:if="${estadisticas.IngresoTotalAnual != 0}">El total anual es de: <span th:text="' $' + ${estadisticas.IngresoTotalAnual}"></span></p>
-        <p th:if="${estadisticas.IngresoTotalAnual == 0}">No hay ingresos para el año ingresado.</p>
 
+        <p th:if="${estadisticas.TotalAnual.IngresoTotalAnual != 0}">El total anual es de: <span th:text="' $' + ${estadisticas.TotalAnual.IngresoTotalAnual}"></span></p>
+        <p th:if="${estadisticas.TotalAnual.IngresoTotalAnual == 0}">No hay ingresos para el año ingresado.</p>
 
         <br>
 
@@ -92,14 +92,16 @@
                     <tr>
                         <th>Mes</th>
                         <th>Ingresos</th>
+                        <th>Cantidad de Ordenes en el Mes</th>
                         <th>Porcentaje del ingreso anual</th>
                     </tr>
                 </thead>
 
                 <tr th:each="entry : ${estadisticas}">
-                    <td th:if="${estadisticas != null && entry.key != 'IngresoTotalAnual'}" th:text="${entry.key}"></td>
-                    <td th:if="${estadisticas != null && entry.key != 'IngresoTotalAnual'}" th:text="${entry.value}"></td>
-                    <td th:if="${estadisticas != null && entry.key != 'IngresoTotalAnual'}" th:text="${#strings.length((entry.value / estadisticas.IngresoTotalAnual * 100) + '%') > 5 ? #strings.substring(((entry.value / estadisticas.IngresoTotalAnual * 100) + '%'), 0, 5) + '%' : (entry.value / estadisticas.IngresoTotalAnual * 100) + '%'}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.key}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.value.RecaudacionMensual}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${entry.value.CantidadOrdenes}"></td>
+                    <td th:if="${estadisticas != null && entry.key != 'TotalAnual'}" th:text="${#strings.length((entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%') > 5 ? #strings.substring(((entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%'), 0, 5) + '%' : (entry.value.RecaudacionMensual / estadisticas.TotalAnual.IngresoTotalAnual * 100) + '%'}"></td>
                 </tr>
             </table>
         </div>
