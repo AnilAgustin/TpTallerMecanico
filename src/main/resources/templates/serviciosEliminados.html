@@ -33,13 +33,11 @@
             <h3>Listado Servicios</h3>
             <form class="d-flex" method="get">
                 <div>
-                    <a th:href="@{/agregarServicio}" class="btn btn-primary me-5 mt-3">Agregar</a>
-                    <a th:href="@{/serviciosEliminados}" class="btn btn-warning me-5 mt-3">Ver eliminados</a>
+                    <a th:href="@{/servicios}" class="btn btn-danger me-5 mt-3">Volver</a>
                 </div>
             </form>
             <div>
                 <form class="d-flex me-4" method="get">
-  
                     <input class="form-control me-2 mt-3" type="search" name="nombre" placeholder="Ingrese el nombre del servicio que desea buscar"
                         aria-label="Search" th:value="${nombre}">
                         
@@ -67,8 +65,7 @@
                             <span th:if="${servicio.repuesto != null and servicio.repuesto != ''}" th:text="${servicio.repuesto}">Mostrar Repuesto</span>
                             <span th:unless="${servicio.repuesto != null and servicio.repuesto != ''}">(No Ingresado)</span>
                         </td>
-                        <td> <a class="btn btn-warning" th:href="@{/modificarServicio/} + ${servicio.idServicio}" th:text="Editar"/>
-                            <a class="btn btn-danger" th:href="@{/eliminarServicio/} + ${servicio.idServicio}" th:text="Eliminar"/></td>
+                        <td> <a class="btn btn-warning" th:href="@{/recuperarServicio/} + ${servicio.idServicio}" th:text="Recuperar"/></td>
                     </tr>
                 </table>
             </div>

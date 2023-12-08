@@ -15,6 +15,10 @@ public interface IServicioDao extends CrudRepository<Servicio, Long>{
     void marcarComoEliminado(@Param("idServicio") Long idServicio);
     
     List<Servicio> findByEstadoTrue(); //arma una consulta SQL personalizada con estado
+    List<Servicio> findByEstadoFalse();
+
+    Servicio findByIdServicio(Long idServicio);
+    Servicio findByIdServicioAndEstadoFalse(Long idServicio);
 
     @Modifying
     @Query("UPDATE Servicio m SET m.estado = true WHERE m.idServicio = :idServicio")  //Update a estado true
@@ -26,5 +30,8 @@ public interface IServicioDao extends CrudRepository<Servicio, Long>{
 
     @Query("SELECT s FROM Servicio s WHERE s.nombre LIKE :nombre% AND s.estado = true")
     List<Servicio> filtrarPorNombreYEstadoTrue(@Param("nombre") String nombre);
+
+    @Query("SELECT s FROM Servicio s WHERE s.nombre LIKE :nombre% AND s.estado = false")
+    List<Servicio> filtrarPorNombreYEstadoFalse(@Param("nombre") String nombre);
 
 }

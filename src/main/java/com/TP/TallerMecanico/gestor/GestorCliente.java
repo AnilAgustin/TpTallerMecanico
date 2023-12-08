@@ -1,7 +1,9 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.Cliente;
+import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.interfaz.IClienteDao;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IOrdenService;
 
@@ -21,6 +23,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -34,6 +37,9 @@ public class GestorCliente {
     private IClienteService clienteService;
 
     @Autowired
+    private IClienteDao clienteDao;
+
+    @Autowired
     private IOrdenService ordenService;
 
     //Listar todos los clientes cuando la URL sea /clientes
@@ -44,9 +50,39 @@ public class GestorCliente {
         return "clientes";
     }
 
+    @GetMapping("/clientesEliminados")
+    public String clientesEliminados(Model model, @RequestParam(name = "dni", required = false) Long dniNumero){
+        List<Cliente> clientes;
+
+        String dni = null;
+        if (dniNumero != null) {
+            // Si se proporciona un DNI numérico, conviértelo a una cadena
+            dni = Long.toString(dniNumero);
+            clientes = clienteDao.findByDniStartingWithAndEstadoFalse(dni);
+
+        }else{
+            clientes = clienteDao.findByEstadoFalse();
+            
+        }
+
+        model.addAttribute("cliente", clientes);
+        
+        return "clientesEliminados";
+    }
+
+    //Cuando se presiona el boton editar se retorna el html con todos los datos de la marca seleccionada para modificar 
+    @GetMapping("/recuperarCliente/{idCliente}")
+    public String recuperarCliente(@PathVariable Long idCliente, Model model) {
+        Cliente cliente = clienteDao.findByIdCliente(idCliente);
+        clienteService.activarCliente(cliente);
+        return "redirect:/clientes";
+    }
+
+
     @GetMapping("/buscarClientes")
     public String buscarNombreFechaCliente(@RequestParam(name = "nombre", required = false) String nombre,
-                                        @RequestParam(name = "fechaUltimaVisita", required = false) LocalDate fechaUltimaVisita,
+                                        @RequestParam(name = "fechaDesde", required = false) LocalDate fechaDesde,
+                                        @RequestParam(name = "fechaHasta", required = false) LocalDate fechaHasta,
                                         @RequestParam(name = "dni", required = false) Long dniNumero,
                                         Model model) {
     
@@ -63,10 +99,10 @@ public class GestorCliente {
             dni = Long.toString(dniNumero);
         }
     
-        if (nombre != null && !nombre.isEmpty() && dni != null && fechaUltimaVisita != null) {
-            // Si se proporciona tanto un nombre como una fecha, puedes buscar los clientes
+        if (nombre != null && !nombre.isEmpty() && dni != null && (fechaDesde != null || fechaHasta != null)) {
+            // Si se proporciona tanto un nombre como una fechaDesde y una fechaHasta, se buscan los clientes
             // con ese nombre que tengan órdenes en la fecha especificada.
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
     
             for (Orden orden : ordenes) {
                 if (orden.getVehiculo().getCliente().getNombre().startsWith(nombre)) {
@@ -77,8 +113,8 @@ public class GestorCliente {
                 }
             }
     
-        }else if (nombre != null && !nombre.isEmpty() && dni == null && fechaUltimaVisita != null) {
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        }else if (nombre != null && !nombre.isEmpty() && dni == null && (fechaDesde != null || fechaHasta != null)) {
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
     
             for (Orden orden : ordenes) {
                 if (orden.getVehiculo().getCliente().getNombre().startsWith(nombre)) {
@@ -86,23 +122,22 @@ public class GestorCliente {
                 }
             }
             
-        }else if (nombre.isEmpty()  && dni != null && fechaUltimaVisita != null) {
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+        }else if (nombre.isEmpty()  && dni != null && (fechaDesde != null || fechaHasta != null)) {
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
 
             for (Orden orden : ordenes) {
                 if (orden.getVehiculo().getCliente().getDni().startsWith(dni)) {
                     clientesSet.add(orden.getVehiculo().getCliente());
                 }
             }
-        }else if (fechaUltimaVisita != null) {
+        }else if ((fechaDesde != null || fechaHasta != null)) {
             // Si solo se proporciona una fecha, puedes buscar los clientes que tienen órdenes
             // en la fecha especificada.
-            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaUltimaVisita);
+            List<Orden> ordenes = ordenService.listarOrdenesFecha(fechaDesde, fechaHasta);
     
             for (Orden orden : ordenes) {
                 clientesSet.add(orden.getVehiculo().getCliente());
             }
-    
         } else if (nombre != null && !nombre.isEmpty()) {
             // Si solo se proporciona un nombre, puedes buscar los clientes por ese nombre.
             clientesSet.addAll(clienteService.buscarClienteNombre(nombre));
@@ -118,7 +153,8 @@ public class GestorCliente {
         model.addAttribute("cliente", clientes);
         model.addAttribute("nombre", nombre);
         model.addAttribute("dni", dni);
-        model.addAttribute("fechaUltimaVisita", fechaUltimaVisita);
+        model.addAttribute("fechaDesde", fechaDesde);
+        model.addAttribute("fechaHasta", fechaHasta);
         return "clientes";
     }
 

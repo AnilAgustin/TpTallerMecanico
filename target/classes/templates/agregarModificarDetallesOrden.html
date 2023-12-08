@@ -135,7 +135,11 @@
     </div>
 </div>
 
-
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var modo = /*[[${modo}]]*/ '';
+    /*]]>*/
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -178,7 +182,7 @@
         })
 
         //DEFINICION DE FUNCIONES
-        
+
         //Funcion para calcular el subTotal
         function calcularSubTotal() {
             const subtotalInput = document.getElementById('subtotal');
@@ -206,7 +210,10 @@
                 const precioNum = parseFloat(precioStr);
                 precioServicioInput.classList.add("bg-dark-subtle");                        // Convierte el precio a floar
                 precioServicioInput.value = precioNum;                                      //Le setea al value del input del precio unitario del ser vicio, con el precio del servicio
-                precioFinal.value = precioNum;
+                
+                if (modo == 'nuevo') {
+                    precioFinal.value = precioNum;
+                }
             } else {
                 precioServicioInput.classList.remove("bg-dark-subtle");
                 precioServicioInput.value = "";                                             //Si es null no setea nada

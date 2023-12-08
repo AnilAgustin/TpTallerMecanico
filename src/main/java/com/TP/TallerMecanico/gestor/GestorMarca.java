@@ -3,9 +3,11 @@ package com.TP.TallerMecanico.gestor;
 import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Orden;
+import com.TP.TallerMecanico.interfaz.IMarcaDao;
 
 import jakarta.validation.Valid;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,6 +32,8 @@ public class GestorMarca {
     @Autowired
     private IMarcaService marcaService; 
 
+    @Autowired
+    private IMarcaDao marcaDao;
 
     //Cuando ingresamos a la URL del puerto nos dirigimos al index 
     @GetMapping("/")
@@ -53,6 +58,24 @@ public class GestorMarca {
         model.addAttribute("modo", "nuevo");
         return "agregarModificarMarca";
     }
+
+    @GetMapping("/marcasEliminadas")
+    public String marcasEliminadas(@RequestParam(name = "nombre", required = false) String nombre, Model model){
+        List<Marca> marcas;
+
+        if (nombre != null) {
+            nombre = nombre.toUpperCase();
+            marcas = marcaDao.findMarcaByNombreAndEstadoFalse(nombre);
+        }else{
+            marcas = marcaDao.findByEstadoFalse();
+        }
+
+        
+        model.addAttribute("marca", marcas);
+        
+        return "marcasEliminadas";
+    }
+
 
     @GetMapping("/buscarMarcas")
     public String buscarMarca(@RequestParam(name = "nombre", required = false) String nombre, Model model){
@@ -108,6 +131,14 @@ public class GestorMarca {
         model.addAttribute("marca", marca);
         model.addAttribute("modo", "editar");
         return "agregarModificarMarca";
+    }
+
+    //Cuando se presiona el boton editar se retorna el html con todos los datos de la marca seleccionada para modificar 
+    @GetMapping("/recuperarMarca/{idMarca}")
+    public String recuperarMarca(@PathVariable Long idMarca, Model model) {
+        Marca marca = marcaDao.findByIdMarca(idMarca);
+        marcaService.activarMarca(marca);
+        return "redirect:/marcas";
     }
 
     //Cuando se presiona el boton eliminar se pasa el ID de la marca y esta se elimina (Soft Delete)

@@ -74,8 +74,10 @@ public class GestorDetalleOrden {
             }
 
             model.addAttribute("modo", "nuevo");
+            
             return "agregarModificarDetallesOrden";
         }
+
         // Obtén el id de la orden después de guardar el detalle, asumiendo que puedes obtenerlo desde detalleOrden
         var orden = ordenService.buscarOrden(id);
         detalleOrden.setOrden(orden);
@@ -83,6 +85,8 @@ public class GestorDetalleOrden {
         //Se llama a la logica guardar definida en IDetalleOrdenService, pero en realidad es DetalleOrdenImplementacion
         detalleOrdenService.guardar(detalleOrden);
 
+        //model.addAttribute("eliminada", false);
+        
         // Construye la URL de redireccionamiento con el id de la orden
         String redirectUrl = "redirect:/ordenes/detallesOrden/" + id;
 

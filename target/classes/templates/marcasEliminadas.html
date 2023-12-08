@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head xmlns:th="http://www.thymeleaft.org">
-        <title>Servicios</title>
+        <title>Marcas</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -16,12 +16,12 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                         <div class="navbar-nav">
-                            <a class="nav-link" th:href="@{/marcas}">Marcas</a>
+                            <a class="nav-link active" aria-current="page" th:href="@{/marcas}">Marcas</a>
                             <a class="nav-link" th:href="@{/modelos}">Modelos</a>
                             <a class="nav-link" th:href="@{/clientes}">Clientes</a>
                             <a class="nav-link" th:href="@{/vehiculos}">Vehiculos</a>
                             <a class="nav-link" th:href="@{/ordenes}">Ordenes</a>
-                            <a class="nav-link active" aria-current="page" th:href="@{/servicios}">Servicios</a>
+                            <a class="nav-link" th:href="@{/servicios}">Servicios</a>
                             <a class="nav-link" th:href="@{/tecnicos}">Tecnicos</a>
                         </div>
                     </div>
@@ -30,52 +30,43 @@
         </header>
 
         <div class="container mt-4">
-            <h3>Listado Servicios</h3>
-            <form class="d-flex" method="get">
-                <div>
-                    <a th:href="@{/agregarServicio}" class="btn btn-primary me-5 mt-3">Agregar</a>
-                    <a th:href="@{/serviciosEliminados}" class="btn btn-warning me-5 mt-3">Ver eliminados</a>
-                </div>
-            </form>
+            <h3>Listado marcas eliminadas</h3>
             <div>
-                <form class="d-flex me-4" method="get">
-  
-                    <input class="form-control me-2 mt-3" type="search" name="nombre" placeholder="Ingrese el nombre del servicio que desea buscar"
+                <form class="d-flex" method="get">
+                    <div>
+                        <a th:href="@{/marcas}" class="btn btn-danger me-5 mt-3">Volver</a>
+                    </div>
+                </form>
+
+                <form class="d-flex me-4" role="search" th:object="${marca}" method="get">
+                    <input class="form-control me-2 mt-3" type="search" name="nombre" placeholder="Ingrese el nombre de la marca que desea buscar"
                         aria-label="Search" th:value="${nombre}">
                         
                     <input type="submit" class="btn btn-success me-2 mt-3" value="Buscar">
                 </form>
             </div>
-
+            
             <br>
-            <div th:if="${servicio != null and !servicio.empty}">
+            <div th:if="${marca != null and !marca.empty}">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>Nombre</th>
-                            <th>Precio</th>
-                            <th>Repuesto</th>
                             <th>Acciones</th>
-
                         </tr>
                     </thead>
 
-                    <tr th:each="servicio :${servicio}">
-                        <td th:text="${servicio.nombre}">Mostrar Nombre</td>
-                        <td th:text="${servicio.precio}">Mostrar Precio</td>
-                        <td>
-                            <span th:if="${servicio.repuesto != null and servicio.repuesto != ''}" th:text="${servicio.repuesto}">Mostrar Repuesto</span>
-                            <span th:unless="${servicio.repuesto != null and servicio.repuesto != ''}">(No Ingresado)</span>
-                        </td>
-                        <td> <a class="btn btn-warning" th:href="@{/modificarServicio/} + ${servicio.idServicio}" th:text="Editar"/>
-                            <a class="btn btn-danger" th:href="@{/eliminarServicio/} + ${servicio.idServicio}" th:text="Eliminar"/></td>
+                    <tr th:each="marca :${marca}">
+                        <td th:text="${marca.nombre}">Mostrar Nombre</td>
+                        <td> <a class="btn btn-warning" th:href="@{/recuperarMarca/} + ${marca.idMarca}" th:text="Recuperar"/></td>
                     </tr>
                 </table>
             </div>
             <br/>
-            <div th:if="${servicio == null or servicio.empty}">
-                La lista de servicios esta vacia
+            <div th:if="${marca == null or marca.empty}">
+                La lista de marcas esta vacia
             </div>
         </div>
+    
     </body>
 </html>

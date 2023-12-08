@@ -129,6 +129,29 @@ public class GestorOrden {
         return "agregarModificarOrden";
     }
 
+    @GetMapping("/ordenesEliminadas")
+    public String ordenesEliminadas(Model model, @RequestParam(name="numero", required = false) Long numero){
+        List<Orden> ordenes;
+
+        if (numero!=null) {
+            ordenes = ordenDao.filtrarOrdenEliminadaPorNumero(numero);
+        }else{
+            ordenes = ordenDao.findByEstadoFalse();
+        }
+        
+
+        //Lógica para mostrar todos 
+        List<Marca> marcas = marcaService.listarMarcas();
+        List<Modelo> modelos = modeloService.listarModelos();
+
+        model.addAttribute("orden", ordenes);
+        model.addAttribute("marcas", marcas);
+        model.addAttribute("modelos", modelos);
+        model.addAttribute("numero", numero);
+
+        return "ordenesEliminadas";
+    }
+    
     //Permite guardar un orden cuando la solicitud POST sea guardarOrden 
     @PostMapping("/guardarOrden")
     public String guardarOrden(@Valid Orden orden, BindingResult error, Model model, @RequestParam("agregarDetalles") String agregarDetalles) {
@@ -255,6 +278,11 @@ public class GestorOrden {
         List<DetalleOrden> detalles = detallesService.listarDetallesPorOrden(orden);
         model.addAttribute("orden", orden);
         model.addAttribute("detalleOrden", detalles);
+
+        if (orden.getEstado()==false) {
+            model.addAttribute("eliminada", true);
+        }
+
         return "detallesOrden";
     }
 

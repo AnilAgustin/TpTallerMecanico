@@ -16,6 +16,8 @@ public interface IModeloDao extends CrudRepository<Modelo, Long>{
     
     List<Modelo> findByEstadoTrue(); //arma una consulta SQL personalizada con estado
 
+    boolean existsByIdModeloAndEstadoTrue(Long id);
+
     @Modifying
     @Query("UPDATE Modelo m SET m.estado = true WHERE m.idModelo = :idModelo")  //Update a estado true
     void marcarComoActivo(@Param("idModelo") Long idModelo);

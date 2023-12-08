@@ -17,6 +17,7 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     void marcarComoEliminado(@Param("idOrden") Long idOrden);
 
     List<Orden> findByEstadoTrue();
+    List<Orden> findByEstadoFalse();
 
     @Modifying
     @Query("UPDATE Orden m SET m.estado = true WHERE m.idOrden = :idOrden")
@@ -133,4 +134,8 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
 
 
     List<Orden> findByFechaRegistro(LocalDate fechaOrden);
+
+    //QUERY PARA ORDENES ELIMINADAS
+    @Query("SELECT o FROM Orden o WHERE o.idOrden = :numero AND o.estado = false")
+    List<Orden> filtrarOrdenEliminadaPorNumero(@Param("numero") Long numero);
 }

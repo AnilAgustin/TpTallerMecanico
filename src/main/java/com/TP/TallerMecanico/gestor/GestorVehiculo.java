@@ -1,6 +1,9 @@
 package com.TP.TallerMecanico.gestor;
 
 import com.TP.TallerMecanico.entidad.*;
+import com.TP.TallerMecanico.interfaz.IClienteDao;
+import com.TP.TallerMecanico.interfaz.IMarcaDao;
+import com.TP.TallerMecanico.interfaz.IModeloDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IMarcaService;
@@ -28,6 +31,18 @@ public class GestorVehiculo {
 
     @Autowired
     private IModeloService modeloService;
+
+    @Autowired
+    private IVehiculoDao vehiculoDao;
+
+    @Autowired
+    private IClienteDao clienteDao;
+
+    @Autowired
+    private IMarcaDao marcaDao;
+
+    @Autowired
+    private IModeloDao modeloDao;
 
     @Autowired
     private IClienteService clienteService;
@@ -72,6 +87,57 @@ public class GestorVehiculo {
         model.addAttribute("modelos", modelos);
 
         return "vehiculos";
+    }
+
+    @GetMapping("/vehiculosEliminados")
+    public String vehiculosEliminados(Model model, @RequestParam(name = "patente", required = false) String patente){
+        List<Vehiculo> vehiculos;
+
+        if (patente!=null && patente!="") {
+            patente = patente.toUpperCase();
+
+            vehiculos = vehiculoDao.findByPatenteAndEstadoFalse(patente);
+
+        }else{
+            vehiculos = vehiculoDao.findByEstadoFalse();
+        }
+
+        
+        model.addAttribute("vehiculo", vehiculos);
+        return "vehiculosEliminados";
+    }
+
+
+    @GetMapping("/recuperarVehiculo/{idVehiculo}")
+    public String recuperarVehiculo(Model model, @PathVariable Long idVehiculo) {
+        Vehiculo vehiculo = vehiculoDao.findByIdVehiculoAndEstadoFalse(idVehiculo);
+    
+        // Verificar la existencia del vehículo y de los objetos Cliente, Modelo y Marca asociados
+        if (vehiculo != null && vehiculo.getCliente() != null && vehiculo.getModelo() != null && vehiculo.getModelo().getMarca() != null) {
+            Cliente clienteAsociado = vehiculo.getCliente();
+            Modelo modeloAsociado = vehiculo.getModelo();
+            Marca marcaAsociada = modeloAsociado.getMarca();
+    
+            // Verificar si los objetos Cliente, Modelo y Marca asociados existen en la base de datos
+            if (clienteDao.existsByIdClienteAndEstadoTrue(clienteAsociado.getIdCliente()) &&
+                modeloDao.existsByIdModeloAndEstadoTrue(modeloAsociado.getIdModelo()) &&
+                marcaDao.existsByIdMarcaAndEstadoTrue(marcaAsociada.getIdMarca())) {
+    
+                // Todos los objetos asociados existen, proceder con la recuperación del vehículo
+                vehiculoService.activarVehiculo(vehiculo);
+                return "redirect:/vehiculos";
+            } else {
+                // Alguno de los objetos asociados no existe, manejar el caso apropiadamente
+                model.addAttribute("error", "No se puede recuperar el vehículo porque uno o más objetos asociados no existen.");
+                vehiculosEliminados(model,"");
+                return "vehiculosEliminados";
+            }
+        } else {
+            // Manejar el caso cuando el vehículo no se encuentra o ya ha sido recuperado
+            model.addAttribute("error", "El vehículo no se encuentra o ya ha sido recuperado.");
+            vehiculosEliminados(model,"");
+            return "vehiculosEliminados";
+        }
     }
 
     //Permitir agregar un vehiculo cuando la URL sea /agregarVehiculo

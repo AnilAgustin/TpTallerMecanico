@@ -66,7 +66,7 @@ public class MarcaImplementacion implements IMarcaService {
 
             //Caso contrario
             } else {
-
+                
                 //Verificamos si la marca con el mismo nombre se encuentra activada en la base de datos
                 if (marcaActivada == null) {
 

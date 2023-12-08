@@ -31,11 +31,15 @@
 
         <div class="container mt-4">
             <h3>Listado Servicios</h3>
+            <form class="d-flex" method="get">
+                <div>
+                    <a th:href="@{/agregarServicio}" class="btn btn-primary me-5 mt-3">Agregar</a>
+                    <a th:href="@{/serviciosEliminados}" class="btn btn-warning me-5 mt-3">Ver eliminados</a>
+                </div>
+            </form>
             <div>
                 <form class="d-flex me-4" method="get">
-                    <div>
-                        <a th:href="@{/agregarServicio}" class="btn btn-primary me-5 mt-3">Agregar</a>
-                    </div>
+  
                     <input class="form-control me-2 mt-3" type="search" name="nombre" placeholder="Ingrese el nombre del servicio que desea buscar"
                         aria-label="Search" th:value="${nombre}">
                         

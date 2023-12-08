@@ -30,13 +30,28 @@
 
 <div class="container mt-4">
     <h3>Listado Clientes</h3>
-        <form class="d-flex me-4" role="search" th:action="@{/buscarClientes}" th:object="${cliente}" method="get">
+
+        <form class="d-flex" method="get">
             <div>
                 <a th:href="@{/agregarCliente}" class="btn btn-primary me-5 mt-3">Agregar</a>
+                <a th:href="@{/clientesEliminados}" class="btn btn-warning me-5 mt-3">Ver eliminados</a>
             </div>
+        </form>
+
+        <form class="d-flex me-4" role="search" th:action="@{/buscarClientes}" th:object="${cliente}" method="get">
             <input class="form-control me-2 mt-3" type="number" name="dni" placeholder="Ingrese el dni del cliente" aria-label="Search" th:value="${dni}">
             <input class="form-control me-2 mt-3" type="text" name="nombre" placeholder="Ingrese el nombre del cliente" aria-label="Search" th:value="${nombre}">
-            <input class="form-control me-2 mt-3" type="date" name="fechaUltimaVisita" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaUltimaVisita}" />
+            
+            <div class="date-input-container">
+                <input class="form-control me-2 mt-3" type="date" name="fechaDesde" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaDesde}" />
+                <span class="date-input-label fw-bold">Desde</span>
+            </div>
+
+            <div class="date-input-container">
+                <input class="form-control me-2 mt-3" type="date" name="fechaHasta" placeholder="Fecha Orden" aria-label="Search" th:value="${fechaHasta}" />
+                <span class="date-input-label fw-bold">Hasta</span>
+            </div>
+
 
             <button class="btn btn-success mt-3" type="submit">Buscar</button>
         </form>

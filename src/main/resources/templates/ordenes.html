@@ -35,7 +35,11 @@
         <form class="d-flex" method="get">
             <div>
                 <a th:href="@{/agregarOrden}" class="btn btn-primary me-5 mt-3">Agregar</a>
+                <a th:href="@{/ordenesEliminadas}" class="btn btn-warning me-5 mt-3">Ver eliminadas</a>
             </div>
+        </form>
+
+        <form class="d-flex" method="get">
 
             <input class="form-select me-2 mt-3" type="number" name="numero" placeholder="Ingrese el numero de la orden"
              aria-label="Search" th:value="${numero}">
