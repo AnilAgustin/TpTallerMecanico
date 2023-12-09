@@ -1,6 +1,7 @@
 package com.TP.TallerMecanico.interfaz;
 
 import com.TP.TallerMecanico.entidad.DetalleOrden;
+import com.TP.TallerMecanico.entidad.Estado;
 import com.TP.TallerMecanico.entidad.Orden;
 
 import java.time.LocalDate;
@@ -41,59 +42,59 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     
     @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
     "FROM DetalleOrden d JOIN d.orden o JOIN d.servicio s " +
-    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual " +
     "GROUP BY s.nombre ")
-    List<Object[]> obtenerIngresosPorServicio(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
+    List<Object[]> obtenerIngresosPorServicio(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId, @Param ("estadoActual") Estado estadoActual);
 
     @Query("SELECT SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) FROM DetalleOrden d " +
     "JOIN d.orden o " +
-    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId")
-    Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual")
+    Double calcularMontoTotalEnPeriodo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId, @Param ("estadoActual") Estado estadoActual);
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY montoTotal DESC " +
     "LIMIT 1")
-    List<Object[]> findServicioMasRecaudo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId); 
+    List<Object[]> findServicioMasRecaudo(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId, @Param ("estadoActual") Estado estadoActual); 
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY cantidadTotal DESC " +
     "LIMIT 1")
-    List<Object[]> findServicioMasUtilizado(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId);
+    List<Object[]> findServicioMasUtilizado(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId, @Param ("estadoActual") Estado estadoActual);
 
 
     //Estadisticas sin filtrado
     @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
     "FROM DetalleOrden d JOIN d.orden o JOIN d.servicio s " +
-    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual " +
     "GROUP BY s.nombre ")
-    List<Object[]> obtenerIngresosPorServicioSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+    List<Object[]> obtenerIngresosPorServicioSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param ("estadoActual") Estado estadoActual);
 
     @Query("SELECT SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) FROM DetalleOrden d " +
     "JOIN d.orden o " +
-    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin ")
-    Double calcularMontoTotalEnPeriodoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+    "WHERE o.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual ")
+    Double calcularMontoTotalEnPeriodoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param ("estadoActual") Estado estadoActual);
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY montoTotal DESC " +
     "LIMIT 1")
-    List<Object[]> findServicioMasRecaudoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin); 
+    List<Object[]> findServicioMasRecaudoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param ("estadoActual") Estado estadoActual); 
 
     @Query("SELECT d.servicio.nombre AS servicio, SUM(CAST(d.cantidad AS int)) AS cantidadTotal " +
     "FROM DetalleOrden d " +
-    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.estado = true AND d.orden.estadoActual = :estadoActual " +
     "GROUP BY d.servicio.nombre " +
     "ORDER BY cantidadTotal DESC " +
     "LIMIT 1")
-    List<Object[]> findServicioMasUtilizadoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin);
+    List<Object[]> findServicioMasUtilizadoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param ("estadoActual") Estado estadoActual);
     
     //Consulta para obtener el Id de una orden relacionada a un detalle de orden
     @Query("SELECT d FROM DetalleOrden d INNER JOIN d.orden o WHERE o.idOrden = :idOrden")

@@ -8,8 +8,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.TP.TallerMecanico.entidad.Estado;
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.interfaz.IDetalleOrdenDao;
+import com.TP.TallerMecanico.interfaz.IEstadoDao;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
 
 @Service
@@ -19,9 +21,14 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Autowired
     private IDetalleOrdenDao detalleOrdenDao;
+
+    @Autowired
+    private IEstadoDao estadoDao;
     @Override
     public Map<String, Map<String, Double>> obtenerEstadisticasIngresosMensuales(int year) {
-        List<Object[]> resultados = ordenDao.obtenerIngresosYOrdenesMensuales(year);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        List<Object[]> resultados = ordenDao.obtenerIngresosYOrdenesMensuales(year,estadoActual);
     
         // Convertir resultados a Map
         Map<String, Map<String, Double>> estadisticas = new HashMap<>();
@@ -53,8 +60,10 @@ public class EstadisticaImplementacion implements IEstadisticaService {
     @Override
     public Map<String, Map<String, Double>> obtenerEstadisticasPorServicioEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin, Long tecnicoId) {
         Map<String, Map<String, Double>> estadisticasPorServicio = new HashMap<>();
-        Double montoTotal = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin, tecnicoId);
-        List<Object[]> resultados = detalleOrdenDao.obtenerIngresosPorServicio(fechaInicio, fechaFin, tecnicoId);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        Double montoTotal = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin, tecnicoId,estadoActual);
+        List<Object[]> resultados = detalleOrdenDao.obtenerIngresosPorServicio(fechaInicio, fechaFin, tecnicoId,estadoActual);
         for (Object[] resultado : resultados) {
             String nombreServicio = (String) resultado[0];
             Double cantidadUtilizada = ((Number) resultado[1]).doubleValue();
@@ -76,13 +85,17 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Override
     public Double calcularMontoTotalEnPeriodo(LocalDate fechaInicio, LocalDate fechaFin, Long tecnicoId){
-        Double ingresosTotales = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin, tecnicoId);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        Double ingresosTotales = detalleOrdenDao.calcularMontoTotalEnPeriodo(fechaInicio, fechaFin, tecnicoId,estadoActual);
         return ingresosTotales;
     }
 
     @Override
     public Map<String, Double> findServicioMasRecaudo(LocalDate fechaInicio, LocalDate fechaFin, Long tecnicoId) {
-        List<Object[]> resultados = detalleOrdenDao.findServicioMasRecaudo(fechaInicio,fechaFin, tecnicoId);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        List<Object[]> resultados = detalleOrdenDao.findServicioMasRecaudo(fechaInicio,fechaFin, tecnicoId,estadoActual);
 
         // Convertir resultados a Map
         Map<String, Double> masRecaudado = new HashMap<>();
@@ -101,7 +114,9 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Override
     public Map<String, Double> findServicioMasUtilizado(LocalDate fechaInicio, LocalDate fechaFin, Long tecnicoId) {
-        List<Object[]> resultados = detalleOrdenDao.findServicioMasUtilizado(fechaInicio,fechaFin, tecnicoId);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        List<Object[]> resultados = detalleOrdenDao.findServicioMasUtilizado(fechaInicio,fechaFin, tecnicoId,estadoActual);
 
         // Convertir resultados a Map
         Map<String, Double> masUtilizado = new HashMap<>();
@@ -122,8 +137,10 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Override
     public Map<String, Double> findMesMasRecaudado(int year) {
-        List<Object[]> resultados = ordenDao.findMesMasRecaudado(year);
-
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        List<Object[]> resultados = ordenDao.findMesMasRecaudado(year,estadoActual);
+        
         
         // Convertir resultados a Map
         Map<String, Double> masRecaudado = new HashMap<>();
@@ -146,8 +163,10 @@ public class EstadisticaImplementacion implements IEstadisticaService {
     public Map<String, Map<String, Double>> obtenerEstadisticasPorServicioEnPeriodoSinFiltro(LocalDate fechaInicio,
             LocalDate fechaFin) {
                 Map<String, Map<String, Double>> estadisticasPorServicio = new HashMap<>();
-                Double montoTotal = detalleOrdenDao.calcularMontoTotalEnPeriodoSinFiltro(fechaInicio, fechaFin);
-                List<Object[]> resultados = detalleOrdenDao.obtenerIngresosPorServicioSinFiltro(fechaInicio, fechaFin);
+                String nombreFacturada = "FACTURADA";
+                Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+                Double montoTotal = detalleOrdenDao.calcularMontoTotalEnPeriodoSinFiltro(fechaInicio, fechaFin,estadoActual);
+                List<Object[]> resultados = detalleOrdenDao.obtenerIngresosPorServicioSinFiltro(fechaInicio, fechaFin,estadoActual);
                 for (Object[] resultado : resultados) {
                     String nombreServicio = (String) resultado[0];
                     Double cantidadUtilizada = ((Number) resultado[1]).doubleValue();
@@ -169,13 +188,17 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Override
     public Double calcularMontoTotalEnPeriodoSinFiltro(LocalDate fechaInicio, LocalDate fechaFin) {
-        Double ingresosTotales = detalleOrdenDao.calcularMontoTotalEnPeriodoSinFiltro(fechaInicio, fechaFin);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        Double ingresosTotales = detalleOrdenDao.calcularMontoTotalEnPeriodoSinFiltro(fechaInicio, fechaFin,estadoActual);
         return ingresosTotales;
     }
 
     @Override
     public Map<String, Double> findServicioMasRecaudoSinFiltro(LocalDate fechaInicio, LocalDate fechaFin) {
-        List<Object[]> resultados = detalleOrdenDao.findServicioMasRecaudoSinFiltro(fechaInicio,fechaFin);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        List<Object[]> resultados = detalleOrdenDao.findServicioMasRecaudoSinFiltro(fechaInicio,fechaFin,estadoActual);
 
         // Convertir resultados a Map
         Map<String, Double> masRecaudado = new HashMap<>();
@@ -192,7 +215,9 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
     @Override
     public Map<String, Double> findServicioMasUtilizadoSinFiltro(LocalDate fechaInicio, LocalDate fechaFin) {
-        List<Object[]> resultados = detalleOrdenDao.findServicioMasUtilizadoSinFiltro(fechaInicio,fechaFin);
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        List<Object[]> resultados = detalleOrdenDao.findServicioMasUtilizadoSinFiltro(fechaInicio,fechaFin,estadoActual);
 
         // Convertir resultados a Map
         Map<String, Double> masUtilizado = new HashMap<>();

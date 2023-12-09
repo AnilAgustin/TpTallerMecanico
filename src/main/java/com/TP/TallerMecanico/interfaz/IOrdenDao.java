@@ -1,4 +1,5 @@
 package com.TP.TallerMecanico.interfaz;
+import com.TP.TallerMecanico.entidad.Estado;
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
 
@@ -132,8 +133,8 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     List<Orden> filtrarOrdenPorFechaHasta(@Param("fechaHastaDocumento") LocalDate fechaHastaDocumento );
 
     //Estadisticas 
-    @Query("SELECT MONTH(o.fechaDocumento) AS mes, COUNT(DISTINCT o.id) AS cantidadOrdenes, SUM(CAST(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100) AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")
-    List<Object[]> obtenerIngresosYOrdenesMensuales(@Param("year") int year);
+    @Query("SELECT MONTH(o.fechaDocumento) AS mes, COUNT(DISTINCT o.id) AS cantidadOrdenes, SUM(CAST(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100) AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year AND o.estado = true AND o.estadoActual = :estadoActual GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")
+    List<Object[]> obtenerIngresosYOrdenesMensuales(@Param("year") int year, @Param ("estadoActual") Estado estadoActual);
 
 
 
@@ -141,11 +142,11 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
        "FROM Orden o " +
        "JOIN DetalleOrden d ON o.idOrden = d.orden.idOrden " +
-       "WHERE YEAR(o.fechaDocumento) = :year " +
+       "WHERE YEAR(o.fechaDocumento) = :year  AND o.estado = true AND o.estadoActual = :estadoActual "+
        "GROUP BY mes " +
        "ORDER BY montoTotal DESC " +
        "LIMIT 1")
-    List<Object[]> findMesMasRecaudado(@Param("year") int year);
+    List<Object[]> findMesMasRecaudado(@Param("year") int year, @Param ("estadoActual") Estado estadoActual);
 
 
     List<Orden> findByFechaRegistro(LocalDate fechaOrden);
