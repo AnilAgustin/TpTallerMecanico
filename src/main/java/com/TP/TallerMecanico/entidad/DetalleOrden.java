@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -28,6 +29,7 @@ public class DetalleOrden implements Serializable {
 
     private int subtotal;
 
+    @Min(value = 0, message = "El precio final del servicio debe ser mayor o igual a cero")
     private int precioFinalServicio;
     
     @ManyToOne
