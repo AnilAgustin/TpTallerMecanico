@@ -100,7 +100,7 @@
                         <div class="form-group">
                             <label style="font-weight: bold;">Precio final del servicio</label>
                             <input class="form-control" type="number" name="precioFinalServicio" id="precioFinalServicio" th:field="*{precioFinalServicio}"/>
-                            <!--<span th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></span>-->
+                            <span th:if="${#fields.hasErrors('precioFinalServicio')}" th:errors="*{precioFinalServicio}"></span>
                         </div>
 
 
@@ -220,9 +220,27 @@
             }
         }
 
+        const form = document.querySelector('form');  // Selecciona el formulario
 
+        form.addEventListener('submit', function (event) {
+            const precioFinalInput = document.getElementById('precioFinalServicio');
+            const precioFinal = parseFloat(precioFinalInput.value);
 
+            if (isNaN(precioFinal) || precioFinal < 0) {
+                // Muestra una alerta o realiza la acción que desees
+                alert('El precio final del servicio no puede ser menor a cero');
+                event.preventDefault();  // Evita que el formulario se envíe
+            }
+
+            if (isNaN(precioFinal) || precioFinal == 0) {
+                // Muestra una alerta o realiza la acción que desees
+                alert('El precio final del servicio no puede ser cero');
+                event.preventDefault();  // Evita que el formulario se envíe
+            }
+        });
     });
+
+    
 </script>
 
 </body>
