@@ -15,7 +15,6 @@ public class OrdenFiltrador {
     @Autowired
     private IOrdenService ordenService;
 
-    @Autowired
     public OrdenFiltrador(IOrdenDao ordenDao, IOrdenService ordenService) {
         this.ordenDao = ordenDao;
         this.ordenService = ordenService;
