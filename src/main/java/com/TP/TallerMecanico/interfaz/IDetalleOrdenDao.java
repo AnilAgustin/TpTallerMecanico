@@ -109,7 +109,7 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     String findApellidoClienteByIdOrden(@Param("idOrden") Long idOrden);
     
     //Consulta personalizada para obtener el impuesto agregado por marca
-    @Query("SELECT marca.impuesto FROM DetalleOrden detalle JOIN detalle.orden o JOIN o.vehiculo v JOIN v.modelo m JOIN m.marca marca WHERE o.idOrden = :idOrden")
+    @Query("SELECT DISTINCT marca.impuesto FROM DetalleOrden detalle JOIN detalle.orden o JOIN o.vehiculo v JOIN v.modelo m JOIN m.marca marca WHERE o.idOrden = :idOrden")
     Double findImpuestoMarcaByIdOrden(@Param("idOrden") Long idOrden);
- 
+
 }
