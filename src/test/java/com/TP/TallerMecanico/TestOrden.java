@@ -1,4 +1,4 @@
-package com.TP;
+package com.TP.TallerMecanico;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
