@@ -26,6 +26,7 @@ public class Orden implements Serializable {
 
     private LocalDate fechaDocumento;
 
+
     @NotEmpty(message = "El kilometraje no debe estar vacio")
     @Pattern(regexp = "^[0-9]{1,8}$", message = "Debe ser un número de 1 a 8 dígitos.")
     private String kilometros;

@@ -25,6 +25,7 @@ public class Tecnico implements Serializable {
 
    
     @NotEmpty(message = "El campo no debe estar vacio")
+    @Column(unique = true)
     @Pattern(regexp = "^[0-9]{1,8}$", message = "El Legajo debe contener solo números y tener un máximo de 8 dígitos")
     private String legajo;
     
