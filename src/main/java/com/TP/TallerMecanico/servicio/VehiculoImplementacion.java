@@ -1,13 +1,10 @@
 package com.TP.TallerMecanico.servicio;
 
-import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.entidad.Vehiculo;
-import com.TP.TallerMecanico.interfaz.IDetalleOrdenDao;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,22 +72,6 @@ public class VehiculoImplementacion implements IVehiculoService {
         }
     }
 
-    // @Override
-    // @Transactional   
-    // public void actualizarKilometraje(Vehiculo vehiculo){
-    //     Long vehiculoId = vehiculo.getIdVehiculo();
-
-    //     Vehiculo vehiculoViejo = vehiculoDao.findByIdVehiculo(vehiculoId);
-
-    //     String kilometrajeNuevo = vehiculo.getKilometros();
-    //     String kilometrajeViejo = vehiculoViejo.getKilometros();
-
-    //     if (Integer.parseInt(kilometrajeNuevo)> Integer.parseInt(kilometrajeViejo)) {
-    //         vehiculoViejo.setKilometros(kilometrajeNuevo);
-    //     }
-    // }
-
-
     @Override
     @Transactional
     public List<Vehiculo> filtrarVehiculos(String patente, Long idMarca, Long idModelo) {
@@ -117,7 +98,6 @@ public class VehiculoImplementacion implements IVehiculoService {
         // En caso de que ninguna condición se cumpla, se devuelve una lista vacía
         return new ArrayList<>();
     }
-    
 
     @Override
     @Transactional

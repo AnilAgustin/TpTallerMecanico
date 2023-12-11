@@ -7,7 +7,6 @@ import lombok.Data;
 @Entity
 @Table(name="imagen")
 public class Imagen implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id

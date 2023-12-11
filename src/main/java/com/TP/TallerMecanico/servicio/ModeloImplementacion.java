@@ -5,7 +5,6 @@ import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IModeloDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
-
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +137,6 @@ public class ModeloImplementacion implements IModeloService {
         
         //Caso contrario
         } else {
-
             //Verificamos que el nombre nuevo y la marca nueva no exista en la base de datos
             Modelo checkNM3 = modeloDao.findByNombreAndMarca(nombreNuevo, marcaNueva);
             Modelo checkNM4 = modeloDao.findByNombreAndMarcaAndEstadoFalse(nombreNuevo, marcaNueva);
@@ -154,8 +152,6 @@ public class ModeloImplementacion implements IModeloService {
                 //Activamos el modelo en caso de que el mismo se encuentre eliminado
                 activarModelo(checkNM4);
             }
-            
-            
         }
     }
 
@@ -167,7 +163,6 @@ public class ModeloImplementacion implements IModeloService {
         for (Vehiculo vehiculo : modelo.getVehiculos()) {
             vehiculoService.activarVehiculo(vehiculo);
         }
-        
     }
 
     @Override

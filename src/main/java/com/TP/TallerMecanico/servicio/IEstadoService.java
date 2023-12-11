@@ -1,8 +1,6 @@
 package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Estado;
-
-import java.time.LocalDate;
 import java.util.List;
 public interface IEstadoService {
 

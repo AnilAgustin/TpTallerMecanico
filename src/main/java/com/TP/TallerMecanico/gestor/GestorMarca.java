@@ -1,18 +1,9 @@
 package com.TP.TallerMecanico.gestor;
 
-import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Marca;
-import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.interfaz.IMarcaDao;
-
 import jakarta.validation.Valid;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,7 +74,6 @@ public class GestorMarca {
         if (nombre != null) {
             nombre = nombre.toUpperCase();
         }
-        //Set<Marca> marcasSet = new HashSet<>();  // Usar un Set para clientes únicos
 
         List<Marca> marcas;
 
@@ -98,7 +88,6 @@ public class GestorMarca {
         
         return "marcas";
     }
-
 
 
     //Permite guardar una marca cuando la solicitud POST sea guardarMarca

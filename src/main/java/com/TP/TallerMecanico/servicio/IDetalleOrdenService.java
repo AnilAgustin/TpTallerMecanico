@@ -2,7 +2,6 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.entidad.Orden;
-
 import java.util.List;
 
 public interface IDetalleOrdenService {

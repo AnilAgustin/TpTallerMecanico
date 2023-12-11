@@ -2,8 +2,6 @@ package com.TP.TallerMecanico.servicio;
 import java.time.LocalDate;
 import java.util.Map;
 
-import com.TP.TallerMecanico.entidad.Tecnico;
-
 public interface IEstadisticaService {
     Map<String, Map<String, Double>> obtenerEstadisticasIngresosMensuales(int year);
     

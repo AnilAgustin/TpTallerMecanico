@@ -2,11 +2,8 @@ package com.TP.TallerMecanico.entidad;
 
 import java.time.LocalDate;
 import jakarta.persistence.*;
-
 import java.io.Serializable;
 import java.util.List;
-
-
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
@@ -25,7 +22,6 @@ public class Orden implements Serializable {
     private LocalDate fechaRegistro;
 
     private LocalDate fechaDocumento;
-
 
     @NotEmpty(message = "El kilometraje no debe estar vacio")
     @Pattern(regexp = "^[0-9]{1,8}$", message = "Debe ser un número de 1 a 8 dígitos.")

@@ -6,16 +6,13 @@ import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import com.TP.TallerMecanico.servicio.IClienteService;
 import com.TP.TallerMecanico.servicio.IOrdenService;
-
 import jakarta.validation.Valid;
-
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
@@ -30,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class GestorCliente {
-
 
     //El Autowired sirve para la inyeccion de dependencias 
     @Autowired

@@ -4,12 +4,9 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.TP.TallerMecanico.entidad.Estado;
-import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.interfaz.IDetalleOrdenDao;
 import com.TP.TallerMecanico.interfaz.IEstadoDao;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;

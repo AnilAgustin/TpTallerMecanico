@@ -1,15 +1,12 @@
 package com.TP.TallerMecanico.servicio;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-
 import com.TP.TallerMecanico.entidad.Estado;
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import com.TP.TallerMecanico.interfaz.IEstadoDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,8 +22,6 @@ public class OrdenImplementacion implements IOrdenService {
 
     @Autowired
     private IEstadoDao estadoDao;
-    @Autowired
-    private EstadoImplementacion estadoImplementacion;
 
     //A continuacion todos los metodos de la clase
     @Override
@@ -113,14 +108,6 @@ public class OrdenImplementacion implements IOrdenService {
         }
         ordenDao.save(orden);
     }
-
-
-    // @Override
-    // @Transactional
-    // public List<Orden> filtrarOrdenes(Long marcaId, Long modeloId, Long numero, LocalDate fechaDocumento) {
-    //     OrdenFiltrador ordenFiltrador = new OrdenFiltrador(ordenDao);
-    //     return ordenFiltrador.filtrarOrdenes(marcaId, modeloId, numero, fechaDocumento);
-    // }
 
     @Override
     @Transactional   

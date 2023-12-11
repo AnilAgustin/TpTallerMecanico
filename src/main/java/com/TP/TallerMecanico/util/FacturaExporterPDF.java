@@ -5,10 +5,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-
 import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.entidad.Servicio;
-
 import com.lowagie.text.Document;
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.Font;

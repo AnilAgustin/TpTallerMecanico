@@ -6,24 +6,14 @@ import com.TP.TallerMecanico.interfaz.IOrdenDao;
 import com.TP.TallerMecanico.servicio.*;
 import com.TP.TallerMecanico.util.FacturaExporterPDF;
 import com.lowagie.text.DocumentException;
-
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -51,9 +41,6 @@ public class GestorOrden {
 
     @Autowired
     private IEstadoService estadoService;
-
-    @Autowired
-    private IClienteService clienteService;
 
     @Autowired
     private IMarcaService marcaService;
@@ -138,7 +125,6 @@ public class GestorOrden {
         }else{
             ordenes = ordenDao.findByEstadoFalse();
         }
-        
 
         //Lógica para mostrar todos 
         List<Marca> marcas = marcaService.listarMarcas();
@@ -245,7 +231,6 @@ public class GestorOrden {
             return "agregarModificarOrden";
         }
 
-        System.out.println(orden.getEstadoActual());
         ordenService.actualizar(orden);
         return "redirect:/ordenes";
     }
@@ -308,8 +293,6 @@ public class GestorOrden {
     public String mostrarFormularioEditarTecnico(@PathVariable ("idVehiculo") Long idVehiculo, @PathVariable ("idTecnico") Long idTecnico, @PathVariable ("idOrden") Long idOrden, Model model) {
         var vehiculo = vehiculoService.buscarVehiculo(idVehiculo);
         Tecnico tecnico = tecnicoService.buscarTecnico(idTecnico);
-
-
 
         Orden orden = ordenService.buscarOrden(idOrden);
         Orden ordenDb = ordenService.buscarOrden(idOrden);

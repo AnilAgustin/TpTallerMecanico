@@ -4,11 +4,8 @@ import com.TP.TallerMecanico.entidad.Marca;
 import com.TP.TallerMecanico.entidad.Modelo;
 import com.TP.TallerMecanico.servicio.IMarcaService;
 import com.TP.TallerMecanico.servicio.IModeloService;
-
 import jakarta.validation.Valid;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,7 +37,6 @@ public class GestorModelo {
             nombre = nombre.toUpperCase();
         }
 
-        //System.out.println(nombre);
 
         if ((marcaId!=null) || (nombre!=null)) {
             modelos = modeloService.filtrarModelos(marcaId, nombre);

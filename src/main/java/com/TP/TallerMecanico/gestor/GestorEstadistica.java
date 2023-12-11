@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.TP.TallerMecanico.entidad.Tecnico;
 import com.TP.TallerMecanico.servicio.IEstadisticaService;
 import com.TP.TallerMecanico.servicio.ITecnicoService;
@@ -34,7 +33,6 @@ public class GestorEstadistica{
 
          Map<String, Map<String, Double>> estadisticas = estadisticaService.obtenerEstadisticasIngresosMensuales(year);
 
-         
         model.addAttribute("estadisticas", estadisticas);
         model.addAttribute("year", year); // Agregar el año al modelo
 
@@ -75,8 +73,6 @@ public class GestorEstadistica{
 
         List<Tecnico> tecnicos = tecnicoService.listarTecnicos();
 
-
-       
 
         if (tecnicoId != null && tecnicoId > 0) {
             // Si se seleccionó un técnico específico, filtrar por ese técnico
@@ -121,8 +117,6 @@ public class GestorEstadistica{
             model.addAttribute("sumaTotal", sumaTotal);
         }
         
-       
-
 
         model.addAttribute("tecnicos", tecnicos);
         model.addAttribute("idTecnico", tecnicoId);
@@ -131,9 +125,6 @@ public class GestorEstadistica{
         model.addAttribute("fechaInicio", fechaInicio);
         model.addAttribute("fechaFin", fechaFin);
 
-
-
-       
 
         return "estadisticas_por_servicio";
     }

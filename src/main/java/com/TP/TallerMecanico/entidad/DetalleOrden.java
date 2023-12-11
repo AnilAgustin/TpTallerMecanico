@@ -1,12 +1,6 @@
 package com.TP.TallerMecanico.entidad;
-
 import jakarta.persistence.*;
-// import jakarta.validation.constraints.NotEmpty;
-// import jakarta.validation.constraints.Pattern;
-// import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
@@ -44,7 +38,6 @@ public class DetalleOrden implements Serializable {
         int cantidad = Integer.parseInt(this.cantidad);
         return (cantidad * precioFinalServicio);
     }
-
 
     @Transient
     private String modo;

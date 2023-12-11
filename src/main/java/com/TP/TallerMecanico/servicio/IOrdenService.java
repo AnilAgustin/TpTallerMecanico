@@ -2,7 +2,6 @@ package com.TP.TallerMecanico.servicio;
 
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
-
 import java.time.LocalDate;
 import java.util.List;
 public interface IOrdenService {

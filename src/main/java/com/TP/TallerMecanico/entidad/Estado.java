@@ -1,10 +1,6 @@
 package com.TP.TallerMecanico.entidad;
-
 import jakarta.persistence.*;
-
 import java.io.Serializable;
-import java.util.List;
-
 import lombok.Data;
 @Data
 @Entity

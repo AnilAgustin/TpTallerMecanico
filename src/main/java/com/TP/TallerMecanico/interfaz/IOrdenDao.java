@@ -2,8 +2,6 @@ package com.TP.TallerMecanico.interfaz;
 import com.TP.TallerMecanico.entidad.Estado;
 import com.TP.TallerMecanico.entidad.Orden;
 import com.TP.TallerMecanico.entidad.Tecnico;
-
-
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
@@ -11,7 +9,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 public interface IOrdenDao extends CrudRepository<Orden, Long> {
-
 
     @Modifying
     @Query("UPDATE Orden m SET m.estado = false WHERE m.idOrden = :idOrden") //Query para el Soft Delete
@@ -32,7 +29,6 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     //QUERYS PARA BUSQUEDA
 
     //FILTROS PARA MARCA
-    //@Query("SELECT o FROM Orden o WHERE o.vehiculo.modelo.id = :modeloId AND o.vehiculo.modelo.marca.id = :marcaId AND CAST(o.idOrden AS string) LIKE :numero%  AND o.fechaDOcumento =:fechaDocumento AND o.estado = true")
     @Query("SELECT o FROM Orden o WHERE o.vehiculo.modelo.id = :modeloId AND o.vehiculo.modelo.marca.id = :marcaId AND o.idOrden = :numero AND o.fechaDocumento BETWEEN :fechaDesdeDocumento AND :fechaHastaDocumento AND o.estado = true")
     List<Orden> filtrarOrdenPorMarcaYModeloYNumeroYFechaDesdeYFechaHasta(@Param("marcaId") Long marcaId, @Param("modeloId") Long modeloId, @Param("numero") Long numero, @Param("fechaDesdeDocumento") LocalDate fechaDesdeDocumento, @Param("fechaHastaDocumento") LocalDate fechaHastaDocumento);
 
@@ -135,9 +131,6 @@ public interface IOrdenDao extends CrudRepository<Orden, Long> {
     //Estadisticas 
     @Query("SELECT MONTH(o.fechaDocumento) AS mes, COUNT(DISTINCT o.id) AS cantidadOrdenes, SUM(CAST(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100) AS DOUBLE)) AS recaudacion_total FROM Orden o JOIN o.detallesOrden d WHERE YEAR(o.fechaDocumento) = :year AND o.estado = true AND o.estadoActual = :estadoActual GROUP BY MONTH(o.fechaDocumento) ORDER BY MONTH(o.fechaDocumento)")
     List<Object[]> obtenerIngresosYOrdenesMensuales(@Param("year") int year, @Param ("estadoActual") Estado estadoActual);
-
-
-
 
     @Query("SELECT MONTH(o.fechaDocumento) AS mes, SUM(d.subtotal * (1 + o.vehiculo.modelo.marca.impuesto/100)) AS montoTotal " +
        "FROM Orden o " +

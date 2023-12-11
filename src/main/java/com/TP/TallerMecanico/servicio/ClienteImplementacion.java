@@ -4,9 +4,7 @@ import com.TP.TallerMecanico.entidad.Cliente;
 import com.TP.TallerMecanico.entidad.Vehiculo;
 import com.TP.TallerMecanico.interfaz.IClienteDao;
 import com.TP.TallerMecanico.interfaz.IVehiculoDao;
-import java.time.LocalDate;
 import java.util.List;
-import com.TP.TallerMecanico.interfaz.IVehiculoDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +25,6 @@ public class ClienteImplementacion implements IClienteService {
     private IClienteDao clienteDao;
 
     //A continuacion todos los metodos de la clase
-
 
     @Override
     public List<Cliente> buscarClienteNombre(String nombre){

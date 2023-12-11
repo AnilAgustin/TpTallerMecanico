@@ -4,13 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-
-// import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.util.List;
-
 import lombok.Data;
-
 
 @Data
 @Entity
@@ -22,7 +18,6 @@ public class Cliente implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCliente;
-
    
     @NotEmpty(message = "El campo no debe estar vacio")
     @Pattern(regexp = "^[0-9]{1,8}$", message = "El DNI debe contener solo números y tener un máximo de 8 dígitos")

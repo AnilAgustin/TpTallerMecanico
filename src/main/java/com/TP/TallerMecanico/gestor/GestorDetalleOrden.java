@@ -7,11 +7,8 @@ import com.TP.TallerMecanico.entidad.DetalleOrden;
 import com.TP.TallerMecanico.servicio.IOrdenService;
 import com.TP.TallerMecanico.servicio.IServicioService;
 import com.TP.TallerMecanico.servicio.IDetalleOrdenService;
-
 import jakarta.validation.Valid;
-
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class GestorDetalleOrden {
 
     //El Autowired sirve para la inyeccion de dependencias
-
     @Autowired
     private IOrdenService ordenService;
     
