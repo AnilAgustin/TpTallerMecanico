@@ -33,7 +33,7 @@
     <h3 th:if="${eliminada == null || !eliminada}">Listado DetallesOrden</h3>
     <h3 th:if="${eliminada}">Listado detalles orden eliminada</h3>
     <br>
-    <a th:if="${eliminada == null || !eliminada and orden.estadoActual?.nombre != 'FACTURADA'}" th:href="@{/ordenes/agregarDetalleOrden/} + ${orden.idOrden}" class="btn btn-primary">Agregar</a>
+    <a th:if="${eliminada == null || !eliminada} and ${orden.estadoActual?.nombre != 'FACTURADA'}" th:href="@{/ordenes/agregarDetalleOrden/} + ${orden.idOrden}" class="btn btn-primary">Agregar</a>
     <br>
     <div th:if="${detalleOrden != null and !detalleOrden.empty}">
         <table class="table">

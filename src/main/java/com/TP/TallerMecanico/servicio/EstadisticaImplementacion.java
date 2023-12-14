@@ -133,6 +133,14 @@ public class EstadisticaImplementacion implements IEstadisticaService {
     }
 
     @Override
+    public Integer obtenerCantidadTotalServicios(LocalDate fechaInicio, LocalDate fechaFin, Long tecnicoId) {
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        Integer cantidadTotalServicios = detalleOrdenDao.obtenerCantidadTotalServicios(fechaInicio, fechaFin, tecnicoId,estadoActual);
+        return cantidadTotalServicios;
+    }
+
+    @Override
     public Map<String, Double> findMesMasRecaudado(int year) {
         String nombreFacturada = "FACTURADA";
         Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
@@ -155,6 +163,8 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
 
     }
+
+
 
     @Override
     public Map<String, Map<String, Double>> obtenerEstadisticasPorServicioEnPeriodoSinFiltro(LocalDate fechaInicio,
@@ -230,5 +240,15 @@ public class EstadisticaImplementacion implements IEstadisticaService {
 
         return masUtilizado;
     }
+
+    @Override
+    public Integer obtenerCantidadTotalServiciosSinFiltro(LocalDate fechaInicio, LocalDate fechaFin) {
+        String nombreFacturada = "FACTURADA";
+        Estado estadoActual = estadoDao.findByNombre(nombreFacturada);
+        Integer cantidadTotalServicios = detalleOrdenDao.obtenerCantidadTotalServiciosSinFiltro(fechaInicio, fechaFin, estadoActual);
+        return cantidadTotalServicios;
+    }
+
+
     
 }

@@ -92,6 +92,9 @@ public class GestorEstadistica{
             .mapToDouble(Double::doubleValue)
             .sum();
 
+            Integer cantidadTotalServicios = estadisticaService.obtenerCantidadTotalServicios(fechaInicio, fechaFin,tecnicoId);
+            model.addAttribute("cantidadTotalServicios",cantidadTotalServicios);
+
             model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
             model.addAttribute("sumaTotal", sumaTotal);
 
@@ -112,6 +115,9 @@ public class GestorEstadistica{
             .flatMap(innerMap -> innerMap.values().stream())
             .mapToDouble(Double::doubleValue)
             .sum();
+
+            Integer cantidadTotalServicios = estadisticaService.obtenerCantidadTotalServiciosSinFiltro(fechaInicio, fechaFin);
+            model.addAttribute("cantidadTotalServicios",cantidadTotalServicios);
 
             model.addAttribute("estadisticasPorServicio", estadisticasPorServicio);
             model.addAttribute("sumaTotal", sumaTotal);

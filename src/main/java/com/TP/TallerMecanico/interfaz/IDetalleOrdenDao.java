@@ -60,6 +60,13 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     "LIMIT 1")
     List<Object[]> findServicioMasUtilizado(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId, @Param ("estadoActual") Estado estadoActual);
 
+    @Query("SELECT SUM(CAST(d.cantidad AS INTEGER)) " +
+    "FROM DetalleOrden d " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin AND d.orden.tecnico.id = :tecnicoId " +
+    "AND d.orden.estado = true " +
+    "AND d.orden.estadoActual = :estadoActual")
+    Integer obtenerCantidadTotalServicios(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("tecnicoId") Long tecnicoId, @Param("estadoActual") Estado estadoActual);
+
 
     //Estadisticas sin filtrado
     @Query("SELECT s.nombre AS nombreServicio, SUM(CAST(d.cantidad AS INTEGER)) AS cantidadUtilizada, SUM(d.subtotal * (1 + d.orden.vehiculo.modelo.marca.impuesto/100)) AS montoRecaudado " +
@@ -89,6 +96,13 @@ public interface IDetalleOrdenDao extends CrudRepository<DetalleOrden, Long>{
     "LIMIT 1")
     List<Object[]> findServicioMasUtilizadoSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param ("estadoActual") Estado estadoActual);
     
+    @Query("SELECT SUM(CAST(d.cantidad AS INTEGER)) " +
+    "FROM DetalleOrden d " +
+    "WHERE d.orden.fechaDocumento BETWEEN :fechaInicio AND :fechaFin " +
+    "AND d.orden.estado = true " +
+    "AND d.orden.estadoActual = :estadoActual")
+    Integer obtenerCantidadTotalServiciosSinFiltro(@Param("fechaInicio") LocalDate fechaInicio, @Param("fechaFin") LocalDate fechaFin, @Param("estadoActual") Estado estadoActual);
+
     //Consulta para obtener el Id de una orden relacionada a un detalle de orden
     @Query("SELECT d FROM DetalleOrden d INNER JOIN d.orden o WHERE o.idOrden = :idOrden")
     List<DetalleOrden> findbyIdOrden(@Param("idOrden") Long idOrden);
