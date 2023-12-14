@@ -40,11 +40,12 @@
         
         
         <div>
-            <a class="btn btn-primary" th:href="@{/estadisticas}">Estadisticas Ingresos Mensuales</a> <a
-                class="btn btn-primary" th:href="@{/estadisticas_por_servicio}">Estadisticas por Servicios</a>
+            <a class="btn btn-primary" th:href="@{/estadisticas}">Estadisticas Ingresos Mensuales</a> 
+            <a class="btn btn-primary" th:href="@{/estadisticas_por_servicio}">Estadisticas por Servicios</a>
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir como PDF</button>    
         </div>
 
-        <h3><u>Estadisticas Por Servicios</u></h3>
+        <h3><u>Estadisticas Por Servicios de Ordenes Facturadas</u></h3>
 
         <div class="container-fluid">
             <form class="row d-flex justify-content-end me-4" action="/estadisticas_por_servicio" method="get">

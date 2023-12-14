@@ -38,12 +38,13 @@
         <div>
             <a class="btn btn-primary" th:href="@{/estadisticas}">Estadisticas Ingresos Mensuales</a> 
             <a class="btn btn-primary" th:href="@{/estadisticas_por_servicio}">Estadisticas por Servicios</a>
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir como PDF</button>
         </div>
 
         
 
 
-        <h3><u>Estadisticas Ingresos Mensuales</u></h3>
+        <h3><u>Estadisticas Ingresos Mensuales para Ordenes Facturadas</u></h3>
 
         <h5><b>Seleccione un Año</b></h5>
         <form class="d-flex me-4" action="/estadisticas" method="get">
@@ -130,7 +131,6 @@
             var data = []; // varialbe que toma un arreglo de los datos
             var labels = []; // variable que toma un arreglo de etiquetas 
             var rows = document.querySelectorAll('table tr'); // Variable que toma todos los elementos de la Eqtiqueta Table de HTML 
-            console.log(rows);
             for (var i = 1; i < rows.length; i++) {  // Recorremos todos las filas de la variable rows 
                 var columns = rows[i].querySelectorAll('td'); // Para cada fila, se seleccionan todas las celdas (td) y se almacenan en la variable columns.
                 //Se agrega a cada columna que se crea un Label y el Valor que corresponde 
@@ -162,7 +162,6 @@
             });
         });
     </script>
-
 
 </body>
 </html>
