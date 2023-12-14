@@ -51,10 +51,10 @@
 
             <tr th:each="detalleOrden :${detalleOrden}">
                 <td th:text="${detalleOrden.servicio.nombre}">Mostrar Servicio</td>
-                <td th:text="${detalleOrden.servicio.precio}">Mostrar Precio</td>
-                <td th:text="${detalleOrden.precioFinalServicio}">Mostrar Precio</td>
+                <td th:text="${detalleOrden.servicio.precioFormateado()}">Mostrar Precio</td>
+                <td th:text="${detalleOrden.precioFinalServicioFormateado()}">Mostrar Precio</td>
                 <td th:text="${detalleOrden.cantidad}">Mostrar Cantidad</td>
-                <td th:text="${detalleOrden.subtotal}">Mostrar Subtotal</td>
+                <td th:text="${detalleOrden.subtotalFormateado()}">Mostrar Subtotal</td>
                 <td th:if="${eliminada == null || !eliminada}">
                     <a th:if="${orden.estadoActual?.nombre != 'FACTURADA'}" class="btn btn-warning" th:href="@{/ordenes/modificarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden}" th:text="Editar"/>
                     <a th:if="${orden.estadoActual?.nombre != 'FACTURADA'}"class="btn btn-danger" th:href="@{/ordenes/eliminarDetalleOrden/} + ${detalleOrden.idDetalleOrden} + '/' + ${orden.idOrden}" th:text="Eliminar"/>

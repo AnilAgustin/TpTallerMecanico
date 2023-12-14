@@ -63,7 +63,7 @@
 
                     <tr th:each="servicio :${servicio}">
                         <td th:text="${servicio.nombre}">Mostrar Nombre</td>
-                        <td th:text="${servicio.precio}">Mostrar Precio</td>
+                        <td th:text="${servicio.precioFormateado()}">Mostrar Precio</td>
                         <td>
                             <span th:if="${servicio.repuesto != null and servicio.repuesto != ''}" th:text="${servicio.repuesto}">Mostrar Repuesto</span>
                             <span th:unless="${servicio.repuesto != null and servicio.repuesto != ''}">(No Ingresado)</span>

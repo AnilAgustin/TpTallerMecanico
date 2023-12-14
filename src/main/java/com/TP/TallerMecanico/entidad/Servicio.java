@@ -3,7 +3,11 @@ package com.TP.TallerMecanico.entidad;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
+
 import lombok.Data;
 
 @Data
@@ -25,6 +29,18 @@ public class Servicio implements Serializable{
     @NotEmpty(message = "El campo no debe estar vacio")
     @Pattern(regexp = "^[0-9]+$", message = "El precio debe contener solo números")
     private String precio;
+
+    //Formateo del precio del servicio
+    public String precioFormateado(){
+         
+        double precioNumerico = Double.parseDouble(precio);
+        NumberFormat formato = DecimalFormat.getNumberInstance(Locale.getDefault());
+        ((DecimalFormat) formato).applyPattern("###,###.##");
+    
+        String precioFormateado = formato.format(precioNumerico);
+        return "$"+precioFormateado;
+    }
+    
 
     @Pattern(regexp = "^(|[a-zA-Z0-9\\s]+)$", message = "El nombre del repuesto debe contener caracteres alfabéticos y números")
     private String repuesto;

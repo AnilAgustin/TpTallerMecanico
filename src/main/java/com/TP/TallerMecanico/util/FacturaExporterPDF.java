@@ -2,6 +2,7 @@ package com.TP.TallerMecanico.util;
 import java.awt.Color;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,9 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import jakarta.servlet.http.HttpServletResponse;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class FacturaExporterPDF {
     
@@ -90,7 +94,7 @@ public class FacturaExporterPDF {
         fuente.setSize(16);
 
         //Encabezado
-        Paragraph titulo = new Paragraph("Factura Electronica",fuente);
+        Paragraph titulo = new Paragraph("Factura",fuente);
         titulo.setAlignment(Paragraph.ALIGN_LEFT);
         documento.add(titulo);
 
@@ -134,14 +138,22 @@ public class FacturaExporterPDF {
             sumaPrecios += (detalleOrden.getPrecioFinalServicio() * cantidad);
         }
 
+        //Formatear numeros
+        NumberFormat formato = DecimalFormat.getNumberInstance(Locale.getDefault());
+        ((DecimalFormat) formato).applyPattern("###,###.##");
+
+        String sumaPreciosFormateado = formato.format(sumaPrecios);
+
         // Agregar el texto con la suma de precios antes del impuesto
-        Paragraph sumaPreciosParrafo = new Paragraph("Costo sin impuesto: $" + sumaPrecios);
+        Paragraph sumaPreciosParrafo = new Paragraph("Costo sin impuesto: $" + sumaPreciosFormateado);
         sumaPreciosParrafo.setAlignment(Paragraph.ALIGN_RIGHT); // Alinea a la derecha para un aspecto más ordenado
         documento.add(sumaPreciosParrafo);
      
         //Se calcula el monto de Impuesto
         Double impuestoSobrePrecio = sumaPrecios * (impuestoMarca/100);
-        Paragraph impuesto = new Paragraph("Impuesto: $"+ impuestoSobrePrecio);
+        String impuestoFormateado = formato.format(impuestoSobrePrecio);
+
+        Paragraph impuesto = new Paragraph("Impuesto: $"+ impuestoFormateado);
         impuesto. setAlignment(Paragraph.ALIGN_RIGHT);
         documento.add(impuesto);
 
@@ -150,7 +162,9 @@ public class FacturaExporterPDF {
         
         //Calculo del Monto total + incorporacion en el documento
         Double montoTotal = impuestoSobrePrecio + sumaPrecios;
-        Paragraph parrafoMontoTotal = new Paragraph("Total: $"+ montoTotal);
+        String montoTotalFormateado = formato.format(montoTotal);
+
+        Paragraph parrafoMontoTotal = new Paragraph("Total: $"+ montoTotalFormateado);
         parrafoMontoTotal.setAlignment(Paragraph.ALIGN_RIGHT);
         documento.add(parrafoMontoTotal);
 
