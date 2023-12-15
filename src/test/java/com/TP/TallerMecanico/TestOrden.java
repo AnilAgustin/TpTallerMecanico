@@ -29,7 +29,7 @@ public class TestOrden {
 		
         orden.setDetallesOrden(listaDetalles);
 		//Se invoca el metodo para realizar el calculo
-		int totalCalculado = orden.calcularTotal();
+		int totalCalculado = Integer.parseInt(orden.calcularTotal());
 
 		//Se comprueba si el resultado obtenido esta bien calculado
 		assertEquals(16000, totalCalculado);
